@@ -40,15 +40,13 @@ public class MCreatorTesting_projectile_code extends Elementsherobrines_fortress
 		World world = (World) dependencies.get("world");
 		if (((entity.getHorizontalFacing()) == EnumFacing.NORTH)) {
 			world.setBlockState(new BlockPos((int) x, (int) y, (int) (z - 1)), Blocks.GOLD_ORE.getDefaultState(), 3);
-		}
-		if (((entity.getHorizontalFacing()) == EnumFacing.EAST)) {
+		} else if (((entity.getHorizontalFacing()) == EnumFacing.EAST)) {
 			world.setBlockState(new BlockPos((int) (x + 1), (int) y, (int) z), Blocks.LAPIS_ORE.getDefaultState(), 3);
-		}
-		if (((entity.getHorizontalFacing()) == EnumFacing.SOUTH)) {
+		} else if (((entity.getHorizontalFacing()) == EnumFacing.SOUTH)) {
 			world.setBlockState(new BlockPos((int) x, (int) y, (int) (z + 1)), Blocks.DIAMOND_ORE.getDefaultState(), 3);
-		}
-		if (((entity.getHorizontalFacing()) == EnumFacing.WEST)) {
+		} else if (((entity.getHorizontalFacing()) == EnumFacing.WEST)) {
 			world.setBlockState(new BlockPos((int) (x - 1), (int) y, (int) z), Blocks.EMERALD_ORE.getDefaultState(), 3);
 		}
+		System.out.println((entity.getHorizontalFacing()));
 	}
 }

@@ -24,7 +24,7 @@
     "specialInfo": [],
     "hardness": 1.0,
     "resistance": 10.0,
-    "hasGravity": true,
+    "hasGravity": false,
     "creativeTab": {
       "value": "CUSTOM:Customelements"
     },
@@ -70,6 +70,9 @@
     "inventoryDropWhenDestroyed": true,
     "inventoryComparatorPower": true,
     "inventoryOutSlotIDs": [],
+    "onRightClicked": {
+      "name": "TestingprojectileRandomTickUpdateEvent"
+    },
     "spawnWorldTypes": [],
     "restrictionBiomes": [],
     "blocksToReplace": [],

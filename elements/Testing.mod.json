@@ -54,8 +54,8 @@
     "flyingMob": false,
     "disableCollisions": false,
     "ridable": true,
-    "canControlForward": false,
-    "canControlStrafe": false,
+    "canControlForward": true,
+    "canControlStrafe": true,
     "immuneToFire": true,
     "immuneToArrows": false,
     "immuneToFallDamage": false,
@@ -86,9 +86,6 @@
     "particleSpawningCondition": "ALWAYS",
     "whenMobIsHurt": {
       "name": "TestingEntityIsHurt"
-    },
-    "onMobTickUpdate": {
-      "name": "Testing_projectile_code"
     },
     "hasAI": true,
     "aiBase": "(none)",

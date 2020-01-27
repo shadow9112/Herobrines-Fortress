@@ -44,6 +44,7 @@ public class herobrines_fortressVariables {
 		public double flightx = 0;
 		public double flighty = 0;
 		public double Flightz = 0;
+		public double Projectile_Movement = 0;
 
 		public MapVariables() {
 			super(DATA_NAME);
@@ -85,6 +86,7 @@ public class herobrines_fortressVariables {
 			flightx = nbt.getDouble("flightx");
 			flighty = nbt.getDouble("flighty");
 			Flightz = nbt.getDouble("Flightz");
+			Projectile_Movement = nbt.getDouble("Projectile_Movement");
 		}
 
 		@Override
@@ -119,6 +121,7 @@ public class herobrines_fortressVariables {
 			nbt.setDouble("flightx", flightx);
 			nbt.setDouble("flighty", flighty);
 			nbt.setDouble("Flightz", Flightz);
+			nbt.setDouble("Projectile_Movement", Projectile_Movement);
 			return nbt;
 		}
 

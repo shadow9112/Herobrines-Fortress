@@ -1,8 +1,8 @@
 {
   "id_map": {
-    "DIMENSION": 2,
     "GUI": 5,
-    "ENTITY": 16
+    "ENTITY": 16,
+    "DIMENSION": 2
   },
   "mod_elements": [
     {
@@ -2375,6 +2375,34 @@
           }
         ]
       }
+    },
+    {
+      "name": "TestingprojectileRandomTickUpdateEvent",
+      "type": "procedure",
+      "sortid": 153,
+      "compiles": true,
+      "locked_code": false,
+      "ids": {},
+      "metadata": {
+        "dependencies": [
+          {
+            "name": "x",
+            "type": "int"
+          },
+          {
+            "name": "y",
+            "type": "int"
+          },
+          {
+            "name": "z",
+            "type": "int"
+          },
+          {
+            "name": "world",
+            "type": "world"
+          }
+        ]
+      }
     }
   ],
   "variable_elements": [
@@ -2557,6 +2585,12 @@
       "type": "number",
       "scope": "map",
       "value": "0"
+    },
+    {
+      "name": "Projectile_Movement",
+      "type": "number",
+      "scope": "map",
+      "value": "0"
     }
   ],
   "sound_elements": [
@@ -2585,8 +2619,8 @@
     "en_us": {
       "block.herobrines_fortress.taintedglass": "Taintedglass",
       "effect.nethered": "Nethered",
-      "item.herobrines_fortress.knockbackstick": "Knockback stick",
       "item.herobrines_fortress.teleporttear": "Teleport tear",
+      "item.herobrines_fortress.knockbackstick": "Knockback stick",
       "item.minecraft.tipped_arrow.effect.nethered": "Arrow of Nethered",
       "tile.forstructures.name": "Command: F2 ",
       "item.herobrines_fortress.tntbow": "TnT Bow",
@@ -2598,8 +2632,8 @@
       "item.selfstabbingdagger.name": "Selfstabbingdagger",
       "item.herobrines_fortress.selfstabbingdagger": "Selfstabbingdagger",
       "item.herobrines_fortress.testing": "Testing Spawn Egg",
-      "block.herobrines_fortress.sicktnt": "Sick tnt",
       "entity.silence.name": "Silence",
+      "block.herobrines_fortress.sicktnt": "Sick tnt",
       "tile.diamondbrickblock.name": "Diamond brick block",
       "tile.flames.name": "Flames",
       "block.herobrines_fortress.onewaywindow": "Oneway window",
@@ -2611,14 +2645,14 @@
       "block.herobrines_fortress.goldbrickblock": "Goldbrickblock",
       "tile.firedirt.name": "Firedirt",
       "item.herobrines_fortress.fireaxe": "Fire axe",
-      "block.herobrines_fortress.sickwoodplanks": "Sick Woodplanks",
       "item.firegem.name": "Fire gem",
+      "block.herobrines_fortress.sickwoodplanks": "Sick Woodplanks",
       "block.herobrines_fortress.goldbrickstairs": "Goldbrickstairs",
       "item.herobrines_fortress.honey_bucket": "Honey Bucket",
       "item.herobrines_fortress.firey": "Fire glasses",
       "block.herobrines_fortress.blastprooffence": "Blast proof fence",
-      "item.herobrines_fortress.lightning": "Lightning Portal Igniter",
       "tile.taintedglass.name": "Taintedglass",
+      "item.herobrines_fortress.lightning": "Lightning Portal Igniter",
       "item.fireshovel.name": "Fireshovel",
       "item.lightningsword.name": "Lightning sword",
       "block.herobrines_fortress.forstructures": "Command: F2 ",
