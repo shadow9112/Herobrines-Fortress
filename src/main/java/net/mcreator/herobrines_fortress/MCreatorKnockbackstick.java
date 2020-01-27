@@ -11,7 +11,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Item;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.EntityLivingBase;
@@ -34,16 +33,18 @@ public class MCreatorKnockbackstick extends Elementsherobrines_fortress.ModEleme
 	public void initElements() {
 		elements.items.add(() -> new ItemToolCustom() {
 			@Override
-			public void onCreated(ItemStack itemstack, World world, EntityPlayer entity) {
-				super.onCreated(itemstack, world, entity);
+			public boolean hitEntity(ItemStack itemstack, EntityLivingBase entity, EntityLivingBase entity2) {
+				super.hitEntity(itemstack, entity, entity2);
 				int x = (int) entity.posX;
 				int y = (int) entity.posY;
 				int z = (int) entity.posZ;
+				World world = entity.world;
 				{
 					java.util.HashMap<String, Object> $_dependencies = new java.util.HashMap<>();
 					$_dependencies.put("itemstack", itemstack);
 					MCreatorKnockbackstickItemIsCraftedsmelted.executeProcedure($_dependencies);
 				}
+				return true;
 			}
 		}.setUnlocalizedName("knockbackstick").setRegistryName("knockbackstick").setCreativeTab(CreativeTabs.TOOLS));
 	}

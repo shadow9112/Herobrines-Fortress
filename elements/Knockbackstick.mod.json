@@ -19,7 +19,7 @@
     "blocksAffected": [],
     "hasGlow": false,
     "repairItems": [],
-    "onCrafted": {
+    "onEntityHitWith": {
       "name": "KnockbackstickItemIsCraftedsmelted"
     }
   }

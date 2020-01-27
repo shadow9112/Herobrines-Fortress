@@ -18,6 +18,7 @@ import net.minecraft.item.Item;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.EnumCreatureType;
@@ -84,7 +85,8 @@ public class MCreatorTesting extends Elementsherobrines_fortress.ModElement {
 			experienceValue = 5;
 			this.isImmuneToFire = true;
 			setNoAI(!true);
-			this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
+			this.tasks.addTask(1, new EntityAILookIdle(this));
+			this.targetTasks.addTask(2, new EntityAIHurtByTarget(this, false));
 			this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(MCreatorFiresword.block, (int) (1)));
 		}
 
