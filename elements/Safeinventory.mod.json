@@ -1,0 +1,81 @@
+{
+  "_fv": 5,
+  "_type": "gui",
+  "definition": {
+    "type": 1,
+    "width": 400,
+    "height": 470,
+    "renderBgLayer": true,
+    "containerBlock": "Safe",
+    "components": [
+      {
+        "type": "inputslot",
+        "data": {
+          "inputLimit": {
+            "value": ""
+          },
+          "inventory": "inherited",
+          "id": 0,
+          "onSlotChanged": {
+            "name": "Test"
+          },
+          "onTakenFromSlot": {
+            "name": "Test"
+          },
+          "onStackTransfer": {
+            "name": "Test"
+          },
+          "name": "Slot #0",
+          "x": 242,
+          "y": 24
+        }
+      },
+      {
+        "type": "inputslot",
+        "data": {
+          "inputLimit": {
+            "value": ""
+          },
+          "inventory": "inherited",
+          "id": 1,
+          "name": "Slot #1",
+          "x": 282,
+          "y": 24
+        }
+      },
+      {
+        "type": "inputslot",
+        "data": {
+          "inputLimit": {
+            "value": ""
+          },
+          "inventory": "inherited",
+          "id": 2,
+          "name": "Slot #2",
+          "x": 322,
+          "y": 24
+        }
+      },
+      {
+        "type": "inputslot",
+        "data": {
+          "inputLimit": {
+            "value": ""
+          },
+          "inventory": "inherited",
+          "id": 3,
+          "name": "Slot #3",
+          "x": 362,
+          "y": 24
+        }
+      }
+    ],
+    "inventories": [
+      {
+        "slotAmount": 30,
+        "name": "Safe_inventory",
+        "dropOnClose": false
+      }
+    ]
+  }
+}

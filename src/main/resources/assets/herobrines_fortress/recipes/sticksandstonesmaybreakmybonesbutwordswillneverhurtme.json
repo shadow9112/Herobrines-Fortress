@@ -1,0 +1,16 @@
+{
+  "group": "herobrines_fortress",
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "herobrines_fortress:sickwoodplanks"
+    },
+    {
+      "item": "herobrines_fortress:sickwoodplanks"
+    }
+  ],
+  "result": {
+    "item": "minecraft:stick",
+    "count": 4
+  }
+}

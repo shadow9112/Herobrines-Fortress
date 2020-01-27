@@ -1,0 +1,100 @@
+{
+  "_fv": 5,
+  "_type": "biome",
+  "definition": {
+    "name": "Fire",
+    "groundBlock": {
+      "value": "CUSTOM:Firedirt"
+    },
+    "undergroundBlock": {
+      "value": "Blocks.STONE#0"
+    },
+    "generateLakes": false,
+    "treeType": 0,
+    "vanillaTreeType": "Savanna trees",
+    "minHeight": 7,
+    "spawnVines": false,
+    "treeVines": {
+      "value": ""
+    },
+    "treeStem": {
+      "value": ""
+    },
+    "treeBranch": {
+      "value": ""
+    },
+    "treeFruits": {
+      "value": ""
+    },
+    "customColors": true,
+    "airColor": {
+      "value": -5916161,
+      "falpha": 0.0
+    },
+    "grassColor": {
+      "value": -26368,
+      "falpha": 0.0
+    },
+    "waterColor": {
+      "value": -3407872,
+      "falpha": 0.0
+    },
+    "treesPerChunk": 3,
+    "grassPerChunk": 10,
+    "flowersPerChunk": 10,
+    "mushroomsPerChunk": 0,
+    "bigMushroomsChunk": 2,
+    "sandPathcesPerChunk": 3,
+    "gravelPatchesPerChunk": 3,
+    "reedsPerChunk": 0,
+    "cactiPerChunk": 0,
+    "deadBushesPerChunk": 3,
+    "rainingPossibility": 0.0,
+    "temperature": 2.0,
+    "baseHeight": 0.1,
+    "heightVariation": 0.5,
+    "spawnBiome": false,
+    "biomeWeight": 10,
+    "biomeType": "WARM",
+    "biomeCategory": "NONE",
+    "biomeDictionaryTypes": [],
+    "spawnList": [
+      {
+        "value": "EntityCreeper"
+      },
+      {
+        "value": "EntityBlaze"
+      },
+      {
+        "value": "EntityCaveSpider"
+      },
+      {
+        "value": "EntityGiantZombie"
+      },
+      {
+        "value": "EntityGhast"
+      },
+      {
+        "value": "EntityHusk"
+      },
+      {
+        "value": "EntitySpellcasterIllager"
+      },
+      {
+        "value": "EntityMagmaCube"
+      },
+      {
+        "value": "EntityWitherSkeleton"
+      },
+      {
+        "value": "EntityWitch"
+      },
+      {
+        "value": "EntitySkeleton"
+      },
+      {
+        "value": "EntitySheep"
+      }
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "axis=z": {
+      "model": "herobrines_fortress:firey_portal_ew"
+    },
+    "axis=x": {
+      "model": "herobrines_fortress:firey_portal_ns"
+    },
+    "inventory": {
+      "model": "herobrines_fortress:firey_portal_ns"
+    }
+  }
+}

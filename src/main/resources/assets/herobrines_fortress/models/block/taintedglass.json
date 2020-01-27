@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "down": "herobrines_fortress:blocks/tainted_glass",
+    "up": "herobrines_fortress:blocks/tainted_glass",
+    "north": "herobrines_fortress:blocks/tainted_glass2",
+    "east": "herobrines_fortress:blocks/tainted_glass",
+    "south": "herobrines_fortress:blocks/tainted_glass",
+    "west": "herobrines_fortress:blocks/tainted_glass",
+    "particle": "herobrines_fortress:blocks/tainted_glass"
+  }
+}

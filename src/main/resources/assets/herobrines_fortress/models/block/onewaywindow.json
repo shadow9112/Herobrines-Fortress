@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "down": "herobrines_fortress:blocks/diamond_brick",
+    "up": "herobrines_fortress:blocks/diamond_brick",
+    "north": "herobrines_fortress:blocks/oneway_glass_back",
+    "east": "herobrines_fortress:blocks/diamond_brick",
+    "south": "herobrines_fortress:blocks/oneway_glass_front",
+    "west": "herobrines_fortress:blocks/diamond_brick",
+    "particle": "herobrines_fortress:blocks/diamond_brick"
+  }
+}

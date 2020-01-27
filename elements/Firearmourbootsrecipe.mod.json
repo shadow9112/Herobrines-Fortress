@@ -1,0 +1,45 @@
+{
+  "_fv": 5,
+  "_type": "recipe",
+  "definition": {
+    "recipeType": "Crafting",
+    "recipeRetstackSize": 1,
+    "recipeShapeless": false,
+    "recipeReturnStack": {
+      "value": "CUSTOM:Firearmour.boots"
+    },
+    "recipeSlots": [
+      {
+        "value": ""
+      },
+      {
+        "value": ""
+      },
+      {
+        "value": ""
+      },
+      {
+        "value": "CUSTOM:Firediamond"
+      },
+      {
+        "value": ""
+      },
+      {
+        "value": "CUSTOM:Firediamond"
+      },
+      {
+        "value": "CUSTOM:Firediamond"
+      },
+      {
+        "value": ""
+      },
+      {
+        "value": "CUSTOM:Firediamond"
+      }
+    ],
+    "smeltingXPReward": 0.0,
+    "smeltingRetstackSize": 1,
+    "name": "firearmourbootsrecipe",
+    "namespace": "mod"
+  }
+}

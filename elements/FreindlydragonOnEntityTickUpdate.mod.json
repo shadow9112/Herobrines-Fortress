@@ -1,0 +1,7 @@
+{
+  "_fv": 5,
+  "_type": "procedure",
+  "definition": {
+    "procedurexml": "<xml xmlns=\"https://developers.google.com/blockly/xml\"><block type=\"event_trigger\" deletable=\"false\" x=\"40\" y=\"40\"><field name=\"trigger\">No additional trigger</field><next><block type=\"variables_set_number\"><field name=\"VAR\">global:flightx</field><value name=\"VAL\"><block type=\"entity_pos_x\"/></value><next><block type=\"variables_set_number\"><field name=\"VAR\">global:flighty</field><value name=\"VAL\"><block type=\"math_dual_ops\"><field name=\"OP\">ADD</field><value name=\"A\"><block type=\"entity_pos_y\"/></value><value name=\"B\"><block type=\"math_number\"><field name=\"NUM\">2</field></block></value></block></value><next><block type=\"variables_set_number\"><field name=\"VAR\">global:Flightz</field><value name=\"VAL\"><block type=\"entity_pos_z\"/></value></block></next></block></next></block></next></block><block type=\"controls_if\" x=\"318\" y=\"594\"><value name=\"IF0\"><block type=\"math_binary_ops\"><field name=\"OP\">EQ</field><value name=\"A\"><block type=\"variables_get_number\"><field name=\"VAR\">global:Fire_Dragon_spawn</field></block></value><value name=\"B\"><block type=\"math_number\"><field name=\"NUM\">0</field></block></value></block></value><statement name=\"DO0\"><block type=\"entity_despawn\"/></statement></block></xml>"
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "_fv": 5,
+  "_type": "dimension",
+  "definition": {
+    "portalFrame": {
+      "value": "Blocks.DIAMOND_BLOCK"
+    },
+    "portalParticles": {
+      "value": "DRAGON_BREATH"
+    },
+    "portalLuminance": 0.0,
+    "portalSound": {
+      "value": "CUSTOM:Firey"
+    },
+    "igniterName": "Lightning Portal Igniter",
+    "igniterTab": {
+      "value": "CUSTOM:Customelements"
+    },
+    "texture": "lighting_igniter",
+    "portalTexture": "lighting_portal",
+    "enablePortal": true,
+    "biomesInDimension": [
+      {
+        "value": "CUSTOM:Lightingbiome"
+      }
+    ],
+    "worldGenType": "Normal world gen",
+    "mainFillerBlock": {
+      "value": "Blocks.STONE#0"
+    },
+    "secondaryFillerBlock": {
+      "value": "Blocks.STONE#0"
+    },
+    "tertiaryFillerBlock": {
+      "value": "CUSTOM:Lightningdirt"
+    },
+    "fluidBlock": {
+      "value": "Blocks.FLOWING_WATER"
+    },
+    "airColor": {
+      "value": -13369345,
+      "falpha": 0.0
+    },
+    "canRespawnHere": false,
+    "hasFog": true,
+    "hasWeather": true,
+    "isDark": false,
+    "doesWaterVaporize": false,
+    "sleepResult": "ALLOW",
+    "hasSkyLight": true,
+    "imitateOverworldBehaviour": false,
+    "dimensionMusic": {
+      "value": "CUSTOM:Firey"
+    }
+  }
+}

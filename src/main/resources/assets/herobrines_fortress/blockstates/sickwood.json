@@ -1,0 +1,31 @@
+{
+  "variants": {
+    "normal": {
+      "model": "herobrines_fortress:sickwood"
+    },
+    "facing=south": {
+      "model": "herobrines_fortress:sickwood"
+    },
+    "facing=north": {
+      "model": "herobrines_fortress:sickwood"
+    },
+    "facing=east": {
+      "model": "herobrines_fortress:sickwood",
+      "x": 90
+    },
+    "facing=west": {
+      "model": "herobrines_fortress:sickwood",
+      "x": 90
+    },
+    "facing=up": {
+      "model": "herobrines_fortress:sickwood",
+      "x": 90,
+      "y": 90
+    },
+    "facing=down": {
+      "model": "herobrines_fortress:sickwood",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

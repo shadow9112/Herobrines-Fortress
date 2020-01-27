@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "down": "herobrines_fortress:blocks/sick_ branches",
+    "up": "herobrines_fortress:blocks/sick_ branches",
+    "north": "herobrines_fortress:blocks/sick_ branches",
+    "east": "herobrines_fortress:blocks/sick_ branches",
+    "south": "herobrines_fortress:blocks/sick_ branches",
+    "west": "herobrines_fortress:blocks/sick_ branches",
+    "particle": "herobrines_fortress:blocks/sick_ branches"
+  }
+}

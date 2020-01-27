@@ -1,0 +1,11 @@
+{
+  "_fv": 5,
+  "_type": "keybind",
+  "definition": {
+    "triggerKey": "N",
+    "keyBindingName": "Structure_spawn_menu",
+    "onKeyPressed": {
+      "name": "FiredungeonkeybindOnKeyPressedmenu"
+    }
+  }
+}

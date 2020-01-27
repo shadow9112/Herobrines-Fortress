@@ -1,0 +1,26 @@
+{
+  "group": "herobrines_fortress",
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "0 2",
+    "3 5"
+  ],
+  "key": {
+    "0": {
+      "item": "herobrines_fortress:firediamond"
+    },
+    "2": {
+      "item": "herobrines_fortress:firediamond"
+    },
+    "3": {
+      "item": "herobrines_fortress:firediamond"
+    },
+    "5": {
+      "item": "herobrines_fortress:firediamond"
+    }
+  },
+  "result": {
+    "item": "herobrines_fortress:firearmourboots",
+    "count": 1
+  }
+}

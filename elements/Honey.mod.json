@@ -1,0 +1,19 @@
+{
+  "_fv": 5,
+  "_type": "fluid",
+  "definition": {
+    "name": "Honey",
+    "textureStill": "honey_still",
+    "textureFlowing": "honey_flowing",
+    "luminosity": 5,
+    "density": 1000,
+    "viscosity": 1000,
+    "isGas": false,
+    "type": "WATER",
+    "generateBucket": true,
+    "spawnWorldTypes": [],
+    "onEntityCollides": {
+      "name": "HoneyMobplayerCollidesBlock"
+    }
+  }
+}

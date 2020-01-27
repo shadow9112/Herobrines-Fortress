@@ -1,0 +1,28 @@
+{
+  "_fv": 5,
+  "_type": "tool",
+  "definition": {
+    "renderType": 0,
+    "texture": "fire_pickaxe",
+    "customModelName": "Normal",
+    "name": "Firepickaxe",
+    "creativeTab": {
+      "value": "CUSTOM:Customelements"
+    },
+    "toolType": "Pickaxe",
+    "harvestLevel": 4,
+    "efficiency": 6.0,
+    "attackSpeed": 2.8,
+    "enchantability": 8,
+    "damageVsEntity": 5.0,
+    "usageCount": 2026,
+    "blocksAffected": [],
+    "hasGlow": false,
+    "onEntityHitWith": {
+      "name": "FireswordMobIsHitWithTool"
+    },
+    "onBlockDestroyedWithTool": {
+      "name": "TnTBowBlockDestroyedWithTool"
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "parent": "block/fence_side",
+  "textures": {
+    "texture": "herobrines_fortress:blocks/dragon_hearted",
+    "particle": "herobrines_fortress:blocks/dragon_hearted"
+  }
+}

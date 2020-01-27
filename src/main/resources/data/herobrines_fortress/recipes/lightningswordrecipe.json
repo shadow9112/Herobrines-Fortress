@@ -1,0 +1,42 @@
+{
+  "group": "herobrines_fortress",
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "012",
+    "345",
+    "678"
+  ],
+  "key": {
+    "0": {
+      "item": "herobrines_fortress:firediamond"
+    },
+    "1": {
+      "item": "herobrines_fortress:firediamond"
+    },
+    "2": {
+      "item": "herobrines_fortress:firediamond"
+    },
+    "3": {
+      "item": "herobrines_fortress:firediamond"
+    },
+    "4": {
+      "item": "minecraft:lava_bucket"
+    },
+    "5": {
+      "item": "herobrines_fortress:firediamond"
+    },
+    "6": {
+      "item": "minecraft:obsidian"
+    },
+    "7": {
+      "item": "minecraft:iron_ingot"
+    },
+    "8": {
+      "item": "minecraft:obsidian"
+    }
+  },
+  "result": {
+    "item": "herobrines_fortress:firesword",
+    "count": 1
+  }
+}

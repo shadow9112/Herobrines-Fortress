@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "type=dandelion": {
+      "model": "herobrines_fortress:flames"
+    }
+  }
+}

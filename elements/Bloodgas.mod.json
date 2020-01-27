@@ -1,0 +1,19 @@
+{
+  "_fv": 5,
+  "_type": "fluid",
+  "definition": {
+    "name": "Bloodgas",
+    "textureStill": "blood_gas",
+    "textureFlowing": "blood_gas",
+    "luminosity": 2,
+    "density": -10,
+    "viscosity": 1000,
+    "isGas": true,
+    "type": "WATER",
+    "generateBucket": true,
+    "creativeTab": {
+      "value": "MISC"
+    },
+    "spawnWorldTypes": []
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "down": "herobrines_fortress:blocks/home_block",
+    "up": "herobrines_fortress:blocks/home_block",
+    "north": "herobrines_fortress:blocks/home_block",
+    "east": "herobrines_fortress:blocks/home_block",
+    "south": "herobrines_fortress:blocks/home_block",
+    "west": "herobrines_fortress:blocks/home_block",
+    "particle": "herobrines_fortress:blocks/home_block"
+  }
+}

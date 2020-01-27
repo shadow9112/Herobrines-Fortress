@@ -1,0 +1,7 @@
+{
+  "parent": "block/cross",
+  "textures": {
+    "cross": "herobrines_fortress:blocks/flamy",
+    "particle": "herobrines_fortress:blocks/flamy"
+  }
+}

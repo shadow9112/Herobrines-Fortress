@@ -1,0 +1,10 @@
+{
+  "_fv": 5,
+  "_type": "command",
+  "definition": {
+    "commandName": "dimension 0",
+    "onCommandExecuted": {
+      "name": "Dimension0CommandExecuted"
+    }
+  }
+}

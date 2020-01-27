@@ -1,0 +1,11 @@
+{
+  "group": "herobrines_fortress",
+  "type": "minecraft:smelting",
+  "experience": 1,
+  "ingredient": {
+    "item": "herobrines_fortress:steeloreblock"
+  },
+  "result": {
+    "item": "herobrines_fortress:steelingot"
+  }
+}

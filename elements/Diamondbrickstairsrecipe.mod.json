@@ -1,0 +1,45 @@
+{
+  "_fv": 5,
+  "_type": "recipe",
+  "definition": {
+    "recipeType": "Crafting",
+    "recipeRetstackSize": 6,
+    "recipeShapeless": false,
+    "recipeReturnStack": {
+      "value": "CUSTOM:Diamondbrickstairs"
+    },
+    "recipeSlots": [
+      {
+        "value": "CUSTOM:Diamondbrickblock"
+      },
+      {
+        "value": ""
+      },
+      {
+        "value": ""
+      },
+      {
+        "value": "CUSTOM:Diamondbrickblock"
+      },
+      {
+        "value": "CUSTOM:Diamondbrickblock"
+      },
+      {
+        "value": ""
+      },
+      {
+        "value": "CUSTOM:Diamondbrickblock"
+      },
+      {
+        "value": "CUSTOM:Diamondbrickblock"
+      },
+      {
+        "value": "CUSTOM:Diamondbrickblock"
+      }
+    ],
+    "smeltingXPReward": 0.0,
+    "smeltingRetstackSize": 1,
+    "name": "diamondbrickstairsrecipe",
+    "namespace": "mod"
+  }
+}

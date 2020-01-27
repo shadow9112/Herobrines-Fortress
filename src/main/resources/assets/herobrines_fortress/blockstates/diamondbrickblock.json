@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "normal": {
+      "model": "herobrines_fortress:diamondbrickblock"
+    },
+    "facing=north": {
+      "model": "herobrines_fortress:diamondbrickblock"
+    },
+    "facing=east": {
+      "model": "herobrines_fortress:diamondbrickblock",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "herobrines_fortress:diamondbrickblock",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "herobrines_fortress:diamondbrickblock",
+      "y": 270
+    },
+    "facing=up": {
+      "model": "herobrines_fortress:diamondbrickblock",
+      "x": 270
+    },
+    "facing=down": {
+      "model": "herobrines_fortress:diamondbrickblock",
+      "x": 90
+    }
+  }
+}

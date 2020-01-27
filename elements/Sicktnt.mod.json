@@ -1,0 +1,99 @@
+{
+  "_fv": 5,
+  "_type": "block",
+  "definition": {
+    "texture": "sick_tnt_top",
+    "textureTop": "sick_tnt_top",
+    "textureLeft": "sick_tnt_side",
+    "textureFront": "sick_tnt_side",
+    "textureRight": "sick_tnt_side",
+    "textureBack": "sick_tnt_side",
+    "renderType": 10,
+    "customModelName": "Normal",
+    "rotationMode": 0,
+    "hasTransparency": false,
+    "transparencyType": "SOLID",
+    "mx": 0.0,
+    "my": 0.0,
+    "mz": 0.0,
+    "Mx": 1.0,
+    "My": 1.0,
+    "Mz": 1.0,
+    "faceShape": "SOLID",
+    "name": "Sick tnt",
+    "specialInfo": [],
+    "hardness": 1.0,
+    "resistance": 10.0,
+    "hasGravity": false,
+    "creativeTab": {
+      "value": "CUSTOM:Customelements"
+    },
+    "destroyTool": "Not specified",
+    "affectedBySilkTouch": true,
+    "customDrop": {
+      "value": ""
+    },
+    "dropAmount": 1,
+    "isBeaconBase": false,
+    "enchantPowerBonus": 0.0,
+    "plantsGrowOn": true,
+    "canProvidePower": false,
+    "lightOpacity": 255,
+    "material": {
+      "value": "TNT"
+    },
+    "tickRate": 10,
+    "isReplaceable": false,
+    "isFlammable": true,
+    "colorOnMap": "DEFAULT",
+    "creativePickItem": {
+      "value": ""
+    },
+    "isNotColidable": false,
+    "soundOnStep": {
+      "value": "SLIME"
+    },
+    "luminance": 1.0,
+    "unbreakable": true,
+    "breakHarvestLevel": 1,
+    "spawnParticles": true,
+    "particleToSpawn": {
+      "value": "SLIME"
+    },
+    "particleSpawningShape": "Spread",
+    "particleSpawningRadious": 0.5,
+    "particleAmount": 4,
+    "particleSpawningCondition": "ALWAYS",
+    "hasInventory": false,
+    "inventorySize": 9,
+    "inventoryStackSize": 64,
+    "inventoryDropWhenDestroyed": true,
+    "inventoryComparatorPower": true,
+    "inventoryOutSlotIDs": [],
+    "onRightClicked": {
+      "name": "SicktntOnBlockRightClicked2"
+    },
+    "onDestroyedByPlayer": {
+      "name": "SicktntBlockDestroyedByExplosion"
+    },
+    "onDestroyedByExplosion": {
+      "name": "SicktntBlockDestroyedByExplosion"
+    },
+    "onStartToDestroy": {
+      "name": "SicktntBlockDestroyedByExplosion"
+    },
+    "onEntityWalksOn": {
+      "name": "SicktntOnBlockRightClicked"
+    },
+    "onRedstoneOn": {
+      "name": "SicktntBlockDestroyedByExplosion"
+    },
+    "spawnWorldTypes": [],
+    "restrictionBiomes": [],
+    "blocksToReplace": [],
+    "frequencyPerChunks": 10,
+    "frequencyOnChunk": 16,
+    "minGenerateHeight": 10,
+    "maxGenerateHeight": 110
+  }
+}

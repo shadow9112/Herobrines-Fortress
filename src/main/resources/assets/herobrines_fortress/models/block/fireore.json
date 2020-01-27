@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "down": "herobrines_fortress:blocks/fire_orey",
+    "up": "herobrines_fortress:blocks/fire_orey",
+    "north": "herobrines_fortress:blocks/fire_orey",
+    "east": "herobrines_fortress:blocks/fire_orey",
+    "south": "herobrines_fortress:blocks/fire_orey",
+    "west": "herobrines_fortress:blocks/fire_orey",
+    "particle": "herobrines_fortress:blocks/fire_orey"
+  }
+}

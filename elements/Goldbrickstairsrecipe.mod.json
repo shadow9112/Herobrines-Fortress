@@ -1,0 +1,45 @@
+{
+  "_fv": 5,
+  "_type": "recipe",
+  "definition": {
+    "recipeType": "Crafting",
+    "recipeRetstackSize": 6,
+    "recipeShapeless": false,
+    "recipeReturnStack": {
+      "value": "CUSTOM:Goldbrickstairs"
+    },
+    "recipeSlots": [
+      {
+        "value": "CUSTOM:Goldbrickblock"
+      },
+      {
+        "value": ""
+      },
+      {
+        "value": ""
+      },
+      {
+        "value": "CUSTOM:Goldbrickblock"
+      },
+      {
+        "value": "CUSTOM:Goldbrickblock"
+      },
+      {
+        "value": ""
+      },
+      {
+        "value": "CUSTOM:Goldbrickblock"
+      },
+      {
+        "value": "CUSTOM:Goldbrickblock"
+      },
+      {
+        "value": "CUSTOM:Goldbrickblock"
+      }
+    ],
+    "smeltingXPReward": 0.0,
+    "smeltingRetstackSize": 1,
+    "name": "goldbrickstairsrecipe",
+    "namespace": "mod"
+  }
+}

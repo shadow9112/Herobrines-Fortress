@@ -1,0 +1,27 @@
+{
+  "_fv": 5,
+  "_type": "potion",
+  "definition": {
+    "name": "Nethered",
+    "effectName": "Nethered",
+    "icon": "71sfjf5loll._sy355_.png",
+    "color": {
+      "value": -16711732,
+      "falpha": 0.0
+    },
+    "isInstant": true,
+    "isBad": true,
+    "isBenefitical": false,
+    "registerPotionType": true,
+    "curativeItems": [
+      {
+        "value": "Items.MILK_BUCKET"
+      }
+    ],
+    "renderStatusInInventory": true,
+    "renderStatusInHUD": true,
+    "onStarted": {
+      "name": "NetheredPotionStartedapplied"
+    }
+  }
+}

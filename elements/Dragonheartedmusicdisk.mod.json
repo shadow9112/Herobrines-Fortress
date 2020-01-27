@@ -1,0 +1,27 @@
+{
+  "_fv": 5,
+  "_type": "item",
+  "definition": {
+    "renderType": 0,
+    "texture": "dragon_hearted",
+    "customModelName": "Normal",
+    "name": "Dragon hearted music disk",
+    "creativeTab": {
+      "value": "MISC"
+    },
+    "stackSize": 1,
+    "enchantability": 0,
+    "useDuration": 0,
+    "toolType": 1.0,
+    "damageCount": 0,
+    "destroyAnyBlock": false,
+    "stayInGridWhenCrafting": false,
+    "enableMeleeDamage": false,
+    "damageVsEntity": 5.0,
+    "specialInfo": [],
+    "hasGlow": false,
+    "onRightClickedOnBlock": {
+      "name": "DragonheartedmusicdiskRightClickedOnBlock"
+    }
+  }
+}

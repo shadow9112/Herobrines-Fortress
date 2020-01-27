@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "down": "herobrines_fortress:blocks/gold_brick",
+    "up": "herobrines_fortress:blocks/gold_brick",
+    "north": "herobrines_fortress:blocks/gold_brick",
+    "east": "herobrines_fortress:blocks/gold_brick",
+    "south": "herobrines_fortress:blocks/gold_brick",
+    "west": "herobrines_fortress:blocks/gold_brick",
+    "particle": "herobrines_fortress:blocks/gold_brick"
+  }
+}

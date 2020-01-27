@@ -1,0 +1,44 @@
+{
+  "_fv": 5,
+  "_type": "gun",
+  "definition": {
+    "renderType": 0,
+    "texture": "fire_throwingdagger",
+    "customModelName": "Normal",
+    "name": "Fire throwing dagger",
+    "creativeTab": {
+      "value": "CUSTOM:Customelements"
+    },
+    "stackSize": 16,
+    "ammoItem": {
+      "value": "CUSTOM:Firethrowingdagger"
+    },
+    "shootConstantly": false,
+    "usageCount": 1,
+    "actionSound": {
+      "value": "block.fire.ambient"
+    },
+    "hasGlow": false,
+    "enableMeleeDamage": false,
+    "damageVsEntity": 5.0,
+    "bulletPower": 0.7,
+    "bulletDamage": 5.0,
+    "bulletKnockback": 2,
+    "bulletParticles": true,
+    "bulletIgnitesFire": true,
+    "bulletItemTexture": {
+      "value": "CUSTOM:Firesword"
+    },
+    "bulletModel": "Default",
+    "customBulletModelTexture": "",
+    "onBulletHitsBlock": {
+      "name": "FirethrowingdaggerBulletHitsBlock"
+    },
+    "onBulletHitsPlayer": {
+      "name": "FirethrowingdaggerBulletHitsPlayer"
+    },
+    "onBulletHitsEntity": {
+      "name": "FirethrowingdaggerBulletHitsPlayer"
+    }
+  }
+}

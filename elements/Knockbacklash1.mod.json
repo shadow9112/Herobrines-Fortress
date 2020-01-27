@@ -1,0 +1,35 @@
+{
+  "_fv": 5,
+  "_type": "gun",
+  "definition": {
+    "renderType": 0,
+    "texture": "knockback_lash",
+    "customModelName": "Normal",
+    "name": "Knock back lash",
+    "creativeTab": {
+      "value": "CUSTOM:Customelements"
+    },
+    "stackSize": 1,
+    "ammoItem": {
+      "value": ""
+    },
+    "shootConstantly": false,
+    "usageCount": 0,
+    "actionSound": {
+      "value": "block.brewing_stand.brew"
+    },
+    "hasGlow": false,
+    "enableMeleeDamage": true,
+    "damageVsEntity": 5.0,
+    "bulletPower": 0.5,
+    "bulletDamage": 5.0,
+    "bulletKnockback": 500,
+    "bulletParticles": true,
+    "bulletIgnitesFire": false,
+    "bulletItemTexture": {
+      "value": "CUSTOM:Firediamond"
+    },
+    "bulletModel": "Default",
+    "customBulletModelTexture": ""
+  }
+}

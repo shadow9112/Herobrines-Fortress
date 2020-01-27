@@ -1,0 +1,16 @@
+{
+  "group": "herobrines_fortress",
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:flint_and_steel"
+    },
+    {
+      "item": "minecraft:grass_block"
+    }
+  ],
+  "result": {
+    "item": "herobrines_fortress:firey",
+    "count": 1
+  }
+}

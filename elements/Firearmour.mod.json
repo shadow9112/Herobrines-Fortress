@@ -1,0 +1,55 @@
+{
+  "_fv": 5,
+  "_type": "armor",
+  "definition": {
+    "enableHelmet": true,
+    "textureHelmet": "fire_armour_helmet",
+    "enableBody": true,
+    "textureBody": "fire_armour_chestplate",
+    "enableLeggings": true,
+    "textureLeggings": "fire_armour_leggings",
+    "enableBoots": true,
+    "textureBoots": "fire_armour_boots",
+    "onHelmetTick": {
+      "name": "FirearmourBootsTickEvent"
+    },
+    "onBodyTick": {
+      "name": "FirearmourBootsTickEvent"
+    },
+    "onLeggingsTick": {
+      "name": "FirearmourBootsTickEvent"
+    },
+    "onBootsTick": {
+      "name": "FirearmourBootsTickEvent"
+    },
+    "creativeTab": {
+      "value": "CUSTOM:Customelements"
+    },
+    "armorTextureFile": "h",
+    "helmetName": "Fire armour Helmet",
+    "bodyName": "Fire armour Body",
+    "leggingsName": "Fire armour Leggings",
+    "bootsName": "Fire armour Boots",
+    "helmetModelName": "Default",
+    "helmetModelPart": "Helmet",
+    "helmetModelTexture": "From armor",
+    "bodyModelName": "Default",
+    "bodyModelPart": "Body",
+    "bodyModelTexture": "From armor",
+    "leggingsModelName": "Default",
+    "leggingsModelPartL": "Leggings L",
+    "leggingsModelPartR": "Leggings R",
+    "leggingsModelTexture": "From armor",
+    "bootsModelName": "Default",
+    "bootsModelPartL": "Boots L",
+    "bootsModelPartR": "Boots R",
+    "bootsModelTexture": "From armor",
+    "maxDamage": 40,
+    "damageValueHelmet": 8,
+    "damageValueBody": 8,
+    "damageValueLeggings": 4,
+    "damageValueBoots": 3,
+    "enchantability": 100,
+    "toughness": 4.0
+  }
+}

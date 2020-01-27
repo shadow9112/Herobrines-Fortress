@@ -1,0 +1,11 @@
+{
+  "_fv": 5,
+  "_type": "tab",
+  "definition": {
+    "name": "Custom elements",
+    "icon": {
+      "value": "CUSTOM:Firesword"
+    },
+    "showSearch": false
+  }
+}

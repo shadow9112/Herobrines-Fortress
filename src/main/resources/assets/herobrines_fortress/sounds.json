@@ -1,0 +1,38 @@
+{
+  "Battlefield": {
+    "category": "master",
+    "sounds": [
+      {
+        "name": "herobrines_fortress:battlefield 4 main theme battlefield 4 warsaw theme 1080p",
+        "stream": false
+      }
+    ]
+  },
+  "Firey": {
+    "category": "master",
+    "sounds": [
+      {
+        "name": "herobrines_fortress:battlefield",
+        "stream": false
+      }
+    ]
+  },
+  "Firey_ambient_sound": {
+    "category": "ambient",
+    "sounds": [
+      {
+        "name": "herobrines_fortress:y2mate.com - battlefield_4_ost_main_theme_song_extended_1_hour_warsaw_theme_xjgugshxyp0",
+        "stream": false
+      }
+    ]
+  },
+  "Dragon_Hearted": {
+    "category": "master",
+    "sounds": [
+      {
+        "name": "herobrines_fortress:dragonhearted - a minecraft original music video",
+        "stream": false
+      }
+    ]
+  }
+}

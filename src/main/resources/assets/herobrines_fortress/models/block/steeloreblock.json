@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "down": "herobrines_fortress:blocks/steel_ore_block",
+    "up": "herobrines_fortress:blocks/steel_ore_block",
+    "north": "herobrines_fortress:blocks/steel_ore_block",
+    "east": "herobrines_fortress:blocks/steel_ore_block",
+    "south": "herobrines_fortress:blocks/steel_ore_block",
+    "west": "herobrines_fortress:blocks/steel_ore_block",
+    "particle": "herobrines_fortress:blocks/steel_ore_block"
+  }
+}

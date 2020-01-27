@@ -1,0 +1,26 @@
+{
+  "_fv": 5,
+  "_type": "tool",
+  "definition": {
+    "renderType": 0,
+    "texture": "knockback_stick_texture",
+    "customModelName": "Normal",
+    "name": "Knockback stick",
+    "creativeTab": {
+      "value": "TOOLS"
+    },
+    "toolType": "Special",
+    "harvestLevel": 0,
+    "efficiency": 0.0,
+    "attackSpeed": 2.0,
+    "enchantability": 3,
+    "damageVsEntity": 3.0,
+    "usageCount": 130,
+    "blocksAffected": [],
+    "hasGlow": false,
+    "repairItems": [],
+    "onCrafted": {
+      "name": "KnockbackstickItemIsCraftedsmelted"
+    }
+  }
+}

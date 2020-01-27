@@ -1,0 +1,45 @@
+{
+  "_fv": 5,
+  "_type": "recipe",
+  "definition": {
+    "recipeType": "Crafting",
+    "recipeRetstackSize": 1,
+    "recipeShapeless": false,
+    "recipeReturnStack": {
+      "value": "CUSTOM:Firearmour.body"
+    },
+    "recipeSlots": [
+      {
+        "value": "CUSTOM:Firediamond"
+      },
+      {
+        "value": ""
+      },
+      {
+        "value": "CUSTOM:Firediamond"
+      },
+      {
+        "value": "CUSTOM:Firediamond"
+      },
+      {
+        "value": "CUSTOM:Firediamond"
+      },
+      {
+        "value": "CUSTOM:Firediamond"
+      },
+      {
+        "value": "CUSTOM:Firediamond"
+      },
+      {
+        "value": "CUSTOM:Firediamond"
+      },
+      {
+        "value": "CUSTOM:Firediamond"
+      }
+    ],
+    "smeltingXPReward": 0.0,
+    "smeltingRetstackSize": 1,
+    "name": "firearmourchestplaterecipe",
+    "namespace": "mod"
+  }
+}

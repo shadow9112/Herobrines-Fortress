@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "down": "herobrines_fortress:blocks/sick_wood_top",
+    "up": "herobrines_fortress:blocks/sick_wood_top",
+    "north": "herobrines_fortress:blocks/sick_wood_side",
+    "east": "herobrines_fortress:blocks/sick_wood_side",
+    "south": "herobrines_fortress:blocks/sick_wood_side",
+    "west": "herobrines_fortress:blocks/sick_wood_side",
+    "particle": "herobrines_fortress:blocks/sick_wood_top"
+  }
+}

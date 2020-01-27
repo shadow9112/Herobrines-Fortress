@@ -1,0 +1,28 @@
+{
+  "_fv": 5,
+  "_type": "gui",
+  "definition": {
+    "type": 0,
+    "width": 700,
+    "height": 400,
+    "renderBgLayer": true,
+    "containerBlock": "<none>",
+    "components": [
+      {
+        "type": "button",
+        "data": {
+          "text": "Fire dungeon",
+          "onClick": {
+            "name": "FiredungeonkeybindOnKeyPressed"
+          },
+          "width": 240,
+          "height": 40,
+          "name": "Fire dungeon",
+          "x": 88,
+          "y": 49
+        }
+      }
+    ],
+    "inventories": []
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "_fv": 5,
+  "_type": "gun",
+  "definition": {
+    "renderType": 0,
+    "texture": "exposive_bow",
+    "customModelName": "Normal",
+    "name": "TnT Bow",
+    "creativeTab": {
+      "value": "COMBAT"
+    },
+    "stackSize": 1,
+    "ammoItem": {
+      "value": "Blocks.TNT"
+    },
+    "shootConstantly": false,
+    "usageCount": 100,
+    "actionSound": {
+      "value": "entity.arrow.shoot"
+    },
+    "hasGlow": false,
+    "enableMeleeDamage": false,
+    "damageVsEntity": 5.0,
+    "bulletPower": 2.0,
+    "bulletDamage": 10.0,
+    "bulletKnockback": 20,
+    "bulletParticles": true,
+    "bulletIgnitesFire": true,
+    "bulletItemTexture": {
+      "value": "CUSTOM:Sicktnt"
+    },
+    "bulletModel": "Default",
+    "customBulletModelTexture": "",
+    "onBulletHitsBlock": {
+      "name": "TnTBowBulletHitsBlock"
+    },
+    "onBulletHitsPlayer": {
+      "name": "TnTBowBulletHitsBlock"
+    },
+    "onBulletHitsEntity": {
+      "name": "TnTBowBulletHitsBlock"
+    },
+    "onRangedItemUsed": {
+      "name": "TnTBowRangedItemUsed"
+    }
+  }
+}

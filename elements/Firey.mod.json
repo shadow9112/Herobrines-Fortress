@@ -1,0 +1,56 @@
+{
+  "_fv": 5,
+  "_type": "dimension",
+  "definition": {
+    "portalFrame": {
+      "value": "Blocks.GOLD_BLOCK"
+    },
+    "portalParticles": {
+      "value": "SMOKE_NORMAL"
+    },
+    "portalLuminance": 0.0,
+    "portalSound": {
+      "value": "CUSTOM:Battlefield"
+    },
+    "igniterName": "Fire glasses",
+    "igniterTab": {
+      "value": "CUSTOM:Customelements"
+    },
+    "texture": "idk",
+    "portalTexture": "nein",
+    "enablePortal": true,
+    "biomesInDimension": [
+      {
+        "value": "CUSTOM:FIre"
+      }
+    ],
+    "worldGenType": "Normal world gen",
+    "mainFillerBlock": {
+      "value": "Blocks.STONE#0"
+    },
+    "secondaryFillerBlock": {
+      "value": "Blocks.STONE#0"
+    },
+    "tertiaryFillerBlock": {
+      "value": "CUSTOM:Firedirt"
+    },
+    "fluidBlock": {
+      "value": "Blocks.FLOWING_LAVA"
+    },
+    "airColor": {
+      "value": -26317,
+      "falpha": 0.0
+    },
+    "canRespawnHere": false,
+    "hasFog": true,
+    "hasWeather": true,
+    "isDark": false,
+    "doesWaterVaporize": false,
+    "sleepResult": "BED_EXPLODES",
+    "hasSkyLight": true,
+    "imitateOverworldBehaviour": true,
+    "dimensionMusic": {
+      "value": "CUSTOM:Firey_ambient_sound"
+    }
+  }
+}

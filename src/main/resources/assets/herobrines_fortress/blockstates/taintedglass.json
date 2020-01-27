@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "normal": {
+      "model": "herobrines_fortress:taintedglass"
+    },
+    "facing=north": {
+      "model": "herobrines_fortress:taintedglass"
+    },
+    "facing=east": {
+      "model": "herobrines_fortress:taintedglass",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "herobrines_fortress:taintedglass",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "herobrines_fortress:taintedglass",
+      "y": 270
+    },
+    "facing=up": {
+      "model": "herobrines_fortress:taintedglass",
+      "x": 270
+    },
+    "facing=down": {
+      "model": "herobrines_fortress:taintedglass",
+      "x": 90
+    }
+  }
+}

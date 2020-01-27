@@ -1,0 +1,28 @@
+{
+  "_fv": 5,
+  "_type": "tool",
+  "definition": {
+    "renderType": 0,
+    "texture": "fire_shovel",
+    "customModelName": "Normal",
+    "name": "Fireshovel",
+    "creativeTab": {
+      "value": "CUSTOM:Customelements"
+    },
+    "toolType": "Spade",
+    "harvestLevel": 4,
+    "efficiency": 6.0,
+    "attackSpeed": 2.8,
+    "enchantability": 4,
+    "damageVsEntity": 5.0,
+    "usageCount": 2026,
+    "blocksAffected": [],
+    "hasGlow": false,
+    "onEntityHitWith": {
+      "name": "FirethrowingdaggerBulletHitsBlock"
+    },
+    "onBlockDestroyedWithTool": {
+      "name": "TnTBowBlockDestroyedWithTool"
+    }
+  }
+}
