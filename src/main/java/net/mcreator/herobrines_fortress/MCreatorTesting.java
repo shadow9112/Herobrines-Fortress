@@ -19,6 +19,7 @@ import net.minecraft.item.Item;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -87,8 +88,9 @@ public class MCreatorTesting extends Elementsherobrines_fortress.ModElement {
 			experienceValue = 5;
 			this.isImmuneToFire = true;
 			setNoAI(!true);
-			this.tasks.addTask(1, new EntityAILookIdle(this));
-			this.targetTasks.addTask(2, new EntityAIHurtByTarget(this, false));
+			this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
+			this.tasks.addTask(2, new EntityAIWander(this, 0.8));
+			this.tasks.addTask(3, new EntityAILookIdle(this));
 			this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(MCreatorFiresword.block, (int) (1)));
 		}
 
@@ -145,6 +147,24 @@ public class MCreatorTesting extends Elementsherobrines_fortress.ModElement {
 			int z = (int) this.posZ;
 			ItemStack itemstack = entity.getHeldItem(hand);
 			return true;
+		}
+
+		@Override
+		public void onEntityUpdate() {
+			super.onEntityUpdate();
+			int x = (int) this.posX;
+			int y = (int) this.posY;
+			int z = (int) this.posZ;
+			Entity entity = this;
+			{
+				java.util.HashMap<String, Object> $_dependencies = new java.util.HashMap<>();
+				$_dependencies.put("entity", entity);
+				$_dependencies.put("x", x);
+				$_dependencies.put("y", y);
+				$_dependencies.put("z", z);
+				$_dependencies.put("world", world);
+				MCreatorTesting_projectile_code.executeProcedure($_dependencies);
+			}
 		}
 
 		@Override

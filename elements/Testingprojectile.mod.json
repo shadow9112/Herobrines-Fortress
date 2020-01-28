@@ -70,7 +70,7 @@
     "inventoryDropWhenDestroyed": true,
     "inventoryComparatorPower": true,
     "inventoryOutSlotIDs": [],
-    "onRightClicked": {
+    "onTickUpdate": {
       "name": "TestingprojectileRandomTickUpdateEvent"
     },
     "spawnWorldTypes": [],

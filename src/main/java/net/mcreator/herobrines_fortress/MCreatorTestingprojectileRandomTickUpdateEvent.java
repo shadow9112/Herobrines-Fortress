@@ -32,9 +32,9 @@ public class MCreatorTestingprojectileRandomTickUpdateEvent extends Elementshero
 		World world = (World) dependencies.get("world");
 		if (((herobrines_fortressVariables.MapVariables.get(world).Projectile_Movement) == 5)) {
 			world.setBlockState(new BlockPos((int) (x + 1), (int) y, (int) z), MCreatorTestingprojectile.block.getDefaultState(), 3);
-			world.setBlockState(new BlockPos((int) (x + 1), (int) (y + 1), (int) z), MCreatorTestingprojectile.block.getDefaultState(), 3);
+			world.setBlockState(new BlockPos((int) (x + 1), (int) (y - 1), (int) z), MCreatorTestingprojectile.block.getDefaultState(), 3);
 		} else {
-			world.setBlockState(new BlockPos((int) (x + 1), (int) (y + 1), (int) z), MCreatorTestingprojectile.block.getDefaultState(), 3);
+			world.setBlockState(new BlockPos((int) (x + 1), (int) (y - 1), (int) z), MCreatorTestingprojectile.block.getDefaultState(), 3);
 			herobrines_fortressVariables.MapVariables.get(world).Projectile_Movement = (double) ((herobrines_fortressVariables.MapVariables
 					.get(world).Projectile_Movement) + 1);
 			herobrines_fortressVariables.MapVariables.get(world).syncData(world);
