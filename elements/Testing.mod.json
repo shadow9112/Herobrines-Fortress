@@ -99,7 +99,7 @@
     "rangedAttackItem": {
       "value": "Blocks.POTTED_CORNFLOWER"
     },
-    "spawnThisMob": true,
+    "spawnThisMob": false,
     "doesDespawnWhenIdle": true,
     "spawningProbability": 20,
     "mobSpawningType": "monster",

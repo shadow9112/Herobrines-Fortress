@@ -2,6 +2,7 @@ package net.mcreator.herobrines_fortress;
 
 import net.minecraft.world.World;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.init.Blocks;
 
 @Elementsherobrines_fortress.ModElement.Tag
 public class MCreatorTestingprojectileRandomTickUpdateEvent extends Elementsherobrines_fortress.ModElement {
@@ -33,11 +34,15 @@ public class MCreatorTestingprojectileRandomTickUpdateEvent extends Elementshero
 		if (((herobrines_fortressVariables.MapVariables.get(world).Projectile_Movement) == 5)) {
 			world.setBlockState(new BlockPos((int) (x + 1), (int) y, (int) z), MCreatorTestingprojectile.block.getDefaultState(), 3);
 			world.setBlockState(new BlockPos((int) (x + 1), (int) (y - 1), (int) z), MCreatorTestingprojectile.block.getDefaultState(), 3);
+			world.setBlockState(new BlockPos((int) x, (int) y, (int) z), Blocks.AIR.getDefaultState(), 3);
+			herobrines_fortressVariables.MapVariables.get(world).Projectile_Movement = (double) 0;
+			herobrines_fortressVariables.MapVariables.get(world).syncData(world);
 		} else {
 			world.setBlockState(new BlockPos((int) (x + 1), (int) (y - 1), (int) z), MCreatorTestingprojectile.block.getDefaultState(), 3);
 			herobrines_fortressVariables.MapVariables.get(world).Projectile_Movement = (double) ((herobrines_fortressVariables.MapVariables
 					.get(world).Projectile_Movement) + 1);
 			herobrines_fortressVariables.MapVariables.get(world).syncData(world);
+			world.setBlockState(new BlockPos((int) x, (int) y, (int) z), Blocks.AIR.getDefaultState(), 3);
 		}
 	}
 }
