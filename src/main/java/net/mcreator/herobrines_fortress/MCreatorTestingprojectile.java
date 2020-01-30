@@ -8,8 +8,11 @@ import net.minecraftforge.client.event.ModelRegistryEvent;
 
 import net.minecraft.world.World;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.Item;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.material.Material;
@@ -80,6 +83,25 @@ public class MCreatorTestingprojectile extends Elementsherobrines_fortress.ModEl
 				MCreatorTestingprojectileRandomTickUpdateEvent.executeProcedure($_dependencies);
 			}
 			world.scheduleUpdate(new BlockPos(x, y, z), this, this.tickRate(world));
+		}
+
+		@Override
+		public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer entity, EnumHand hand, EnumFacing direction,
+				float hitX, float hitY, float hitZ) {
+			super.onBlockActivated(world, pos, state, entity, hand, direction, hitX, hitY, hitZ);
+			int x = pos.getX();
+			int y = pos.getY();
+			int z = pos.getZ();
+			Block block = this;
+			{
+				java.util.HashMap<String, Object> $_dependencies = new java.util.HashMap<>();
+				$_dependencies.put("x", x);
+				$_dependencies.put("y", y);
+				$_dependencies.put("z", z);
+				$_dependencies.put("world", world);
+				MCreatorSicktntBlockDestroyedByExplosion.executeProcedure($_dependencies);
+			}
+			return true;
 		}
 	}
 }

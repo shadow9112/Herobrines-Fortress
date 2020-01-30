@@ -1,8 +1,8 @@
 {
   "id_map": {
-    "ENTITY": 16,
     "GUI": 5,
-    "DIMENSION": 2
+    "DIMENSION": 2,
+    "ENTITY": 18
   },
   "mod_elements": [
     {
@@ -2303,14 +2303,6 @@
       "ids": {}
     },
     {
-      "name": "How",
-      "type": "keybind",
-      "sortid": 150,
-      "compiles": true,
-      "locked_code": false,
-      "ids": {}
-    },
-    {
       "name": "PasswordTest",
       "type": "gui",
       "sortid": 151,
@@ -2654,7 +2646,6 @@
       "tile.flames.name": "Flames",
       "block.herobrines_fortress.onewaywindow": "Oneway window",
       "key.mcreator.firedungeonkeybind": "Structure_spawn_menu",
-      "key.mcreator.how": "How",
       "item.herobrines_fortress.steelingot": "Steel ingot",
       "tile.onewaywindow.name": "Oneway window",
       "tile.sickleaves.name": "Sick leaves",
