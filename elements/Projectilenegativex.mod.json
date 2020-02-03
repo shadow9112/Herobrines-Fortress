@@ -20,7 +20,7 @@
     "My": 1.0,
     "Mz": 1.0,
     "faceShape": "SOLID",
-    "name": "Testingprojectile",
+    "name": "Projectilenegativex",
     "specialInfo": [],
     "hardness": 1.0,
     "resistance": 10.0,
@@ -71,7 +71,7 @@
     "inventoryComparatorPower": true,
     "inventoryOutSlotIDs": [],
     "onTickUpdate": {
-      "name": "TestingprojectileRandomTickUpdateEvent"
+      "name": "Testing_projectile_negative_x"
     },
     "onEntityCollides": {
       "name": "Projectile_result"
@@ -81,7 +81,7 @@
     "blocksToReplace": [],
     "frequencyPerChunks": 10,
     "frequencyOnChunk": 16,
-    "minGenerateHeight": 10,
-    "maxGenerateHeight": 110
+    "minGenerateHeight": 0,
+    "maxGenerateHeight": 64
   }
 }

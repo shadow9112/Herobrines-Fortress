@@ -1,8 +1,8 @@
 {
   "id_map": {
-    "GUI": 5,
     "DIMENSION": 2,
-    "ENTITY": 18
+    "ENTITY": 18,
+    "GUI": 5
   },
   "mod_elements": [
     {
@@ -1787,7 +1787,8 @@
       "sortid": 31,
       "compiles": true,
       "locked_code": false,
-      "ids": {}
+      "ids": {},
+      "registry_name": "testingprojectile_positive_x"
     },
     {
       "name": "TestingOnEntityTickUpdate",
@@ -2375,6 +2376,7 @@
       "compiles": true,
       "locked_code": false,
       "ids": {},
+      "registry_name": "testingprojectile_positive_x",
       "metadata": {
         "dependencies": [
           {
@@ -2410,6 +2412,89 @@
             "type": "entity"
           }
         ]
+      }
+    },
+    {
+      "name": "Testing_projectile_negative_x",
+      "type": "procedure",
+      "sortid": 155,
+      "compiles": true,
+      "locked_code": false,
+      "ids": {},
+      "metadata": {
+        "dependencies": [
+          {
+            "name": "x",
+            "type": "int"
+          },
+          {
+            "name": "y",
+            "type": "int"
+          },
+          {
+            "name": "z",
+            "type": "int"
+          },
+          {
+            "name": "world",
+            "type": "world"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Projectilenegativex",
+      "type": "block",
+      "sortid": 156,
+      "compiles": true,
+      "locked_code": false,
+      "ids": {}
+    },
+    {
+      "name": "Projectile_result",
+      "type": "procedure",
+      "sortid": 157,
+      "compiles": true,
+      "locked_code": false,
+      "ids": {},
+      "metadata": {
+        "dependencies": [
+          {
+            "name": "x",
+            "type": "int"
+          },
+          {
+            "name": "y",
+            "type": "int"
+          },
+          {
+            "name": "z",
+            "type": "int"
+          },
+          {
+            "name": "world",
+            "type": "world"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Explosion",
+      "type": "block",
+      "sortid": 158,
+      "compiles": true,
+      "locked_code": false,
+      "ids": {}
+    },
+    {
+      "name": "Entitycolision",
+      "type": "procedure",
+      "sortid": 159,
+      "compiles": true,
+      "locked_code": false,
+      "ids": {},
+      "metadata": {
+        "dependencies": []
       }
     }
   ],
@@ -2599,6 +2684,24 @@
       "type": "number",
       "scope": "map",
       "value": "0"
+    },
+    {
+      "name": "Player_Collision_x",
+      "type": "number",
+      "scope": "map",
+      "value": "0"
+    },
+    {
+      "name": "Player_collison_y",
+      "type": "number",
+      "scope": "map",
+      "value": "0"
+    },
+    {
+      "name": "Player_collision_z",
+      "type": "number",
+      "scope": "map",
+      "value": "0"
     }
   ],
   "sound_elements": [
@@ -2627,8 +2730,9 @@
     "en_us": {
       "block.herobrines_fortress.taintedglass": "Taintedglass",
       "effect.nethered": "Nethered",
-      "item.herobrines_fortress.teleporttear": "Teleport tear",
+      "tile.explosion.name": "Explosion",
       "item.herobrines_fortress.knockbackstick": "Knockback stick",
+      "item.herobrines_fortress.teleporttear": "Teleport tear",
       "item.minecraft.tipped_arrow.effect.nethered": "Arrow of Nethered",
       "tile.forstructures.name": "Command: F2 ",
       "item.herobrines_fortress.tntbow": "TnT Bow",
@@ -2640,8 +2744,8 @@
       "item.selfstabbingdagger.name": "Selfstabbingdagger",
       "item.herobrines_fortress.selfstabbingdagger": "Selfstabbingdagger",
       "item.herobrines_fortress.testing": "Testing Spawn Egg",
-      "entity.silence.name": "Silence",
       "block.herobrines_fortress.sicktnt": "Sick tnt",
+      "entity.silence.name": "Silence",
       "tile.diamondbrickblock.name": "Diamond brick block",
       "tile.flames.name": "Flames",
       "block.herobrines_fortress.onewaywindow": "Oneway window",
@@ -2652,16 +2756,17 @@
       "block.herobrines_fortress.goldbrickblock": "Goldbrickblock",
       "tile.firedirt.name": "Firedirt",
       "item.herobrines_fortress.fireaxe": "Fire axe",
-      "item.firegem.name": "Fire gem",
       "block.herobrines_fortress.sickwoodplanks": "Sick Woodplanks",
+      "item.firegem.name": "Fire gem",
       "block.herobrines_fortress.goldbrickstairs": "Goldbrickstairs",
       "item.herobrines_fortress.honey_bucket": "Honey Bucket",
       "item.herobrines_fortress.firey": "Fire glasses",
       "block.herobrines_fortress.blastprooffence": "Blast proof fence",
-      "tile.taintedglass.name": "Taintedglass",
       "item.herobrines_fortress.lightning": "Lightning Portal Igniter",
+      "tile.taintedglass.name": "Taintedglass",
       "item.fireshovel.name": "Fireshovel",
       "item.lightningsword.name": "Lightning sword",
+      "tile.testingprojectile_positive_x.name": "Testingprojectile",
       "block.herobrines_fortress.forstructures": "Command: F2 ",
       "tile.sickwood.name": "Sick Wood",
       "tile.firedungeonstarter.name": "Fire dungeon starter",
@@ -2717,6 +2822,7 @@
       "tile.blastprooffence.name": "Blast proof fence",
       "tile.goldbrickstairs.name": "Goldbrickstairs",
       "item.firey.name": "Fire glasses",
+      "tile.projectilenegativex.name": "Projectilenegativex",
       "tile.homeblock.name": "Homeblock",
       "tile.sickwoodplanks.name": "Sick Woodplanks",
       "item.herobrines_fortress.firedragon": "Fire dragon Spawn Egg",
@@ -2724,7 +2830,6 @@
       "item.herobrines_fortress.bloodgas_bucket": "Bloodgas Bucket",
       "item.herobrines_fortress.fireshovel": "Fireshovel",
       "entity.testing.name": "Testing",
-      "tile.testingprojectile.name": "Testingprojectile",
       "tile.diamondbrickstairs.name": "Diamondbrickstairs",
       "item.lightning.name": "Lightning Portal Igniter",
       "biome.herobrines_fortress.lightingbiome": "Lighting biome",

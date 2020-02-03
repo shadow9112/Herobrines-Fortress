@@ -7,7 +7,9 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 
 import net.minecraft.world.World;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.Item;
 import net.minecraft.entity.Entity;
@@ -17,15 +19,13 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.Block;
 
-import java.util.Random;
-
 @Elementsherobrines_fortress.ModElement.Tag
-public class MCreatorTestingprojectile extends Elementsherobrines_fortress.ModElement {
-	@GameRegistry.ObjectHolder("herobrines_fortress:testingprojectile_positive_x")
+public class MCreatorExplosion extends Elementsherobrines_fortress.ModElement {
+	@GameRegistry.ObjectHolder("herobrines_fortress:explosion")
 	public static final Block block = null;
 
-	public MCreatorTestingprojectile(Elementsherobrines_fortress instance) {
-		super(instance, 31);
+	public MCreatorExplosion(Elementsherobrines_fortress instance) {
+		super(instance, 158);
 	}
 
 	@Override
@@ -37,37 +37,41 @@ public class MCreatorTestingprojectile extends Elementsherobrines_fortress.ModEl
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModels(ModelRegistryEvent event) {
-		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(
-				"herobrines_fortress:testingprojectile_positive_x", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation("herobrines_fortress:explosion",
+				"inventory"));
 	}
 
 	public static class BlockCustom extends Block {
 		public BlockCustom() {
 			super(Material.ROCK);
-			setRegistryName("testingprojectile_positive_x");
-			setUnlocalizedName("testingprojectile_positive_x");
+			setRegistryName("explosion");
+			setUnlocalizedName("explosion");
 			setSoundType(SoundType.GROUND);
 			setHardness(1F);
 			setResistance(10F);
 			setLightLevel(0F);
 			setLightOpacity(255);
 			setCreativeTab(MCreatorCustomelements.tab);
-			setBlockUnbreakable();
 		}
 
 		@Override
-		public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
-			super.onBlockAdded(world, pos, state);
-			int x = pos.getX();
-			int y = pos.getY();
-			int z = pos.getZ();
-			Block block = this;
-			world.scheduleUpdate(new BlockPos(x, y, z), this, this.tickRate(world));
+		public boolean isFullCube(IBlockState state) {
+			return false;
 		}
 
 		@Override
-		public void updateTick(World world, BlockPos pos, IBlockState state, Random random) {
-			super.updateTick(world, pos, state, random);
+		public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+			return new AxisAlignedBB(0D, 0D, 0D, 0D, 0D, 0D);
+		}
+
+		@Override
+		public boolean isOpaqueCube(IBlockState state) {
+			return false;
+		}
+
+		@Override
+		public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
+			super.onEntityCollidedWithBlock(world, pos, state, entity);
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();
@@ -78,14 +82,13 @@ public class MCreatorTestingprojectile extends Elementsherobrines_fortress.ModEl
 				$_dependencies.put("y", y);
 				$_dependencies.put("z", z);
 				$_dependencies.put("world", world);
-				MCreatorTestingprojectileRandomTickUpdateEvent.executeProcedure($_dependencies);
+				MCreatorProjectile_result.executeProcedure($_dependencies);
 			}
-			world.scheduleUpdate(new BlockPos(x, y, z), this, this.tickRate(world));
 		}
 
 		@Override
-		public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
-			super.onEntityCollidedWithBlock(world, pos, state, entity);
+		public void onEntityWalk(World world, BlockPos pos, Entity entity) {
+			super.onEntityWalk(world, pos, entity);
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();

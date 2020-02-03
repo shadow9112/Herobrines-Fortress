@@ -20,12 +20,12 @@ import net.minecraft.block.Block;
 import java.util.Random;
 
 @Elementsherobrines_fortress.ModElement.Tag
-public class MCreatorTestingprojectile extends Elementsherobrines_fortress.ModElement {
-	@GameRegistry.ObjectHolder("herobrines_fortress:testingprojectile_positive_x")
+public class MCreatorProjectilenegativex extends Elementsherobrines_fortress.ModElement {
+	@GameRegistry.ObjectHolder("herobrines_fortress:projectilenegativex")
 	public static final Block block = null;
 
-	public MCreatorTestingprojectile(Elementsherobrines_fortress instance) {
-		super(instance, 31);
+	public MCreatorProjectilenegativex(Elementsherobrines_fortress instance) {
+		super(instance, 156);
 	}
 
 	@Override
@@ -38,14 +38,14 @@ public class MCreatorTestingprojectile extends Elementsherobrines_fortress.ModEl
 	@Override
 	public void registerModels(ModelRegistryEvent event) {
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(
-				"herobrines_fortress:testingprojectile_positive_x", "inventory"));
+				"herobrines_fortress:projectilenegativex", "inventory"));
 	}
 
 	public static class BlockCustom extends Block {
 		public BlockCustom() {
 			super(Material.ROCK);
-			setRegistryName("testingprojectile_positive_x");
-			setUnlocalizedName("testingprojectile_positive_x");
+			setRegistryName("projectilenegativex");
+			setUnlocalizedName("projectilenegativex");
 			setSoundType(SoundType.GROUND);
 			setHardness(1F);
 			setResistance(10F);
@@ -78,7 +78,7 @@ public class MCreatorTestingprojectile extends Elementsherobrines_fortress.ModEl
 				$_dependencies.put("y", y);
 				$_dependencies.put("z", z);
 				$_dependencies.put("world", world);
-				MCreatorTestingprojectileRandomTickUpdateEvent.executeProcedure($_dependencies);
+				MCreatorTesting_projectile_negative_x.executeProcedure($_dependencies);
 			}
 			world.scheduleUpdate(new BlockPos(x, y, z), this, this.tickRate(world));
 		}

@@ -2,25 +2,25 @@
   "_fv": 5,
   "_type": "block",
   "definition": {
-    "texture": "lighting_portal",
-    "textureTop": "lighting_portal",
-    "textureLeft": "lighting_portal",
-    "textureFront": "lighting_portal",
-    "textureRight": "lighting_portal",
-    "textureBack": "lighting_portal",
+    "texture": "dragon_hearted",
+    "textureTop": "dragon_hearted",
+    "textureLeft": "dragon_hearted",
+    "textureFront": "dragon_hearted",
+    "textureRight": "dragon_hearted",
+    "textureBack": "dragon_hearted",
     "renderType": 10,
     "customModelName": "Normal",
     "rotationMode": 0,
-    "hasTransparency": false,
+    "hasTransparency": true,
     "transparencyType": "SOLID",
     "mx": 0.0,
     "my": 0.0,
     "mz": 0.0,
-    "Mx": 1.0,
-    "My": 1.0,
-    "Mz": 1.0,
+    "Mx": 0.0,
+    "My": 0.0,
+    "Mz": 0.0,
     "faceShape": "SOLID",
-    "name": "Testingprojectile",
+    "name": "Explosion",
     "specialInfo": [],
     "hardness": 1.0,
     "resistance": 10.0,
@@ -54,7 +54,7 @@
       "value": "GROUND"
     },
     "luminance": 0.0,
-    "unbreakable": true,
+    "unbreakable": false,
     "breakHarvestLevel": 1,
     "spawnParticles": false,
     "particleToSpawn": {
@@ -70,10 +70,10 @@
     "inventoryDropWhenDestroyed": true,
     "inventoryComparatorPower": true,
     "inventoryOutSlotIDs": [],
-    "onTickUpdate": {
-      "name": "TestingprojectileRandomTickUpdateEvent"
-    },
     "onEntityCollides": {
+      "name": "Projectile_result"
+    },
+    "onEntityWalksOn": {
       "name": "Projectile_result"
     },
     "spawnWorldTypes": [],
@@ -81,7 +81,7 @@
     "blocksToReplace": [],
     "frequencyPerChunks": 10,
     "frequencyOnChunk": 16,
-    "minGenerateHeight": 10,
-    "maxGenerateHeight": 110
+    "minGenerateHeight": 0,
+    "maxGenerateHeight": 64
   }
 }
