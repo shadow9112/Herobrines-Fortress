@@ -1,7 +1,8 @@
 package net.mcreator.herobrines_fortress;
 
 import net.minecraft.world.World;
-import net.minecraft.entity.passive.EntitySkeletonHorse;
+import net.minecraft.entity.passive.horse.SkeletonHorseEntity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Entity;
 
 @Elementsherobrines_fortress.ModElement.Tag
@@ -32,11 +33,9 @@ public class MCreatorSkeletonhorsespawneggbecauseMcreatorisbadRightClickedOnBloc
 		int z = (int) dependencies.get("z");
 		World world = (World) dependencies.get("world");
 		if (!world.isRemote) {
-			Entity entityToSpawn = new EntitySkeletonHorse(world);
-			if (entityToSpawn != null) {
-				entityToSpawn.setLocationAndAngles(x, y, z, world.rand.nextFloat() * 360F, 0.0F);
-				world.spawnEntity(entityToSpawn);
-			}
+			Entity entityToSpawn = new SkeletonHorseEntity(EntityType.SKELETON_HORSE, world);
+			entityToSpawn.setLocationAndAngles(x, y, z, world.rand.nextFloat() * 360F, 0);
+			world.addEntity(entityToSpawn);
 		}
 	}
 }

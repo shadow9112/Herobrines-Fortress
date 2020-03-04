@@ -1,0 +1,191 @@
+{
+  "_fv": 5,
+  "_type": "loottable",
+  "definition": {
+    "type": "Chest",
+    "pools": [
+      {
+        "minrolls": 5,
+        "maxrolls": 6,
+        "minbonusrolls": 1,
+        "maxbonusrolls": 1,
+        "hasbonusrolls": false,
+        "entries": [
+          {
+            "type": "item",
+            "item": {
+              "value": "Items.DIAMOND"
+            },
+            "weight": 3
+          },
+          {
+            "type": "item",
+            "item": {
+              "value": "CUSTOM:Steelingot"
+            },
+            "weight": 50
+          }
+        ]
+      },
+      {
+        "minrolls": 1,
+        "maxrolls": 1,
+        "minbonusrolls": 1,
+        "maxbonusrolls": 1,
+        "hasbonusrolls": false,
+        "entries": [
+          {
+            "type": "item",
+            "item": {
+              "value": "Items.RECORD_BLOCKS"
+            },
+            "weight": 10
+          },
+          {
+            "type": "item",
+            "item": {
+              "value": "Items.RECORD_FAR"
+            },
+            "weight": 10
+          },
+          {
+            "type": "item",
+            "item": {
+              "value": "Items.RECORD_STAL"
+            },
+            "weight": 10
+          },
+          {
+            "type": "item",
+            "item": {
+              "value": "Items.RECORD_STRAD"
+            },
+            "weight": 10
+          },
+          {
+            "type": "item",
+            "item": {
+              "value": "Items.RECORD_MELLOHI"
+            },
+            "weight": 10
+          },
+          {
+            "type": "item",
+            "item": {
+              "value": "Blocks.AIR"
+            },
+            "weight": 50
+          }
+        ]
+      },
+      {
+        "minrolls": 5,
+        "maxrolls": 7,
+        "minbonusrolls": 1,
+        "maxbonusrolls": 1,
+        "hasbonusrolls": false,
+        "entries": [
+          {
+            "type": "item",
+            "item": {
+              "value": "CUSTOM:Steelingot"
+            },
+            "weight": 50
+          },
+          {
+            "type": "item",
+            "item": {
+              "value": "Blocks.AIR"
+            },
+            "weight": 50
+          }
+        ]
+      },
+      {
+        "minrolls": 1,
+        "maxrolls": 1,
+        "minbonusrolls": 1,
+        "maxbonusrolls": 1,
+        "hasbonusrolls": false,
+        "entries": [
+          {
+            "type": "item",
+            "item": {
+              "value": "CUSTOM:Firey"
+            },
+            "weight": 1
+          },
+          {
+            "type": "item",
+            "item": {
+              "value": "Blocks.AIR"
+            },
+            "weight": 99
+          }
+        ]
+      },
+      {
+        "minrolls": 1,
+        "maxrolls": 3,
+        "minbonusrolls": 1,
+        "maxbonusrolls": 1,
+        "hasbonusrolls": false,
+        "entries": [
+          {
+            "type": "item",
+            "item": {
+              "value": "CUSTOM:Sickdust"
+            },
+            "weight": 30
+          },
+          {
+            "type": "item",
+            "item": {
+              "value": "Blocks.AIR"
+            },
+            "weight": 70
+          }
+        ]
+      },
+      {
+        "minrolls": 1,
+        "maxrolls": 1,
+        "minbonusrolls": 1,
+        "maxbonusrolls": 1,
+        "hasbonusrolls": false,
+        "entries": [
+          {
+            "type": "item",
+            "item": {
+              "value": "CUSTOM:Sicknessarmour.helmet"
+            },
+            "weight": 1
+          },
+          {
+            "type": "item",
+            "item": {
+              "value": "CUSTOM:Sicknessarmour.body"
+            },
+            "weight": 1
+          },
+          {
+            "type": "item",
+            "item": {
+              "value": "CUSTOM:Sicknessarmour.legs"
+            },
+            "weight": 1
+          },
+          {
+            "type": "item",
+            "item": {
+              "value": "CUSTOM:Sicknessarmour.boots"
+            },
+            "weight": 1
+          }
+        ]
+      }
+    ],
+    "name": "sickchest",
+    "namespace": "minecraft"
+  }
+}

@@ -1,41 +1,48 @@
 package net.mcreator.herobrines_fortress;
 
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.registries.ObjectHolder;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
-import net.minecraft.world.gen.feature.WorldGenMinable;
-import net.minecraft.world.gen.IChunkGenerator;
-import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.storage.loot.LootContext;
+import net.minecraft.world.gen.placement.Placement;
+import net.minecraft.world.gen.placement.CountRangeConfig;
+import net.minecraft.world.gen.feature.OreFeatureConfig;
+import net.minecraft.world.gen.feature.OreFeature;
+import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.World;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.Explosion;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.Rotation;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.item.ItemBlock;
+import net.minecraft.util.Direction;
+import net.minecraft.state.StateContainer;
+import net.minecraft.state.DirectionProperty;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Item;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.BlockItem;
+import net.minecraft.fluid.IFluidState;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.material.MaterialColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.material.MapColor;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.BlockDirectional;
+import net.minecraft.block.DirectionalBlock;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Block;
 
 import java.util.Random;
+import java.util.List;
+import java.util.Collections;
 
 @Elementsherobrines_fortress.ModElement.Tag
 public class MCreatorSickWood extends Elementsherobrines_fortress.ModElement {
-	@GameRegistry.ObjectHolder("herobrines_fortress:sickwood")
+	@ObjectHolder("herobrines_fortress:sickwood")
 	public static final Block block = null;
 
 	public MCreatorSickWood(Elementsherobrines_fortress instance) {
@@ -44,111 +51,70 @@ public class MCreatorSickWood extends Elementsherobrines_fortress.ModElement {
 
 	@Override
 	public void initElements() {
-		elements.blocks.add(() -> new BlockCustom());
-		elements.items.add(() -> new ItemBlock(block).setRegistryName(block.getRegistryName()));
+		elements.blocks.add(() -> new CustomBlock());
+		elements.items.add(() -> new BlockItem(block, new Item.Properties().group(MCreatorCustomelements.tab)).setRegistryName(block
+				.getRegistryName()));
 	}
 
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerModels(ModelRegistryEvent event) {
-		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation("herobrines_fortress:sickwood",
-				"inventory"));
-	}
+	public static class CustomBlock extends Block {
+		public static final DirectionProperty FACING = DirectionalBlock.FACING;
 
-	@Override
-	public void generateWorld(Random random, int chunkX, int chunkZ, World world, int dimID, IChunkGenerator cg, IChunkProvider cp) {
-		boolean dimensionCriteria = false;
-		if (dimID == 0)
-			dimensionCriteria = true;
-		if (!dimensionCriteria)
-			return;
-		for (int i = 0; i < 10; i++) {
-			int x = chunkX + random.nextInt(16);
-			int y = random.nextInt(100) + 10;
-			int z = chunkZ + random.nextInt(16);
-			(new WorldGenMinable(block.getDefaultState(), 16, new com.google.common.base.Predicate<IBlockState>() {
-				public boolean apply(IBlockState blockAt) {
-					boolean blockCriteria = false;
-					IBlockState require;
-					return blockCriteria;
-				}
-			})).generate(world, random, new BlockPos(x, y, z));
-		}
-	}
-
-	public static class BlockCustom extends Block {
-		public static final PropertyDirection FACING = BlockDirectional.FACING;
-
-		public BlockCustom() {
-			super(Material.WOOD);
+		public CustomBlock() {
+			super(Block.Properties.create(Material.WOOD).sound(SoundType.WOOD).hardnessAndResistance(1f, 10f).lightValue(0));
+			this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.SOUTH));
 			setRegistryName("sickwood");
-			setUnlocalizedName("sickwood");
-			setSoundType(SoundType.WOOD);
-			setHardness(1F);
-			setResistance(10F);
-			setLightLevel(0F);
-			setLightOpacity(255);
-			setCreativeTab(MCreatorCustomelements.tab);
-			this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.SOUTH));
 		}
 
 		@Override
-		protected net.minecraft.block.state.BlockStateContainer createBlockState() {
-			return new net.minecraft.block.state.BlockStateContainer(this, new IProperty[]{FACING});
+		protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+			builder.add(FACING);
 		}
 
 		@Override
-		public IBlockState withRotation(IBlockState state, Rotation rot) {
+		public BlockState rotate(BlockState state, Rotation rot) {
 			if (rot == Rotation.CLOCKWISE_90 || rot == Rotation.COUNTERCLOCKWISE_90) {
-				if ((EnumFacing) state.getValue(FACING) == EnumFacing.WEST || (EnumFacing) state.getValue(FACING) == EnumFacing.EAST) {
-					return state.withProperty(FACING, EnumFacing.UP);
-				} else if ((EnumFacing) state.getValue(FACING) == EnumFacing.UP || (EnumFacing) state.getValue(FACING) == EnumFacing.DOWN) {
-					return state.withProperty(FACING, EnumFacing.WEST);
+				if ((Direction) state.get(FACING) == Direction.WEST || (Direction) state.get(FACING) == Direction.EAST) {
+					return state.with(FACING, Direction.UP);
+				} else if ((Direction) state.get(FACING) == Direction.UP || (Direction) state.get(FACING) == Direction.DOWN) {
+					return state.with(FACING, Direction.WEST);
 				}
 			}
 			return state;
 		}
 
 		@Override
-		public IBlockState getStateFromMeta(int meta) {
-			return this.getDefaultState().withProperty(FACING, EnumFacing.getFront(meta));
-		}
-
-		@Override
-		public int getMetaFromState(IBlockState state) {
-			return ((EnumFacing) state.getValue(FACING)).getIndex();
-		}
-
-		@Override
-		public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta,
-				EntityLivingBase placer) {
-			if (facing == EnumFacing.WEST || facing == EnumFacing.EAST)
-				facing = EnumFacing.UP;
-			else if (facing == EnumFacing.NORTH || facing == EnumFacing.SOUTH)
-				facing = EnumFacing.EAST;
+		public BlockState getStateForPlacement(BlockItemUseContext context) {
+			Direction facing = context.getFace();
+			if (facing == Direction.WEST || facing == Direction.EAST)
+				facing = Direction.UP;
+			else if (facing == Direction.NORTH || facing == Direction.SOUTH)
+				facing = Direction.EAST;
 			else
-				facing = EnumFacing.SOUTH;
-			return this.getDefaultState().withProperty(FACING, facing);
+				facing = Direction.SOUTH;
+			return this.getDefaultState().with(FACING, facing);
 		}
 
 		@Override
-		public boolean isFlammable(IBlockAccess blockAccess, BlockPos pos, EnumFacing face) {
+		public boolean isFlammable(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
 			return true;
 		}
 
 		@Override
-		public MapColor getMapColor(IBlockState state, IBlockAccess blockAccess, BlockPos pos) {
-			return MapColor.WOOD;
+		public MaterialColor getMaterialColor(BlockState state, IBlockReader blockAccess, BlockPos pos) {
+			return MaterialColor.WOOD;
 		}
 
 		@Override
-		public boolean canSilkHarvest(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
-			return false;
+		public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+			List<ItemStack> dropsOriginal = super.getDrops(state, builder);
+			if (!dropsOriginal.isEmpty())
+				return dropsOriginal;
+			return Collections.singletonList(new ItemStack(this, 1));
 		}
 
 		@Override
-		public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer entity, boolean willHarvest) {
-			boolean retval = super.removedByPlayer(state, world, pos, entity, willHarvest);
+		public boolean removedByPlayer(BlockState state, World world, BlockPos pos, PlayerEntity entity, boolean willHarvest, IFluidState fluid) {
+			boolean retval = super.removedByPlayer(state, world, pos, entity, willHarvest, fluid);
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();
@@ -165,8 +131,8 @@ public class MCreatorSickWood extends Elementsherobrines_fortress.ModElement {
 		}
 
 		@Override
-		public void onBlockDestroyedByExplosion(World world, BlockPos pos, Explosion e) {
-			super.onBlockDestroyedByExplosion(world, pos, e);
+		public void onExplosionDestroy(World world, BlockPos pos, Explosion e) {
+			super.onExplosionDestroy(world, pos, e);
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();
@@ -182,8 +148,8 @@ public class MCreatorSickWood extends Elementsherobrines_fortress.ModElement {
 		}
 
 		@Override
-		public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
-			super.onEntityCollidedWithBlock(world, pos, state, entity);
+		public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
+			super.onEntityCollision(state, world, pos, entity);
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();
@@ -197,24 +163,26 @@ public class MCreatorSickWood extends Elementsherobrines_fortress.ModElement {
 				MCreatorSickWoodEntityCollidesInTheBlock.executeProcedure($_dependencies);
 			}
 		}
+	}
 
-		@Override
-		public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer entity, EnumHand hand, EnumFacing direction,
-				float hitX, float hitY, float hitZ) {
-			super.onBlockActivated(world, pos, state, entity, hand, direction, hitX, hitY, hitZ);
-			int x = pos.getX();
-			int y = pos.getY();
-			int z = pos.getZ();
-			Block block = this;
-			{
-				java.util.HashMap<String, Object> $_dependencies = new java.util.HashMap<>();
-				$_dependencies.put("x", x);
-				$_dependencies.put("y", y);
-				$_dependencies.put("z", z);
-				$_dependencies.put("world", world);
-				MCreatorSicktntOnBlockRightClicked2.executeProcedure($_dependencies);
-			}
-			return true;
+	@Override
+	public void init(FMLCommonSetupEvent event) {
+		for (Biome biome : ForgeRegistries.BIOMES.getValues()) {
+			biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Biome.createDecoratedFeature(new OreFeature(OreFeatureConfig::deserialize) {
+				@Override
+				public boolean place(IWorld world, ChunkGenerator generator, Random rand, BlockPos pos, OreFeatureConfig config) {
+					DimensionType dimensionType = world.getDimension().getType();
+					boolean dimensionCriteria = false;
+					if (dimensionType == DimensionType.OVERWORLD)
+						dimensionCriteria = true;
+					if (!dimensionCriteria)
+						return false;
+					return super.place(world, generator, rand, pos, config);
+				}
+			}, new OreFeatureConfig(OreFeatureConfig.FillerBlockType.create("sickwood", "sickwood", blockAt -> {
+				boolean blockCriteria = false;
+				return blockCriteria;
+			}), block.getDefaultState(), 16), Placement.COUNT_RANGE, new CountRangeConfig(10, 10, 10, 110)));
 		}
 	}
 }

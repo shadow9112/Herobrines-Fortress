@@ -1,13 +1,10 @@
 {
   "variants": {
     "axis=z": {
-      "model": "herobrines_fortress:lightning_portal_ew"
+      "model": "herobrines_fortress:block/lightning_portal_ew"
     },
     "axis=x": {
-      "model": "herobrines_fortress:lightning_portal_ns"
-    },
-    "inventory": {
-      "model": "herobrines_fortress:lightning_portal_ns"
+      "model": "herobrines_fortress:block/lightning_portal_ns"
     }
   }
 }

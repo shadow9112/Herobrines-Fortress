@@ -1,20 +1,20 @@
 package net.mcreator.herobrines_fortress;
 
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.common.MinecraftForge;
 
 import net.minecraft.world.World;
 import net.minecraft.item.ItemStack;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.boss.EntityDragon;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.Entity;
 
 @Elementsherobrines_fortress.ModElement.Tag
 public class MCreatorDragondeath extends Elementsherobrines_fortress.ModElement {
 	public MCreatorDragondeath(Elementsherobrines_fortress instance) {
 		super(instance, 134);
+		MinecraftForge.EVENT_BUS.register(this);
 	}
 
 	public static void executeProcedure(java.util.HashMap<String, Object> dependencies) {
@@ -43,11 +43,11 @@ public class MCreatorDragondeath extends Elementsherobrines_fortress.ModElement 
 		int y = (int) dependencies.get("y");
 		int z = (int) dependencies.get("z");
 		World world = (World) dependencies.get("world");
-		if ((entity instanceof EntityDragon)) {
+		if ((entity instanceof EnderDragonEntity)) {
 			if (!world.isRemote) {
-				EntityItem entityToSpawn = new EntityItem(world, x, y, z, new ItemStack(MCreatorTnTBow.block, (int) (1)));
+				ItemEntity entityToSpawn = new ItemEntity(world, x, y, z, new ItemStack(MCreatorTnTBow.block, (int) (1)));
 				entityToSpawn.setPickupDelay(10);
-				world.spawnEntity(entityToSpawn);
+				world.addEntity(entityToSpawn);
 			}
 		}
 	}
@@ -69,10 +69,5 @@ public class MCreatorDragondeath extends Elementsherobrines_fortress.ModElement 
 			dependencies.put("event", event);
 			this.executeProcedure(dependencies);
 		}
-	}
-
-	@Override
-	public void preInit(FMLPreInitializationEvent event) {
-		MinecraftForge.EVENT_BUS.register(this);
 	}
 }

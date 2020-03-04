@@ -1,27 +1,26 @@
 package net.mcreator.herobrines_fortress;
 
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.registries.ObjectHolder;
 
+import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.World;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Item;
+import net.minecraft.item.BlockItem;
 import net.minecraft.entity.Entity;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Block;
 
 import java.util.Random;
+import java.util.List;
+import java.util.Collections;
 
 @Elementsherobrines_fortress.ModElement.Tag
 public class MCreatorTestingprojectile extends Elementsherobrines_fortress.ModElement {
-	@GameRegistry.ObjectHolder("herobrines_fortress:testingprojectile_positive_x")
+	@ObjectHolder("herobrines_fortress:testingprojectile_positive_x")
 	public static final Block block = null;
 
 	public MCreatorTestingprojectile(Elementsherobrines_fortress instance) {
@@ -30,44 +29,38 @@ public class MCreatorTestingprojectile extends Elementsherobrines_fortress.ModEl
 
 	@Override
 	public void initElements() {
-		elements.blocks.add(() -> new BlockCustom());
-		elements.items.add(() -> new ItemBlock(block).setRegistryName(block.getRegistryName()));
+		elements.blocks.add(() -> new CustomBlock());
+		elements.items.add(() -> new BlockItem(block, new Item.Properties().group(MCreatorCustomelements.tab)).setRegistryName(block
+				.getRegistryName()));
 	}
 
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerModels(ModelRegistryEvent event) {
-		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(
-				"herobrines_fortress:testingprojectile_positive_x", "inventory"));
-	}
-
-	public static class BlockCustom extends Block {
-		public BlockCustom() {
-			super(Material.ROCK);
+	public static class CustomBlock extends Block {
+		public CustomBlock() {
+			super(Block.Properties.create(Material.ROCK).sound(SoundType.GROUND).hardnessAndResistance(-1, 3600000).lightValue(0));
 			setRegistryName("testingprojectile_positive_x");
-			setUnlocalizedName("testingprojectile_positive_x");
-			setSoundType(SoundType.GROUND);
-			setHardness(1F);
-			setResistance(10F);
-			setLightLevel(0F);
-			setLightOpacity(255);
-			setCreativeTab(MCreatorCustomelements.tab);
-			setBlockUnbreakable();
 		}
 
 		@Override
-		public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
-			super.onBlockAdded(world, pos, state);
+		public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+			List<ItemStack> dropsOriginal = super.getDrops(state, builder);
+			if (!dropsOriginal.isEmpty())
+				return dropsOriginal;
+			return Collections.singletonList(new ItemStack(this, 1));
+		}
+
+		@Override
+		public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean moving) {
+			super.onBlockAdded(state, world, pos, oldState, moving);
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();
 			Block block = this;
-			world.scheduleUpdate(new BlockPos(x, y, z), this, this.tickRate(world));
+			world.getPendingBlockTicks().scheduleTick(new BlockPos(x, y, z), this, this.tickRate(world));
 		}
 
 		@Override
-		public void updateTick(World world, BlockPos pos, IBlockState state, Random random) {
-			super.updateTick(world, pos, state, random);
+		public void tick(BlockState state, World world, BlockPos pos, Random random) {
+			super.tick(state, world, pos, random);
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();
@@ -80,12 +73,12 @@ public class MCreatorTestingprojectile extends Elementsherobrines_fortress.ModEl
 				$_dependencies.put("world", world);
 				MCreatorTestingprojectileRandomTickUpdateEvent.executeProcedure($_dependencies);
 			}
-			world.scheduleUpdate(new BlockPos(x, y, z), this, this.tickRate(world));
+			world.getPendingBlockTicks().scheduleTick(new BlockPos(x, y, z), this, this.tickRate(world));
 		}
 
 		@Override
-		public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
-			super.onEntityCollidedWithBlock(world, pos, state, entity);
+		public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
+			super.onEntityCollision(state, world, pos, entity);
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();

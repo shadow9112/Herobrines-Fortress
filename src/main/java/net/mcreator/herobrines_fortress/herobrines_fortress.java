@@ -17,69 +17,52 @@
  */
 package net.mcreator.herobrines_fortress;
 
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.common.registry.EntityEntry;
-import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.network.simple.SimpleChannel;
+import net.minecraftforge.fml.network.NetworkRegistry;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.model.obj.OBJLoader;
 
 import net.minecraft.world.biome.Biome;
-import net.minecraft.potion.Potion;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.item.Item;
+import net.minecraft.entity.EntityType;
 import net.minecraft.block.Block;
 
 import java.util.function.Supplier;
 
-@Mod(modid = herobrines_fortress.MODID, version = herobrines_fortress.VERSION)
+@Mod("herobrines_fortress")
 public class herobrines_fortress {
-	public static final String MODID = "herobrines_fortress";
-	public static final String VERSION = "1.0.0";
-	public static final SimpleNetworkWrapper PACKET_HANDLER = NetworkRegistry.INSTANCE.newSimpleChannel("herobrines_fortres:a");
-	@SidedProxy(clientSide = "net.mcreator.herobrines_fortress.ClientProxyherobrines_fortress", serverSide = "net.mcreator.herobrines_fortress.ServerProxyherobrines_fortress")
-	public static IProxyherobrines_fortress proxy;
-	@Mod.Instance(MODID)
-	public static herobrines_fortress instance;
-	public Elementsherobrines_fortress elements = new Elementsherobrines_fortress();
+	private static final String PROTOCOL_VERSION = "1";
+	public static final SimpleChannel PACKET_HANDLER = NetworkRegistry.newSimpleChannel(new ResourceLocation("herobrines_fortress",
+			"herobrines_fortress"), () -> PROTOCOL_VERSION, PROTOCOL_VERSION::equals, PROTOCOL_VERSION::equals);
+	public Elementsherobrines_fortress elements;
 
-	@Mod.EventHandler
-	public void preInit(FMLPreInitializationEvent event) {
+	public herobrines_fortress() {
+		elements = new Elementsherobrines_fortress();
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::init);
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
+		FMLJavaModLoadingContext.get().getModEventBus().register(this);
 		MinecraftForge.EVENT_BUS.register(this);
-		GameRegistry.registerWorldGenerator(elements, 5);
-		GameRegistry.registerFuelHandler(elements);
-		NetworkRegistry.INSTANCE.registerGuiHandler(this, new Elementsherobrines_fortress.GuiHandler());
-		elements.preInit(event);
-		MinecraftForge.EVENT_BUS.register(elements);
-		elements.getElements().forEach(element -> element.preInit(event));
-		proxy.preInit(event);
 	}
 
-	@Mod.EventHandler
-	public void init(FMLInitializationEvent event) {
+	private void init(FMLCommonSetupEvent event) {
 		elements.getElements().forEach(element -> element.init(event));
-		proxy.init(event);
 	}
 
-	@Mod.EventHandler
-	public void postInit(FMLPostInitializationEvent event) {
-		proxy.postInit(event);
+	private void clientSetup(FMLClientSetupEvent event) {
+		OBJLoader.INSTANCE.addDomain("herobrines_fortress");
 	}
 
-	@Mod.EventHandler
+	@SubscribeEvent
 	public void serverLoad(FMLServerStartingEvent event) {
 		elements.getElements().forEach(element -> element.serverLoad(event));
-		proxy.serverLoad(event);
 	}
 
 	@SubscribeEvent
@@ -98,26 +81,12 @@ public class herobrines_fortress {
 	}
 
 	@SubscribeEvent
-	public void registerEntities(RegistryEvent.Register<EntityEntry> event) {
-		event.getRegistry().registerAll(elements.getEntities().stream().map(Supplier::get).toArray(EntityEntry[]::new));
-	}
-
-	@SubscribeEvent
-	public void registerPotions(RegistryEvent.Register<Potion> event) {
-		event.getRegistry().registerAll(elements.getPotions().stream().map(Supplier::get).toArray(Potion[]::new));
+	public void registerEntities(RegistryEvent.Register<EntityType<?>> event) {
+		event.getRegistry().registerAll(elements.getEntities().stream().map(Supplier::get).toArray(EntityType[]::new));
 	}
 
 	@SubscribeEvent
 	public void registerSounds(RegistryEvent.Register<net.minecraft.util.SoundEvent> event) {
 		elements.registerSounds(event);
-	}
-
-	@SubscribeEvent
-	@SideOnly(Side.CLIENT)
-	public void registerModels(ModelRegistryEvent event) {
-		elements.getElements().forEach(element -> element.registerModels(event));
-	}
-	static {
-		FluidRegistry.enableUniversalBucket();
 	}
 }

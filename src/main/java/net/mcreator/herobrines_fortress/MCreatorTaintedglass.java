@@ -1,36 +1,33 @@
 package net.mcreator.herobrines_fortress;
 
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.registries.ObjectHolder;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.Dist;
 
-import net.minecraft.world.World;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.util.Rotation;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.Mirror;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.state.StateContainer;
+import net.minecraft.state.DirectionProperty;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.Item;
-import net.minecraft.init.Blocks;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.properties.IProperty;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.BlockItem;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.BlockDirectional;
+import net.minecraft.block.DirectionalBlock;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Block;
+
+import java.util.List;
+import java.util.Collections;
 
 @Elementsherobrines_fortress.ModElement.Tag
 public class MCreatorTaintedglass extends Elementsherobrines_fortress.ModElement {
-	@GameRegistry.ObjectHolder("herobrines_fortress:taintedglass")
+	@ObjectHolder("herobrines_fortress:taintedglass")
 	public static final Block block = null;
 
 	public MCreatorTaintedglass(Elementsherobrines_fortress instance) {
@@ -39,73 +36,50 @@ public class MCreatorTaintedglass extends Elementsherobrines_fortress.ModElement
 
 	@Override
 	public void initElements() {
-		elements.blocks.add(() -> new BlockCustom());
-		elements.items.add(() -> new ItemBlock(block).setRegistryName(block.getRegistryName()));
+		elements.blocks.add(() -> new CustomBlock());
+		elements.items.add(() -> new BlockItem(block, new Item.Properties().group(MCreatorCustomelements.tab)).setRegistryName(block
+				.getRegistryName()));
 	}
 
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerModels(ModelRegistryEvent event) {
-		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation("herobrines_fortress:taintedglass",
-				"inventory"));
-	}
+	public static class CustomBlock extends Block {
+		public static final DirectionProperty FACING = DirectionalBlock.FACING;
 
-	public static class BlockCustom extends Block {
-		public static final PropertyDirection FACING = BlockDirectional.FACING;
-
-		public BlockCustom() {
-			super(Material.GLASS);
+		public CustomBlock() {
+			super(Block.Properties.create(Material.GLASS).sound(SoundType.GLASS).hardnessAndResistance(0.5f, 100f).lightValue(15));
+			this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.NORTH));
 			setRegistryName("taintedglass");
-			setUnlocalizedName("taintedglass");
-			setSoundType(SoundType.GLASS);
-			setHardness(0.5F);
-			setResistance(100F);
-			setLightLevel(1F);
-			setLightOpacity(0);
-			setCreativeTab(MCreatorCustomelements.tab);
-			this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
 		}
 
-		@SideOnly(Side.CLIENT)
+		@OnlyIn(Dist.CLIENT)
 		@Override
-		public BlockRenderLayer getBlockLayer() {
+		public BlockRenderLayer getRenderLayer() {
 			return BlockRenderLayer.TRANSLUCENT;
 		}
 
 		@Override
-		protected net.minecraft.block.state.BlockStateContainer createBlockState() {
-			return new net.minecraft.block.state.BlockStateContainer(this, new IProperty[]{FACING});
+		protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+			builder.add(FACING);
+		}
+
+		public BlockState rotate(BlockState state, Rotation rot) {
+			return state.with(FACING, rot.rotate(state.get(FACING)));
+		}
+
+		public BlockState mirror(BlockState state, Mirror mirrorIn) {
+			return state.rotate(mirrorIn.toRotation(state.get(FACING)));
 		}
 
 		@Override
-		public IBlockState withRotation(IBlockState state, Rotation rot) {
-			return state.withProperty(FACING, rot.rotate((EnumFacing) state.getValue(FACING)));
+		public BlockState getStateForPlacement(BlockItemUseContext context) {
+			return this.getDefaultState().with(FACING, context.getNearestLookingDirection().getOpposite());
 		}
 
 		@Override
-		public IBlockState withMirror(IBlockState state, Mirror mirrorIn) {
-			return state.withRotation(mirrorIn.toRotation((EnumFacing) state.getValue(FACING)));
-		}
-
-		@Override
-		public IBlockState getStateFromMeta(int meta) {
-			return this.getDefaultState().withProperty(FACING, EnumFacing.getFront(meta));
-		}
-
-		@Override
-		public int getMetaFromState(IBlockState state) {
-			return ((EnumFacing) state.getValue(FACING)).getIndex();
-		}
-
-		@Override
-		public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta,
-				EntityLivingBase placer) {
-			return this.getDefaultState().withProperty(FACING, EnumFacing.getDirectionFromEntityLiving(pos, placer));
-		}
-
-		@Override
-		public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-			drops.add(new ItemStack(Blocks.AIR, (int) (1)));
+		public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+			List<ItemStack> dropsOriginal = super.getDrops(state, builder);
+			if (!dropsOriginal.isEmpty())
+				return dropsOriginal;
+			return Collections.singletonList(new ItemStack(Blocks.AIR, (int) (1)));
 		}
 	}
 }

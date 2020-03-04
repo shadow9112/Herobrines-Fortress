@@ -1,43 +1,46 @@
 package net.mcreator.herobrines_fortress;
 
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.registries.ObjectHolder;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.fml.network.FMLPlayMessages;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraft.world.World;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.ActionResult;
+import net.minecraft.network.IPacket;
+import net.minecraft.item.UseAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Item;
-import net.minecraft.item.EnumAction;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.entity.projectile.EntityTippedArrow;
-import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.entity.projectile.AbstractArrowEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.IRendersAsItem;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.Entity;
-import net.minecraft.client.renderer.entity.RenderSnowball;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.entity.SpriteRenderer;
 import net.minecraft.client.Minecraft;
 
 import com.google.common.collect.Multimap;
 
 @Elementsherobrines_fortress.ModElement.Tag
 public class MCreatorKnockbacklash1 extends Elementsherobrines_fortress.ModElement {
-	@GameRegistry.ObjectHolder("herobrines_fortress:knockbacklash1")
+	@ObjectHolder("herobrines_fortress:knockbacklash1")
 	public static final Item block = null;
-	public static final int ENTITYID = 6;
+	@ObjectHolder("herobrines_fortress:entitybulletknockbacklash1")
+	public static final EntityType arrow = null;
 
 	public MCreatorKnockbacklash1(Elementsherobrines_fortress instance) {
 		super(instance, 20);
@@ -45,120 +48,128 @@ public class MCreatorKnockbacklash1 extends Elementsherobrines_fortress.ModEleme
 
 	@Override
 	public void initElements() {
-		elements.items.add(() -> new RangedItem());
-		elements.entities.add(() -> EntityEntryBuilder.create().entity(EntityArrowCustom.class)
-				.id(new ResourceLocation("herobrines_fortress", "entitybulletknockbacklash1"), ENTITYID).name("entitybulletknockbacklash1")
-				.tracker(64, 1, true).build());
+		elements.items.add(() -> new ItemRanged());
+		elements.entities.add(() -> (EntityType.Builder.<ArrowCustomEntity> create(ArrowCustomEntity::new, EntityClassification.MISC)
+				.setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(1).setCustomClientFactory(ArrowCustomEntity::new).size(
+				0.5f, 0.5f)).build("entitybulletknockbacklash1").setRegistryName("entitybulletknockbacklash1"));
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerModels(ModelRegistryEvent event) {
-		ModelLoader.setCustomModelResourceLocation(block, 0, new ModelResourceLocation("herobrines_fortress:knockbacklash1", "inventory"));
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void preInit(FMLPreInitializationEvent event) {
-		RenderingRegistry.registerEntityRenderingHandler(EntityArrowCustom.class, renderManager -> {
-			return new RenderSnowball(renderManager, new ItemStack(MCreatorFirediamond.block, (int) (1)).getItem(), Minecraft.getMinecraft()
-					.getRenderItem());
+	@OnlyIn(Dist.CLIENT)
+	public void init(FMLCommonSetupEvent event) {
+		RenderingRegistry.registerEntityRenderingHandler(ArrowCustomEntity.class, renderManager -> {
+			return new SpriteRenderer(renderManager, Minecraft.getInstance().getItemRenderer());
 		});
 	}
 
-	public static class RangedItem extends Item {
-		public RangedItem() {
-			super();
-			setMaxDamage(0);
-			setFull3D();
-			setUnlocalizedName("knockbacklash1");
+	public static class ItemRanged extends Item {
+		public ItemRanged() {
+			super(new Item.Properties().group(MCreatorCustomelements.tab).maxStackSize(1));
 			setRegistryName("knockbacklash1");
-			maxStackSize = 1;
-			setCreativeTab(MCreatorCustomelements.tab);
 		}
 
 		@Override
-		public Multimap<String, AttributeModifier> getItemAttributeModifiers(EntityEquipmentSlot slot) {
-			Multimap<String, AttributeModifier> multimap = super.getItemAttributeModifiers(slot);
-			if (slot == EntityEquipmentSlot.MAINHAND) {
-				multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Ranged item modifier",
-						(double) 1, 0));
-				multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Ranged item modifier",
-						-2.4, 0));
+		public UseAction getUseAction(ItemStack stack) {
+			return UseAction.BOW;
+		}
+
+		@Override
+		public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity entity, Hand hand) {
+			entity.setActiveHand(hand);
+			return new ActionResult(ActionResultType.SUCCESS, entity.getHeldItem(hand));
+		}
+
+		@Override
+		public int getUseDuration(ItemStack itemstack) {
+			return 72000;
+		}
+
+		@Override
+		public Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot) {
+			Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(slot);
+			if (slot == EquipmentSlotType.MAINHAND) {
+				multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "ranged_item_damage",
+						(double) 3, AttributeModifier.Operation.ADDITION));
+				multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "ranged_item_attack_speed",
+						-2.4, AttributeModifier.Operation.ADDITION));
 			}
 			return multimap;
 		}
 
 		@Override
-		public void onPlayerStoppedUsing(ItemStack itemstack, World world, EntityLivingBase entityLivingBase, int timeLeft) {
-			if (!world.isRemote && entityLivingBase instanceof EntityPlayerMP) {
-				EntityPlayerMP entity = (EntityPlayerMP) entityLivingBase;
+		public void onPlayerStoppedUsing(ItemStack itemstack, World world, LivingEntity entityLiving, int timeLeft) {
+			if (!world.isRemote && entityLiving instanceof ServerPlayerEntity) {
+				ServerPlayerEntity entity = (ServerPlayerEntity) entityLiving;
 				float power = 0.5f;
-				EntityArrowCustom entityarrow = new EntityArrowCustom(world, entity);
+				ArrowCustomEntity entityarrow = new ArrowCustomEntity(arrow, entity, world);
 				entityarrow.shoot(entity.getLookVec().x, entity.getLookVec().y, entity.getLookVec().z, power * 2, 0);
 				entityarrow.setSilent(true);
 				entityarrow.setIsCritical(true);
 				entityarrow.setDamage(5);
 				entityarrow.setKnockbackStrength(500);
-				itemstack.damageItem(1, entity);
+				itemstack.damageItem(1, entity, e -> e.sendBreakAnimation(entity.getActiveHand()));
 				int x = (int) entity.posX;
 				int y = (int) entity.posY;
 				int z = (int) entity.posZ;
-				world.playSound((EntityPlayer) null, (double) x, (double) y, (double) z,
-						(net.minecraft.util.SoundEvent) net.minecraft.util.SoundEvent.REGISTRY.getObject(new ResourceLocation(
-								("block.brewing_stand.brew"))), SoundCategory.NEUTRAL, 1, 1f / (itemRand.nextFloat() * 0.5f + 1f) + (power / 2));
-				entityarrow.pickupStatus = EntityArrow.PickupStatus.DISALLOWED;
-				if (!world.isRemote)
-					world.spawnEntity(entityarrow);
+				world.playSound((PlayerEntity) null, (double) x, (double) y, (double) z,
+						(net.minecraft.util.SoundEvent) ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.brewing_stand.brew")),
+						SoundCategory.PLAYERS, 1, 1f / (random.nextFloat() * 0.5f + 1) + (power / 2));
+				entityarrow.pickupStatus = AbstractArrowEntity.PickupStatus.DISALLOWED;
+				world.addEntity(entityarrow);
 			}
-		}
-
-		@Override
-		public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer entity, EnumHand hand) {
-			entity.setActiveHand(hand);
-			return new ActionResult(EnumActionResult.SUCCESS, entity.getHeldItem(hand));
-		}
-
-		@Override
-		public EnumAction getItemUseAction(ItemStack itemstack) {
-			return EnumAction.BOW;
-		}
-
-		@Override
-		public int getMaxItemUseDuration(ItemStack itemstack) {
-			return 72000;
 		}
 	}
 
-	public static class EntityArrowCustom extends EntityTippedArrow {
-		public EntityArrowCustom(World a) {
-			super(a);
+	@OnlyIn(value = Dist.CLIENT, _interface = IRendersAsItem.class)
+	public static class ArrowCustomEntity extends AbstractArrowEntity implements IRendersAsItem {
+		public ArrowCustomEntity(FMLPlayMessages.SpawnEntity packet, World world) {
+			super(arrow, world);
 		}
 
-		public EntityArrowCustom(World worldIn, double x, double y, double z) {
-			super(worldIn, x, y, z);
+		public ArrowCustomEntity(EntityType<? extends ArrowCustomEntity> type, World world) {
+			super(type, world);
 		}
 
-		public EntityArrowCustom(World worldIn, EntityLivingBase shooter) {
-			super(worldIn, shooter);
+		public ArrowCustomEntity(EntityType<? extends ArrowCustomEntity> type, double x, double y, double z, World world) {
+			super(type, x, y, z, world);
+		}
+
+		public ArrowCustomEntity(EntityType<? extends ArrowCustomEntity> type, LivingEntity entity, World world) {
+			super(type, entity, world);
 		}
 
 		@Override
-		protected void arrowHit(EntityLivingBase entity) {
+		public IPacket<?> createSpawnPacket() {
+			return NetworkHooks.getEntitySpawningPacket(this);
+		}
+
+		@Override
+		@OnlyIn(Dist.CLIENT)
+		public ItemStack getItem() {
+			return new ItemStack(MCreatorFirediamond.block, (int) (1));
+		}
+
+		@Override
+		protected ItemStack getArrowStack() {
+			return null;
+		}
+
+		@Override
+		protected void arrowHit(LivingEntity entity) {
 			super.arrowHit(entity);
 			entity.setArrowCountInEntity(entity.getArrowCountInEntity() - 1);
 		}
 
 		@Override
-		public void onUpdate() {
-			super.onUpdate();
+		public void tick() {
+			super.tick();
 			int x = (int) this.posX;
 			int y = (int) this.posY;
 			int z = (int) this.posZ;
 			World world = this.world;
-			Entity entity = (Entity) shootingEntity;
+			Entity entity = this.getShooter();
 			if (this.inGround) {
-				this.world.removeEntity(this);
+				this.remove();
 			}
 		}
 	}

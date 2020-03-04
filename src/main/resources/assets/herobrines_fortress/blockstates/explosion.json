@@ -1,7 +1,7 @@
 {
   "variants": {
-    "normal": {
-      "model": "herobrines_fortress:explosion"
+    "": {
+      "model": "herobrines_fortress:block/explosion"
     }
   }
 }

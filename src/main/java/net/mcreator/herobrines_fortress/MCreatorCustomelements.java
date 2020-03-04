@@ -1,10 +1,10 @@
 package net.mcreator.herobrines_fortress;
 
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemGroup;
 
 @Elementsherobrines_fortress.ModElement.Tag
 public class MCreatorCustomelements extends Elementsherobrines_fortress.ModElement {
@@ -14,18 +14,18 @@ public class MCreatorCustomelements extends Elementsherobrines_fortress.ModEleme
 
 	@Override
 	public void initElements() {
-		tab = new CreativeTabs("tabcustomelements") {
-			@SideOnly(Side.CLIENT)
+		tab = new ItemGroup("tabcustomelements") {
+			@OnlyIn(Dist.CLIENT)
 			@Override
-			public ItemStack getTabIconItem() {
+			public ItemStack createIcon() {
 				return new ItemStack(MCreatorFiresword.block, (int) (1));
 			}
 
-			@SideOnly(Side.CLIENT)
+			@OnlyIn(Dist.CLIENT)
 			public boolean hasSearchBar() {
 				return false;
 			}
 		};
 	}
-	public static CreativeTabs tab;
+	public static ItemGroup tab;
 }

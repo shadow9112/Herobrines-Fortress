@@ -30,9 +30,9 @@
     "bodyName": "Fire armour Body",
     "leggingsName": "Fire armour Leggings",
     "bootsName": "Fire armour Boots",
-    "helmetModelName": "Default",
-    "helmetModelPart": "Helmet",
-    "helmetModelTexture": "From armor",
+    "helmetModelName": "Modelfirehelmet",
+    "helmetModelPart": "helmet",
+    "helmetModelTexture": "firehelmet_test.png",
     "bodyModelName": "Default",
     "bodyModelPart": "Body",
     "bodyModelTexture": "From armor",
@@ -50,6 +50,10 @@
     "damageValueLeggings": 4,
     "damageValueBoots": 3,
     "enchantability": 100,
-    "toughness": 4.0
+    "toughness": 4.0,
+    "equipSound": {
+      "value": ""
+    },
+    "repairItems": []
   }
 }

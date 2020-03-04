@@ -1,33 +1,39 @@
 package net.mcreator.herobrines_fortress;
 
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.registries.ObjectHolder;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.common.ToolType;
 
-import net.minecraft.world.gen.feature.WorldGenMinable;
-import net.minecraft.world.gen.IChunkGenerator;
-import net.minecraft.world.chunk.IChunkProvider;
-import net.minecraft.world.World;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.storage.loot.LootContext;
+import net.minecraft.world.gen.placement.Placement;
+import net.minecraft.world.gen.placement.CountRangeConfig;
+import net.minecraft.world.gen.feature.OreFeatureConfig;
+import net.minecraft.world.gen.feature.OreFeature;
+import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Item;
-import net.minecraft.init.Blocks;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.BlockItem;
+import net.minecraft.block.material.MaterialColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.material.MapColor;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Block;
 
 import java.util.Random;
+import java.util.List;
+import java.util.Collections;
 
 @Elementsherobrines_fortress.ModElement.Tag
 public class MCreatorSteeloreblock extends Elementsherobrines_fortress.ModElement {
-	@GameRegistry.ObjectHolder("herobrines_fortress:steeloreblock")
+	@ObjectHolder("herobrines_fortress:steeloreblock")
 	public static final Block block = null;
 
 	public MCreatorSteeloreblock(Elementsherobrines_fortress instance) {
@@ -36,64 +42,54 @@ public class MCreatorSteeloreblock extends Elementsherobrines_fortress.ModElemen
 
 	@Override
 	public void initElements() {
-		elements.blocks.add(() -> new BlockCustom());
-		elements.items.add(() -> new ItemBlock(block).setRegistryName(block.getRegistryName()));
+		elements.blocks.add(() -> new CustomBlock());
+		elements.items.add(() -> new BlockItem(block, new Item.Properties().group(MCreatorCustomelements.tab)).setRegistryName(block
+				.getRegistryName()));
 	}
 
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerModels(ModelRegistryEvent event) {
-		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation("herobrines_fortress:steeloreblock",
-				"inventory"));
-	}
-
-	@Override
-	public void generateWorld(Random random, int chunkX, int chunkZ, World world, int dimID, IChunkGenerator cg, IChunkProvider cp) {
-		boolean dimensionCriteria = false;
-		if (dimID == 0)
-			dimensionCriteria = true;
-		if (dimID == MCreatorFirey.DIMID)
-			dimensionCriteria = true;
-		if (!dimensionCriteria)
-			return;
-		for (int i = 0; i < 5; i++) {
-			int x = chunkX + random.nextInt(16);
-			int y = random.nextInt(100) + 10;
-			int z = chunkZ + random.nextInt(16);
-			(new WorldGenMinable(block.getDefaultState(), 7, new com.google.common.base.Predicate<IBlockState>() {
-				public boolean apply(IBlockState blockAt) {
-					boolean blockCriteria = false;
-					IBlockState require;
-					if (blockAt.getBlock() == Blocks.STONE.getDefaultState().getBlock())
-						blockCriteria = true;
-					return blockCriteria;
-				}
-			})).generate(world, random, new BlockPos(x, y, z));
-		}
-	}
-
-	public static class BlockCustom extends Block {
-		public BlockCustom() {
-			super(Material.ROCK);
+	public static class CustomBlock extends Block {
+		public CustomBlock() {
+			super(Block.Properties.create(Material.ROCK).sound(SoundType.STONE).hardnessAndResistance(2f, 10f).lightValue(0).harvestLevel(3)
+					.harvestTool(ToolType.PICKAXE));
 			setRegistryName("steeloreblock");
-			setUnlocalizedName("steeloreblock");
-			setSoundType(SoundType.STONE);
-			setHarvestLevel("pickaxe", 3);
-			setHardness(2F);
-			setResistance(10F);
-			setLightLevel(0F);
-			setLightOpacity(255);
-			setCreativeTab(MCreatorCustomelements.tab);
 		}
 
 		@Override
-		public MapColor getMapColor(IBlockState state, IBlockAccess blockAccess, BlockPos pos) {
-			return MapColor.STONE;
+		public MaterialColor getMaterialColor(BlockState state, IBlockReader blockAccess, BlockPos pos) {
+			return MaterialColor.STONE;
 		}
 
 		@Override
-		public boolean canSilkHarvest(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
-			return false;
+		public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+			List<ItemStack> dropsOriginal = super.getDrops(state, builder);
+			if (!dropsOriginal.isEmpty())
+				return dropsOriginal;
+			return Collections.singletonList(new ItemStack(this, 1));
+		}
+	}
+
+	@Override
+	public void init(FMLCommonSetupEvent event) {
+		for (Biome biome : ForgeRegistries.BIOMES.getValues()) {
+			biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Biome.createDecoratedFeature(new OreFeature(OreFeatureConfig::deserialize) {
+				@Override
+				public boolean place(IWorld world, ChunkGenerator generator, Random rand, BlockPos pos, OreFeatureConfig config) {
+					DimensionType dimensionType = world.getDimension().getType();
+					boolean dimensionCriteria = false;
+					if (dimensionType == DimensionType.OVERWORLD)
+						dimensionCriteria = true;
+					if (dimensionType == MCreatorFirey.type)
+						dimensionCriteria = true;
+					if (!dimensionCriteria)
+						return false;
+					return super.place(world, generator, rand, pos, config);
+				}
+			}, new OreFeatureConfig(OreFeatureConfig.FillerBlockType.create("steeloreblock", "steeloreblock", blockAt -> {
+				boolean blockCriteria = false;
+				if (blockAt.getBlock() == Blocks.STONE.getDefaultState().getBlock())
+					blockCriteria = true;
+				return blockCriteria;
+			}), block.getDefaultState(), 7), Placement.COUNT_RANGE, new CountRangeConfig(5, 10, 10, 110)));
 		}
 	}
 }

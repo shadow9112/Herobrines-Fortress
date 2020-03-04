@@ -31,11 +31,9 @@ public class MCreatorSummonfiredragonCommandExecuted extends Elementsherobrines_
 		int z = (int) dependencies.get("z");
 		World world = (World) dependencies.get("world");
 		if (!world.isRemote) {
-			Entity entityToSpawn = new MCreatorFiredragon.EntityCustom(world);
-			if (entityToSpawn != null) {
-				entityToSpawn.setLocationAndAngles(x, y, z, world.rand.nextFloat() * 360F, 0.0F);
-				world.spawnEntity(entityToSpawn);
-			}
+			Entity entityToSpawn = new MCreatorFiredragon.CustomEntity(MCreatorFiredragon.entity, world);
+			entityToSpawn.setLocationAndAngles(x, y, z, world.rand.nextFloat() * 360F, 0);
+			world.addEntity(entityToSpawn);
 		}
 	}
 }

@@ -1,7 +1,8 @@
 package net.mcreator.herobrines_fortress;
 
+import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.World;
-import net.minecraft.entity.effect.EntityLightningBolt;
+import net.minecraft.entity.effect.LightningBoltEntity;
 
 @Elementsherobrines_fortress.ModElement.Tag
 public class MCreatorLightningstrikesagain extends Elementsherobrines_fortress.ModElement {
@@ -31,7 +32,8 @@ public class MCreatorLightningstrikesagain extends Elementsherobrines_fortress.M
 		int z = (int) dependencies.get("z");
 		World world = (World) dependencies.get("world");
 		if (((herobrines_fortressVariables.MapVariables.get(world).Lightnings) == 5)) {
-			world.addWeatherEffect(new EntityLightningBolt(world, (int) x, (int) y, (int) z, false));
+			if (world instanceof ServerWorld)
+				((ServerWorld) world).addLightningBolt(new LightningBoltEntity(world, (int) x, (int) y, (int) z, false));
 		}
 	}
 }

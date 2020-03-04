@@ -1,7 +1,7 @@
 package net.mcreator.herobrines_fortress;
 
-import net.minecraft.util.EnumHand;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.Hand;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Entity;
 
 @Elementsherobrines_fortress.ModElement.Tag
@@ -16,8 +16,8 @@ public class MCreatorTestingEntityIsHurt extends Elementsherobrines_fortress.Mod
 			return;
 		}
 		Entity entity = (Entity) dependencies.get("entity");
-		if (entity instanceof EntityLivingBase) {
-			((EntityLivingBase) entity).swingArm(EnumHand.MAIN_HAND);
+		if (entity instanceof LivingEntity) {
+			((LivingEntity) entity).swingArm(Hand.MAIN_HAND);
 		}
 	}
 }

@@ -1,12 +1,15 @@
 package net.mcreator.herobrines_fortress;
 
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
+import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.World;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.world.Explosion;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.entity.effect.EntityLightningBolt;
+import net.minecraft.entity.effect.LightningBoltEntity;
+import net.minecraft.block.Blocks;
 
 @Elementsherobrines_fortress.ModElement.Tag
 public class MCreatorProjectile_result extends Elementsherobrines_fortress.ModElement {
@@ -37,29 +40,30 @@ public class MCreatorProjectile_result extends Elementsherobrines_fortress.ModEl
 		World world = (World) dependencies.get("world");
 		if ((Math.random() < 0.2)) {
 			if (!world.isRemote) {
-				world.createExplosion(null, (int) x, (int) y, (int) z, (float) 4, true);
+				world.createExplosion(null, (int) x, (int) y, (int) z, (float) 4, Explosion.Mode.BREAK);
 			}
-			world.setBlockToAir(new BlockPos((int) x, (int) y, (int) z));
+			world.setBlockState(new BlockPos((int) x, (int) y, (int) z), Blocks.AIR.getDefaultState(), 3);
 			{
-				MinecraftServer mcserv = FMLCommonHandler.instance().getMinecraftServerInstance();
+				MinecraftServer mcserv = ServerLifecycleHooks.getCurrentServer();
 				if (mcserv != null)
-					mcserv.getPlayerList().sendMessage(new TextComponentString("Explosion"));
+					mcserv.getPlayerList().sendMessage(new StringTextComponent("Explosion"));
 			}
 		} else if ((Math.random() >= Math.min(0.2, 0.4))) {
-			world.addWeatherEffect(new EntityLightningBolt(world, (int) x, (int) y, (int) z, false));
-			world.setBlockToAir(new BlockPos((int) x, (int) y, (int) z));
+			if (world instanceof ServerWorld)
+				((ServerWorld) world).addLightningBolt(new LightningBoltEntity(world, (int) x, (int) y, (int) z, false));
+			world.setBlockState(new BlockPos((int) x, (int) y, (int) z), Blocks.AIR.getDefaultState(), 3);
 			{
-				MinecraftServer mcserv = FMLCommonHandler.instance().getMinecraftServerInstance();
+				MinecraftServer mcserv = ServerLifecycleHooks.getCurrentServer();
 				if (mcserv != null)
-					mcserv.getPlayerList().sendMessage(new TextComponentString("Lightning"));
+					mcserv.getPlayerList().sendMessage(new StringTextComponent("Lightning"));
 			}
 		} else if ((Math.random() >= Math.max(0.5, 1))) {
 			{
-				MinecraftServer mcserv = FMLCommonHandler.instance().getMinecraftServerInstance();
+				MinecraftServer mcserv = ServerLifecycleHooks.getCurrentServer();
 				if (mcserv != null)
-					mcserv.getPlayerList().sendMessage(new TextComponentString("Hello"));
+					mcserv.getPlayerList().sendMessage(new StringTextComponent("Hello"));
 			}
-			world.setBlockToAir(new BlockPos((int) x, (int) y, (int) z));
+			world.setBlockState(new BlockPos((int) x, (int) y, (int) z), Blocks.AIR.getDefaultState(), 3);
 		}
 	}
 }

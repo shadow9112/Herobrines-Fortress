@@ -1,6 +1,7 @@
 package net.mcreator.herobrines_fortress;
 
 import net.minecraft.world.World;
+import net.minecraft.world.Explosion;
 
 @Elementsherobrines_fortress.ModElement.Tag
 public class MCreatorSicktntBlockDestroyedByExplosion extends Elementsherobrines_fortress.ModElement {
@@ -30,7 +31,7 @@ public class MCreatorSicktntBlockDestroyedByExplosion extends Elementsherobrines
 		int z = (int) dependencies.get("z");
 		World world = (World) dependencies.get("world");
 		if (!world.isRemote) {
-			world.createExplosion(null, (int) x, (int) y, (int) z, (float) 6, true);
+			world.createExplosion(null, (int) x, (int) y, (int) z, (float) 6, Explosion.Mode.BREAK);
 		}
 	}
 }

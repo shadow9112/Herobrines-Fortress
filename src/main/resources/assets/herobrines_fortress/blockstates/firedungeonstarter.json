@@ -1,7 +1,7 @@
 {
   "variants": {
-    "normal": {
-      "model": "herobrines_fortress:firedungeonstarter"
+    "": {
+      "model": "herobrines_fortress:block/firedungeonstarter"
     }
   }
 }

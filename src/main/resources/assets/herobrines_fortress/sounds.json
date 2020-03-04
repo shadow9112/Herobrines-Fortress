@@ -1,5 +1,5 @@
 {
-  "Battlefield": {
+  "battlefield": {
     "category": "master",
     "sounds": [
       {
@@ -8,7 +8,7 @@
       }
     ]
   },
-  "Firey": {
+  "firey": {
     "category": "master",
     "sounds": [
       {
@@ -17,7 +17,7 @@
       }
     ]
   },
-  "Firey_ambient_sound": {
+  "firey_ambient_sound": {
     "category": "ambient",
     "sounds": [
       {
@@ -26,7 +26,7 @@
       }
     ]
   },
-  "Dragon_Hearted": {
+  "dragon_hearted": {
     "category": "master",
     "sounds": [
       {

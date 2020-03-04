@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "down": "herobrines_fortress:blocks/sick_dest_ore_texture",
+    "up": "herobrines_fortress:blocks/sick_dest_ore_texture",
+    "north": "herobrines_fortress:blocks/sick_dest_ore_texture",
+    "east": "herobrines_fortress:blocks/sick_dest_ore_texture",
+    "south": "herobrines_fortress:blocks/sick_dest_ore_texture",
+    "west": "herobrines_fortress:blocks/sick_dest_ore_texture",
+    "particle": "herobrines_fortress:blocks/sick_dest_ore_texture"
+  }
+}

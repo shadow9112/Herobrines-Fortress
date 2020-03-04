@@ -1,8 +1,20 @@
 package net.mcreator.herobrines_fortress;
 
+import net.minecraftforge.fml.network.NetworkHooks;
+
 import net.minecraft.world.World;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.Entity;
+
+import io.netty.buffer.Unpooled;
 
 @Elementsherobrines_fortress.ModElement.Tag
 public class MCreatorVaultpasswordenterButtonClickedOnButtonClicked extends Elementsherobrines_fortress.ModElement {
@@ -70,8 +82,19 @@ public class MCreatorVaultpasswordenterButtonClickedOnButtonClicked extends Elem
 			herobrines_fortressVariables.MapVariables.get(world).syncData(world);
 			herobrines_fortressVariables.MapVariables.get(world).Vault_password_number5 = (double) 0;
 			herobrines_fortressVariables.MapVariables.get(world).syncData(world);
-			if (entity instanceof EntityPlayer)
-				((EntityPlayer) entity).openGui(herobrines_fortress.instance, MCreatorSafeinventory.GUIID, world, x, y, z);
+			if (entity instanceof ServerPlayerEntity)
+				NetworkHooks.openGui((ServerPlayerEntity) entity, new INamedContainerProvider() {
+					@Override
+					public ITextComponent getDisplayName() {
+						return new StringTextComponent("Safeinventory");
+					}
+
+					@Override
+					public Container createMenu(int id, PlayerInventory inventory, PlayerEntity player) {
+						return new MCreatorSafeinventory.GuiContainerMod(id, inventory, new PacketBuffer(Unpooled.buffer())
+								.writeBlockPos(new BlockPos(x, y, z)));
+					}
+				}, new BlockPos(x, y, z));
 		} else if (((herobrines_fortressVariables.MapVariables.get(world).Vault_password_number1) == (herobrines_fortressVariables.MapVariables
 				.get(world).Vault_password_1_password))) {
 			if (((herobrines_fortressVariables.MapVariables.get(world).Vault_password_number2) == (herobrines_fortressVariables.MapVariables
@@ -82,8 +105,19 @@ public class MCreatorVaultpasswordenterButtonClickedOnButtonClicked extends Elem
 							.get(world).Vault_password_4_password))) {
 						if (((herobrines_fortressVariables.MapVariables.get(world).Vault_password_number5) == (herobrines_fortressVariables.MapVariables
 								.get(world).Vault_password_5_password))) {
-							if (entity instanceof EntityPlayer)
-								((EntityPlayer) entity).openGui(herobrines_fortress.instance, MCreatorSafeinventory.GUIID, world, x, y, z);
+							if (entity instanceof ServerPlayerEntity)
+								NetworkHooks.openGui((ServerPlayerEntity) entity, new INamedContainerProvider() {
+									@Override
+									public ITextComponent getDisplayName() {
+										return new StringTextComponent("Safeinventory");
+									}
+
+									@Override
+									public Container createMenu(int id, PlayerInventory inventory, PlayerEntity player) {
+										return new MCreatorSafeinventory.GuiContainerMod(id, inventory, new PacketBuffer(Unpooled.buffer())
+												.writeBlockPos(new BlockPos(x, y, z)));
+									}
+								}, new BlockPos(x, y, z));
 						}
 					}
 				}

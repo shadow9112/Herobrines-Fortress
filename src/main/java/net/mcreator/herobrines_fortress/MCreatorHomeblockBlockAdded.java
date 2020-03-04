@@ -3,9 +3,8 @@ package net.mcreator.herobrines_fortress;
 import net.minecraft.world.World;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.item.ItemStack;
-import net.minecraft.init.Blocks;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.block.Blocks;
 
 @Elementsherobrines_fortress.ModElement.Tag
 public class MCreatorHomeblockBlockAdded extends Elementsherobrines_fortress.ModElement {
@@ -34,428 +33,235 @@ public class MCreatorHomeblockBlockAdded extends Elementsherobrines_fortress.Mod
 		int y = (int) dependencies.get("y");
 		int z = (int) dependencies.get("z");
 		World world = (World) dependencies.get("world");
-		if ((new Object() {
-			public boolean blockEquals(IBlockState a, IBlockState b) {
-				try {
-					return (a.getBlock() == b.getBlock()) && (a.getBlock().getMetaFromState(a) == b.getBlock().getMetaFromState(b));
-				} catch (Exception e) {
-					return (a.getBlock() == b.getBlock());
-				}
-			}
-		}.blockEquals((world.getBlockState(new BlockPos((int) (x + 1), (int) y, (int) z))), Blocks.IRON_BLOCK.getDefaultState()))) {
-			if ((new Object() {
-				public boolean blockEquals(IBlockState a, IBlockState b) {
-					try {
-						return (a.getBlock() == b.getBlock()) && (a.getBlock().getMetaFromState(a) == b.getBlock().getMetaFromState(b));
-					} catch (Exception e) {
-						return (a.getBlock() == b.getBlock());
-					}
-				}
-			}.blockEquals((world.getBlockState(new BlockPos((int) (x - 1), (int) y, (int) z))), Blocks.IRON_BLOCK.getDefaultState()))) {
-				if ((new Object() {
-					public boolean blockEquals(IBlockState a, IBlockState b) {
-						try {
-							return (a.getBlock() == b.getBlock()) && (a.getBlock().getMetaFromState(a) == b.getBlock().getMetaFromState(b));
-						} catch (Exception e) {
-							return (a.getBlock() == b.getBlock());
-						}
-					}
-				}.blockEquals((world.getBlockState(new BlockPos((int) (x - 1), (int) y, (int) (z + 1)))), Blocks.IRON_BLOCK.getDefaultState()))) {
-					if ((new Object() {
-						public boolean blockEquals(IBlockState a, IBlockState b) {
-							try {
-								return (a.getBlock() == b.getBlock()) && (a.getBlock().getMetaFromState(a) == b.getBlock().getMetaFromState(b));
-							} catch (Exception e) {
-								return (a.getBlock() == b.getBlock());
-							}
-						}
-					}.blockEquals((world.getBlockState(new BlockPos((int) (x - 1), (int) y, (int) (z - 1)))), Blocks.IRON_BLOCK.getDefaultState()))) {
-						if ((new Object() {
-							public boolean blockEquals(IBlockState a, IBlockState b) {
-								try {
-									return (a.getBlock() == b.getBlock()) && (a.getBlock().getMetaFromState(a) == b.getBlock().getMetaFromState(b));
-								} catch (Exception e) {
-									return (a.getBlock() == b.getBlock());
-								}
-							}
-						}.blockEquals((world.getBlockState(new BlockPos((int) x, (int) y, (int) (z + 1)))), Blocks.IRON_BLOCK.getDefaultState()))) {
-							if ((new Object() {
-								public boolean blockEquals(IBlockState a, IBlockState b) {
-									try {
-										return (a.getBlock() == b.getBlock())
-												&& (a.getBlock().getMetaFromState(a) == b.getBlock().getMetaFromState(b));
-									} catch (Exception e) {
-										return (a.getBlock() == b.getBlock());
-									}
-								}
-							}.blockEquals((world.getBlockState(new BlockPos((int) x, (int) y, (int) (z - 1)))), Blocks.IRON_BLOCK.getDefaultState()))) {
-								if ((new Object() {
-									public boolean blockEquals(IBlockState a, IBlockState b) {
-										try {
-											return (a.getBlock() == b.getBlock())
-													&& (a.getBlock().getMetaFromState(a) == b.getBlock().getMetaFromState(b));
-										} catch (Exception e) {
-											return (a.getBlock() == b.getBlock());
-										}
-									}
-								}.blockEquals((world.getBlockState(new BlockPos((int) (x + 1), (int) y, (int) (z - 1)))),
-										Blocks.IRON_BLOCK.getDefaultState()))) {
-									if ((new Object() {
-										public boolean blockEquals(IBlockState a, IBlockState b) {
-											try {
-												return (a.getBlock() == b.getBlock())
-														&& (a.getBlock().getMetaFromState(a) == b.getBlock().getMetaFromState(b));
-											} catch (Exception e) {
-												return (a.getBlock() == b.getBlock());
-											}
-										}
-									}.blockEquals((world.getBlockState(new BlockPos((int) (x + 1), (int) y, (int) (z + 1)))),
-											Blocks.IRON_BLOCK.getDefaultState()))) {
+		if (((world.getBlockState(new BlockPos((int) (x + 1), (int) y, (int) z))).getBlock() == Blocks.IRON_BLOCK.getDefaultState().getBlock())) {
+			if (((world.getBlockState(new BlockPos((int) (x - 1), (int) y, (int) z))).getBlock() == Blocks.IRON_BLOCK.getDefaultState().getBlock())) {
+				if (((world.getBlockState(new BlockPos((int) (x - 1), (int) y, (int) (z + 1)))).getBlock() == Blocks.IRON_BLOCK.getDefaultState()
+						.getBlock())) {
+					if (((world.getBlockState(new BlockPos((int) (x - 1), (int) y, (int) (z - 1)))).getBlock() == Blocks.IRON_BLOCK.getDefaultState()
+							.getBlock())) {
+						if (((world.getBlockState(new BlockPos((int) x, (int) y, (int) (z + 1)))).getBlock() == Blocks.IRON_BLOCK.getDefaultState()
+								.getBlock())) {
+							if (((world.getBlockState(new BlockPos((int) x, (int) y, (int) (z - 1)))).getBlock() == Blocks.IRON_BLOCK
+									.getDefaultState().getBlock())) {
+								if (((world.getBlockState(new BlockPos((int) (x + 1), (int) y, (int) (z - 1)))).getBlock() == Blocks.IRON_BLOCK
+										.getDefaultState().getBlock())) {
+									if (((world.getBlockState(new BlockPos((int) (x + 1), (int) y, (int) (z + 1)))).getBlock() == Blocks.IRON_BLOCK
+											.getDefaultState().getBlock())) {
 										herobrines_fortressVariables.MapVariables.get(world).Home_item_give = (double) 0;
 										herobrines_fortressVariables.MapVariables.get(world).syncData(world);
 									} else {
-										world.setBlockToAir(new BlockPos((int) x, (int) y, (int) z));
+										world.setBlockState(new BlockPos((int) x, (int) y, (int) z), Blocks.AIR.getDefaultState(), 3);
 										if (!world.isRemote) {
-											EntityItem entityToSpawn = new EntityItem(world, x, y, z, new ItemStack(MCreatorHomeblock.block,
+											ItemEntity entityToSpawn = new ItemEntity(world, x, y, z, new ItemStack(MCreatorHomeblock.block,
 													(int) (1)));
 											entityToSpawn.setPickupDelay(10);
-											world.spawnEntity(entityToSpawn);
+											world.addEntity(entityToSpawn);
 										}
 									}
 								} else {
-									world.setBlockToAir(new BlockPos((int) x, (int) y, (int) z));
+									world.setBlockState(new BlockPos((int) x, (int) y, (int) z), Blocks.AIR.getDefaultState(), 3);
 									if (!world.isRemote) {
-										EntityItem entityToSpawn = new EntityItem(world, x, y, z, new ItemStack(MCreatorHomeblock.block, (int) (1)));
+										ItemEntity entityToSpawn = new ItemEntity(world, x, y, z, new ItemStack(MCreatorHomeblock.block, (int) (1)));
 										entityToSpawn.setPickupDelay(10);
-										world.spawnEntity(entityToSpawn);
+										world.addEntity(entityToSpawn);
 									}
 								}
 							} else {
-								world.setBlockToAir(new BlockPos((int) x, (int) y, (int) z));
+								world.setBlockState(new BlockPos((int) x, (int) y, (int) z), Blocks.AIR.getDefaultState(), 3);
 								if (!world.isRemote) {
-									EntityItem entityToSpawn = new EntityItem(world, x, y, z, new ItemStack(MCreatorHomeblock.block, (int) (1)));
+									ItemEntity entityToSpawn = new ItemEntity(world, x, y, z, new ItemStack(MCreatorHomeblock.block, (int) (1)));
 									entityToSpawn.setPickupDelay(10);
-									world.spawnEntity(entityToSpawn);
+									world.addEntity(entityToSpawn);
 								}
 							}
 						} else {
-							world.setBlockToAir(new BlockPos((int) x, (int) y, (int) z));
+							world.setBlockState(new BlockPos((int) x, (int) y, (int) z), Blocks.AIR.getDefaultState(), 3);
 							if (!world.isRemote) {
-								EntityItem entityToSpawn = new EntityItem(world, x, y, z, new ItemStack(MCreatorHomeblock.block, (int) (1)));
+								ItemEntity entityToSpawn = new ItemEntity(world, x, y, z, new ItemStack(MCreatorHomeblock.block, (int) (1)));
 								entityToSpawn.setPickupDelay(10);
-								world.spawnEntity(entityToSpawn);
+								world.addEntity(entityToSpawn);
 							}
 						}
 					} else {
-						world.setBlockToAir(new BlockPos((int) x, (int) y, (int) z));
+						world.setBlockState(new BlockPos((int) x, (int) y, (int) z), Blocks.AIR.getDefaultState(), 3);
 						if (!world.isRemote) {
-							EntityItem entityToSpawn = new EntityItem(world, x, y, z, new ItemStack(MCreatorHomeblock.block, (int) (1)));
+							ItemEntity entityToSpawn = new ItemEntity(world, x, y, z, new ItemStack(MCreatorHomeblock.block, (int) (1)));
 							entityToSpawn.setPickupDelay(10);
-							world.spawnEntity(entityToSpawn);
+							world.addEntity(entityToSpawn);
 						}
 					}
 				} else {
-					world.setBlockToAir(new BlockPos((int) x, (int) y, (int) z));
+					world.setBlockState(new BlockPos((int) x, (int) y, (int) z), Blocks.AIR.getDefaultState(), 3);
 					if (!world.isRemote) {
-						EntityItem entityToSpawn = new EntityItem(world, x, y, z, new ItemStack(MCreatorHomeblock.block, (int) (1)));
+						ItemEntity entityToSpawn = new ItemEntity(world, x, y, z, new ItemStack(MCreatorHomeblock.block, (int) (1)));
 						entityToSpawn.setPickupDelay(10);
-						world.spawnEntity(entityToSpawn);
+						world.addEntity(entityToSpawn);
 					}
 				}
 			} else {
-				world.setBlockToAir(new BlockPos((int) x, (int) y, (int) z));
+				world.setBlockState(new BlockPos((int) x, (int) y, (int) z), Blocks.AIR.getDefaultState(), 3);
 				if (!world.isRemote) {
-					EntityItem entityToSpawn = new EntityItem(world, x, y, z, new ItemStack(MCreatorHomeblock.block, (int) (1)));
+					ItemEntity entityToSpawn = new ItemEntity(world, x, y, z, new ItemStack(MCreatorHomeblock.block, (int) (1)));
 					entityToSpawn.setPickupDelay(10);
-					world.spawnEntity(entityToSpawn);
+					world.addEntity(entityToSpawn);
 				}
 			}
-		} else if ((new Object() {
-			public boolean blockEquals(IBlockState a, IBlockState b) {
-				try {
-					return (a.getBlock() == b.getBlock()) && (a.getBlock().getMetaFromState(a) == b.getBlock().getMetaFromState(b));
-				} catch (Exception e) {
-					return (a.getBlock() == b.getBlock());
-				}
-			}
-		}.blockEquals((world.getBlockState(new BlockPos((int) (x + 1), (int) y, (int) z))), MCreatorGoldbrickblock.block.getDefaultState()))) {
-			if ((new Object() {
-				public boolean blockEquals(IBlockState a, IBlockState b) {
-					try {
-						return (a.getBlock() == b.getBlock()) && (a.getBlock().getMetaFromState(a) == b.getBlock().getMetaFromState(b));
-					} catch (Exception e) {
-						return (a.getBlock() == b.getBlock());
-					}
-				}
-			}.blockEquals((world.getBlockState(new BlockPos((int) (x - 1), (int) y, (int) z))), MCreatorGoldbrickblock.block.getDefaultState()))) {
-				if ((new Object() {
-					public boolean blockEquals(IBlockState a, IBlockState b) {
-						try {
-							return (a.getBlock() == b.getBlock()) && (a.getBlock().getMetaFromState(a) == b.getBlock().getMetaFromState(b));
-						} catch (Exception e) {
-							return (a.getBlock() == b.getBlock());
-						}
-					}
-				}.blockEquals((world.getBlockState(new BlockPos((int) (x - 1), (int) y, (int) (z + 1)))),
-						MCreatorDiamondbrickblock.block.getDefaultState()))) {
-					if ((new Object() {
-						public boolean blockEquals(IBlockState a, IBlockState b) {
-							try {
-								return (a.getBlock() == b.getBlock()) && (a.getBlock().getMetaFromState(a) == b.getBlock().getMetaFromState(b));
-							} catch (Exception e) {
-								return (a.getBlock() == b.getBlock());
-							}
-						}
-					}.blockEquals((world.getBlockState(new BlockPos((int) (x - 1), (int) y, (int) (z - 1)))),
-							MCreatorDiamondbrickblock.block.getDefaultState()))) {
-						if ((new Object() {
-							public boolean blockEquals(IBlockState a, IBlockState b) {
-								try {
-									return (a.getBlock() == b.getBlock()) && (a.getBlock().getMetaFromState(a) == b.getBlock().getMetaFromState(b));
-								} catch (Exception e) {
-									return (a.getBlock() == b.getBlock());
-								}
-							}
-						}.blockEquals((world.getBlockState(new BlockPos((int) x, (int) y, (int) (z + 1)))),
-								MCreatorGoldbrickblock.block.getDefaultState()))) {
-							if ((new Object() {
-								public boolean blockEquals(IBlockState a, IBlockState b) {
-									try {
-										return (a.getBlock() == b.getBlock())
-												&& (a.getBlock().getMetaFromState(a) == b.getBlock().getMetaFromState(b));
-									} catch (Exception e) {
-										return (a.getBlock() == b.getBlock());
-									}
-								}
-							}.blockEquals((world.getBlockState(new BlockPos((int) x, (int) y, (int) (z - 1)))),
-									MCreatorGoldbrickblock.block.getDefaultState()))) {
-								if ((new Object() {
-									public boolean blockEquals(IBlockState a, IBlockState b) {
-										try {
-											return (a.getBlock() == b.getBlock())
-													&& (a.getBlock().getMetaFromState(a) == b.getBlock().getMetaFromState(b));
-										} catch (Exception e) {
-											return (a.getBlock() == b.getBlock());
-										}
-									}
-								}.blockEquals((world.getBlockState(new BlockPos((int) (x + 1), (int) y, (int) (z - 1)))),
-										MCreatorDiamondbrickblock.block.getDefaultState()))) {
-									if ((new Object() {
-										public boolean blockEquals(IBlockState a, IBlockState b) {
-											try {
-												return (a.getBlock() == b.getBlock())
-														&& (a.getBlock().getMetaFromState(a) == b.getBlock().getMetaFromState(b));
-											} catch (Exception e) {
-												return (a.getBlock() == b.getBlock());
-											}
-										}
-									}.blockEquals((world.getBlockState(new BlockPos((int) (x + 1), (int) y, (int) (z + 1)))),
-											MCreatorDiamondbrickblock.block.getDefaultState()))) {
+		} else if (((world.getBlockState(new BlockPos((int) (x + 1), (int) y, (int) z))).getBlock() == MCreatorGoldbrickblock.block.getDefaultState()
+				.getBlock())) {
+			if (((world.getBlockState(new BlockPos((int) (x - 1), (int) y, (int) z))).getBlock() == MCreatorGoldbrickblock.block.getDefaultState()
+					.getBlock())) {
+				if (((world.getBlockState(new BlockPos((int) (x - 1), (int) y, (int) (z + 1)))).getBlock() == MCreatorDiamondbrickblock.block
+						.getDefaultState().getBlock())) {
+					if (((world.getBlockState(new BlockPos((int) (x - 1), (int) y, (int) (z - 1)))).getBlock() == MCreatorDiamondbrickblock.block
+							.getDefaultState().getBlock())) {
+						if (((world.getBlockState(new BlockPos((int) x, (int) y, (int) (z + 1)))).getBlock() == MCreatorGoldbrickblock.block
+								.getDefaultState().getBlock())) {
+							if (((world.getBlockState(new BlockPos((int) x, (int) y, (int) (z - 1)))).getBlock() == MCreatorGoldbrickblock.block
+									.getDefaultState().getBlock())) {
+								if (((world.getBlockState(new BlockPos((int) (x + 1), (int) y, (int) (z - 1)))).getBlock() == MCreatorDiamondbrickblock.block
+										.getDefaultState().getBlock())) {
+									if (((world.getBlockState(new BlockPos((int) (x + 1), (int) y, (int) (z + 1)))).getBlock() == MCreatorDiamondbrickblock.block
+											.getDefaultState().getBlock())) {
 										herobrines_fortressVariables.MapVariables.get(world).Home_item_give = (double) 0;
 										herobrines_fortressVariables.MapVariables.get(world).syncData(world);
 									} else {
-										world.setBlockToAir(new BlockPos((int) x, (int) y, (int) z));
+										world.setBlockState(new BlockPos((int) x, (int) y, (int) z), Blocks.AIR.getDefaultState(), 3);
 										if (!world.isRemote) {
-											EntityItem entityToSpawn = new EntityItem(world, x, y, z, new ItemStack(MCreatorHomeblock.block,
+											ItemEntity entityToSpawn = new ItemEntity(world, x, y, z, new ItemStack(MCreatorHomeblock.block,
 													(int) (1)));
 											entityToSpawn.setPickupDelay(10);
-											world.spawnEntity(entityToSpawn);
+											world.addEntity(entityToSpawn);
 										}
 									}
 								} else {
-									world.setBlockToAir(new BlockPos((int) x, (int) y, (int) z));
+									world.setBlockState(new BlockPos((int) x, (int) y, (int) z), Blocks.AIR.getDefaultState(), 3);
 									if (!world.isRemote) {
-										EntityItem entityToSpawn = new EntityItem(world, x, y, z, new ItemStack(MCreatorHomeblock.block, (int) (1)));
+										ItemEntity entityToSpawn = new ItemEntity(world, x, y, z, new ItemStack(MCreatorHomeblock.block, (int) (1)));
 										entityToSpawn.setPickupDelay(10);
-										world.spawnEntity(entityToSpawn);
+										world.addEntity(entityToSpawn);
 									}
 								}
 							} else {
-								world.setBlockToAir(new BlockPos((int) x, (int) y, (int) z));
+								world.setBlockState(new BlockPos((int) x, (int) y, (int) z), Blocks.AIR.getDefaultState(), 3);
 								if (!world.isRemote) {
-									EntityItem entityToSpawn = new EntityItem(world, x, y, z, new ItemStack(MCreatorHomeblock.block, (int) (1)));
+									ItemEntity entityToSpawn = new ItemEntity(world, x, y, z, new ItemStack(MCreatorHomeblock.block, (int) (1)));
 									entityToSpawn.setPickupDelay(10);
-									world.spawnEntity(entityToSpawn);
+									world.addEntity(entityToSpawn);
 								}
 							}
 						} else {
-							world.setBlockToAir(new BlockPos((int) x, (int) y, (int) z));
+							world.setBlockState(new BlockPos((int) x, (int) y, (int) z), Blocks.AIR.getDefaultState(), 3);
 							if (!world.isRemote) {
-								EntityItem entityToSpawn = new EntityItem(world, x, y, z, new ItemStack(MCreatorHomeblock.block, (int) (1)));
+								ItemEntity entityToSpawn = new ItemEntity(world, x, y, z, new ItemStack(MCreatorHomeblock.block, (int) (1)));
 								entityToSpawn.setPickupDelay(10);
-								world.spawnEntity(entityToSpawn);
+								world.addEntity(entityToSpawn);
 							}
 						}
 					} else {
-						world.setBlockToAir(new BlockPos((int) x, (int) y, (int) z));
+						world.setBlockState(new BlockPos((int) x, (int) y, (int) z), Blocks.AIR.getDefaultState(), 3);
 						if (!world.isRemote) {
-							EntityItem entityToSpawn = new EntityItem(world, x, y, z, new ItemStack(MCreatorHomeblock.block, (int) (1)));
+							ItemEntity entityToSpawn = new ItemEntity(world, x, y, z, new ItemStack(MCreatorHomeblock.block, (int) (1)));
 							entityToSpawn.setPickupDelay(10);
-							world.spawnEntity(entityToSpawn);
+							world.addEntity(entityToSpawn);
 						}
 					}
 				} else {
-					world.setBlockToAir(new BlockPos((int) x, (int) y, (int) z));
+					world.setBlockState(new BlockPos((int) x, (int) y, (int) z), Blocks.AIR.getDefaultState(), 3);
 					if (!world.isRemote) {
-						EntityItem entityToSpawn = new EntityItem(world, x, y, z, new ItemStack(MCreatorHomeblock.block, (int) (1)));
+						ItemEntity entityToSpawn = new ItemEntity(world, x, y, z, new ItemStack(MCreatorHomeblock.block, (int) (1)));
 						entityToSpawn.setPickupDelay(10);
-						world.spawnEntity(entityToSpawn);
+						world.addEntity(entityToSpawn);
 					}
 				}
 			} else {
-				world.setBlockToAir(new BlockPos((int) x, (int) y, (int) z));
+				world.setBlockState(new BlockPos((int) x, (int) y, (int) z), Blocks.AIR.getDefaultState(), 3);
 				if (!world.isRemote) {
-					EntityItem entityToSpawn = new EntityItem(world, x, y, z, new ItemStack(MCreatorHomeblock.block, (int) (1)));
+					ItemEntity entityToSpawn = new ItemEntity(world, x, y, z, new ItemStack(MCreatorHomeblock.block, (int) (1)));
 					entityToSpawn.setPickupDelay(10);
-					world.spawnEntity(entityToSpawn);
+					world.addEntity(entityToSpawn);
 				}
 			}
-		} else if ((new Object() {
-			public boolean blockEquals(IBlockState a, IBlockState b) {
-				try {
-					return (a.getBlock() == b.getBlock()) && (a.getBlock().getMetaFromState(a) == b.getBlock().getMetaFromState(b));
-				} catch (Exception e) {
-					return (a.getBlock() == b.getBlock());
-				}
-			}
-		}.blockEquals((world.getBlockState(new BlockPos((int) (x + 1), (int) y, (int) z))), MCreatorDiamondbrickblock.block.getDefaultState()))) {
-			if ((new Object() {
-				public boolean blockEquals(IBlockState a, IBlockState b) {
-					try {
-						return (a.getBlock() == b.getBlock()) && (a.getBlock().getMetaFromState(a) == b.getBlock().getMetaFromState(b));
-					} catch (Exception e) {
-						return (a.getBlock() == b.getBlock());
-					}
-				}
-			}.blockEquals((world.getBlockState(new BlockPos((int) (x - 1), (int) y, (int) z))), MCreatorDiamondbrickblock.block.getDefaultState()))) {
-				if ((new Object() {
-					public boolean blockEquals(IBlockState a, IBlockState b) {
-						try {
-							return (a.getBlock() == b.getBlock()) && (a.getBlock().getMetaFromState(a) == b.getBlock().getMetaFromState(b));
-						} catch (Exception e) {
-							return (a.getBlock() == b.getBlock());
-						}
-					}
-				}.blockEquals((world.getBlockState(new BlockPos((int) (x - 1), (int) y, (int) (z + 1)))),
-						MCreatorGoldbrickblock.block.getDefaultState()))) {
-					if ((new Object() {
-						public boolean blockEquals(IBlockState a, IBlockState b) {
-							try {
-								return (a.getBlock() == b.getBlock()) && (a.getBlock().getMetaFromState(a) == b.getBlock().getMetaFromState(b));
-							} catch (Exception e) {
-								return (a.getBlock() == b.getBlock());
-							}
-						}
-					}.blockEquals((world.getBlockState(new BlockPos((int) (x - 1), (int) y, (int) (z - 1)))),
-							MCreatorGoldbrickblock.block.getDefaultState()))) {
-						if ((new Object() {
-							public boolean blockEquals(IBlockState a, IBlockState b) {
-								try {
-									return (a.getBlock() == b.getBlock()) && (a.getBlock().getMetaFromState(a) == b.getBlock().getMetaFromState(b));
-								} catch (Exception e) {
-									return (a.getBlock() == b.getBlock());
-								}
-							}
-						}.blockEquals((world.getBlockState(new BlockPos((int) x, (int) y, (int) (z + 1)))),
-								MCreatorDiamondbrickblock.block.getDefaultState()))) {
-							if ((new Object() {
-								public boolean blockEquals(IBlockState a, IBlockState b) {
-									try {
-										return (a.getBlock() == b.getBlock())
-												&& (a.getBlock().getMetaFromState(a) == b.getBlock().getMetaFromState(b));
-									} catch (Exception e) {
-										return (a.getBlock() == b.getBlock());
-									}
-								}
-							}.blockEquals((world.getBlockState(new BlockPos((int) x, (int) y, (int) (z - 1)))),
-									MCreatorDiamondbrickblock.block.getDefaultState()))) {
-								if ((new Object() {
-									public boolean blockEquals(IBlockState a, IBlockState b) {
-										try {
-											return (a.getBlock() == b.getBlock())
-													&& (a.getBlock().getMetaFromState(a) == b.getBlock().getMetaFromState(b));
-										} catch (Exception e) {
-											return (a.getBlock() == b.getBlock());
-										}
-									}
-								}.blockEquals((world.getBlockState(new BlockPos((int) (x + 1), (int) y, (int) (z - 1)))),
-										MCreatorGoldbrickblock.block.getDefaultState()))) {
-									if ((new Object() {
-										public boolean blockEquals(IBlockState a, IBlockState b) {
-											try {
-												return (a.getBlock() == b.getBlock())
-														&& (a.getBlock().getMetaFromState(a) == b.getBlock().getMetaFromState(b));
-											} catch (Exception e) {
-												return (a.getBlock() == b.getBlock());
-											}
-										}
-									}.blockEquals((world.getBlockState(new BlockPos((int) (x + 1), (int) y, (int) (z + 1)))),
-											MCreatorGoldbrickblock.block.getDefaultState()))) {
+		} else if (((world.getBlockState(new BlockPos((int) (x + 1), (int) y, (int) z))).getBlock() == MCreatorDiamondbrickblock.block
+				.getDefaultState().getBlock())) {
+			if (((world.getBlockState(new BlockPos((int) (x - 1), (int) y, (int) z))).getBlock() == MCreatorDiamondbrickblock.block.getDefaultState()
+					.getBlock())) {
+				if (((world.getBlockState(new BlockPos((int) (x - 1), (int) y, (int) (z + 1)))).getBlock() == MCreatorGoldbrickblock.block
+						.getDefaultState().getBlock())) {
+					if (((world.getBlockState(new BlockPos((int) (x - 1), (int) y, (int) (z - 1)))).getBlock() == MCreatorGoldbrickblock.block
+							.getDefaultState().getBlock())) {
+						if (((world.getBlockState(new BlockPos((int) x, (int) y, (int) (z + 1)))).getBlock() == MCreatorDiamondbrickblock.block
+								.getDefaultState().getBlock())) {
+							if (((world.getBlockState(new BlockPos((int) x, (int) y, (int) (z - 1)))).getBlock() == MCreatorDiamondbrickblock.block
+									.getDefaultState().getBlock())) {
+								if (((world.getBlockState(new BlockPos((int) (x + 1), (int) y, (int) (z - 1)))).getBlock() == MCreatorGoldbrickblock.block
+										.getDefaultState().getBlock())) {
+									if (((world.getBlockState(new BlockPos((int) (x + 1), (int) y, (int) (z + 1)))).getBlock() == MCreatorGoldbrickblock.block
+											.getDefaultState().getBlock())) {
 										herobrines_fortressVariables.MapVariables.get(world).Home_item_give = (double) 0;
 										herobrines_fortressVariables.MapVariables.get(world).syncData(world);
 									} else {
-										world.setBlockToAir(new BlockPos((int) x, (int) y, (int) z));
+										world.setBlockState(new BlockPos((int) x, (int) y, (int) z), Blocks.AIR.getDefaultState(), 3);
 										if (!world.isRemote) {
-											EntityItem entityToSpawn = new EntityItem(world, x, y, z, new ItemStack(MCreatorHomeblock.block,
+											ItemEntity entityToSpawn = new ItemEntity(world, x, y, z, new ItemStack(MCreatorHomeblock.block,
 													(int) (1)));
 											entityToSpawn.setPickupDelay(10);
-											world.spawnEntity(entityToSpawn);
+											world.addEntity(entityToSpawn);
 										}
 									}
 								} else {
-									world.setBlockToAir(new BlockPos((int) x, (int) y, (int) z));
+									world.setBlockState(new BlockPos((int) x, (int) y, (int) z), Blocks.AIR.getDefaultState(), 3);
 									if (!world.isRemote) {
-										EntityItem entityToSpawn = new EntityItem(world, x, y, z, new ItemStack(MCreatorHomeblock.block, (int) (1)));
+										ItemEntity entityToSpawn = new ItemEntity(world, x, y, z, new ItemStack(MCreatorHomeblock.block, (int) (1)));
 										entityToSpawn.setPickupDelay(10);
-										world.spawnEntity(entityToSpawn);
+										world.addEntity(entityToSpawn);
 									}
 								}
 							} else {
-								world.setBlockToAir(new BlockPos((int) x, (int) y, (int) z));
+								world.setBlockState(new BlockPos((int) x, (int) y, (int) z), Blocks.AIR.getDefaultState(), 3);
 								if (!world.isRemote) {
-									EntityItem entityToSpawn = new EntityItem(world, x, y, z, new ItemStack(MCreatorHomeblock.block, (int) (1)));
+									ItemEntity entityToSpawn = new ItemEntity(world, x, y, z, new ItemStack(MCreatorHomeblock.block, (int) (1)));
 									entityToSpawn.setPickupDelay(10);
-									world.spawnEntity(entityToSpawn);
+									world.addEntity(entityToSpawn);
 								}
 							}
 						} else {
-							world.setBlockToAir(new BlockPos((int) x, (int) y, (int) z));
+							world.setBlockState(new BlockPos((int) x, (int) y, (int) z), Blocks.AIR.getDefaultState(), 3);
 							if (!world.isRemote) {
-								EntityItem entityToSpawn = new EntityItem(world, x, y, z, new ItemStack(MCreatorHomeblock.block, (int) (1)));
+								ItemEntity entityToSpawn = new ItemEntity(world, x, y, z, new ItemStack(MCreatorHomeblock.block, (int) (1)));
 								entityToSpawn.setPickupDelay(10);
-								world.spawnEntity(entityToSpawn);
+								world.addEntity(entityToSpawn);
 							}
 						}
 					} else {
-						world.setBlockToAir(new BlockPos((int) x, (int) y, (int) z));
+						world.setBlockState(new BlockPos((int) x, (int) y, (int) z), Blocks.AIR.getDefaultState(), 3);
 						if (!world.isRemote) {
-							EntityItem entityToSpawn = new EntityItem(world, x, y, z, new ItemStack(MCreatorHomeblock.block, (int) (1)));
+							ItemEntity entityToSpawn = new ItemEntity(world, x, y, z, new ItemStack(MCreatorHomeblock.block, (int) (1)));
 							entityToSpawn.setPickupDelay(10);
-							world.spawnEntity(entityToSpawn);
+							world.addEntity(entityToSpawn);
 						}
 					}
 				} else {
-					world.setBlockToAir(new BlockPos((int) x, (int) y, (int) z));
+					world.setBlockState(new BlockPos((int) x, (int) y, (int) z), Blocks.AIR.getDefaultState(), 3);
 					if (!world.isRemote) {
-						EntityItem entityToSpawn = new EntityItem(world, x, y, z, new ItemStack(MCreatorHomeblock.block, (int) (1)));
+						ItemEntity entityToSpawn = new ItemEntity(world, x, y, z, new ItemStack(MCreatorHomeblock.block, (int) (1)));
 						entityToSpawn.setPickupDelay(10);
-						world.spawnEntity(entityToSpawn);
+						world.addEntity(entityToSpawn);
 					}
 				}
 			} else {
-				world.setBlockToAir(new BlockPos((int) x, (int) y, (int) z));
+				world.setBlockState(new BlockPos((int) x, (int) y, (int) z), Blocks.AIR.getDefaultState(), 3);
 				if (!world.isRemote) {
-					EntityItem entityToSpawn = new EntityItem(world, x, y, z, new ItemStack(MCreatorHomeblock.block, (int) (1)));
+					ItemEntity entityToSpawn = new ItemEntity(world, x, y, z, new ItemStack(MCreatorHomeblock.block, (int) (1)));
 					entityToSpawn.setPickupDelay(10);
-					world.spawnEntity(entityToSpawn);
+					world.addEntity(entityToSpawn);
 				}
 			}
 		} else {
-			world.setBlockToAir(new BlockPos((int) x, (int) y, (int) z));
+			world.setBlockState(new BlockPos((int) x, (int) y, (int) z), Blocks.AIR.getDefaultState(), 3);
 			if (!world.isRemote) {
-				EntityItem entityToSpawn = new EntityItem(world, x, y, z, new ItemStack(MCreatorHomeblock.block, (int) (1)));
+				ItemEntity entityToSpawn = new ItemEntity(world, x, y, z, new ItemStack(MCreatorHomeblock.block, (int) (1)));
 				entityToSpawn.setPickupDelay(10);
-				world.spawnEntity(entityToSpawn);
+				world.addEntity(entityToSpawn);
 			}
 		}
 	}

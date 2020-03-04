@@ -1,9 +1,10 @@
 package net.mcreator.herobrines_fortress;
 
 import net.minecraft.world.World;
+import net.minecraft.world.Explosion;
 import net.minecraft.util.DamageSource;
 import net.minecraft.item.ItemStack;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.Entity;
 
 @Elementsherobrines_fortress.ModElement.Tag
@@ -39,12 +40,12 @@ public class MCreatorSelfstabbingdaggerItemInInventoryTick extends Elementsherob
 		int z = (int) dependencies.get("z");
 		World world = (World) dependencies.get("world");
 		if (!world.isRemote) {
-			world.createExplosion(null, (int) x, (int) y, (int) z, (float) 2, true);
+			world.createExplosion(null, (int) x, (int) y, (int) z, (float) 2, Explosion.Mode.BREAK);
 		}
 		entity.attackEntityFrom(DamageSource.GENERIC, (float) 5);
 		entity.setFire((int) 3);
-		if (entity instanceof EntityPlayer)
-			((EntityPlayer) entity).inventory.clearMatchingItems(new ItemStack(MCreatorSelfstabbingdagger.block, (int) (1)).getItem(), -1, (int) 1,
-					null);
+		if (entity instanceof PlayerEntity)
+			((PlayerEntity) entity).inventory.clearMatchingItems(
+					p -> new ItemStack(MCreatorSelfstabbingdagger.block, (int) (1)).getItem() == p.getItem(), (int) 1);
 	}
 }

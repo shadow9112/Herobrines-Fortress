@@ -1,10 +1,12 @@
 package net.mcreator.herobrines_fortress;
 
+import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.World;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.command.ICommandSender;
+import net.minecraft.util.math.Vec2f;
+import net.minecraft.command.ICommandSource;
+import net.minecraft.command.CommandSource;
 
 @Elementsherobrines_fortress.ModElement.Tag
 public class MCreatorSickWoodEntityCollidesInTheBlock extends Elementsherobrines_fortress.ModElement {
@@ -33,43 +35,13 @@ public class MCreatorSickWoodEntityCollidesInTheBlock extends Elementsherobrines
 		int y = (int) dependencies.get("y");
 		int z = (int) dependencies.get("z");
 		World world = (World) dependencies.get("world");
-		if (!world.isRemote && world.getMinecraftServer() != null) {
-			world.getMinecraftServer().getCommandManager().executeCommand(new ICommandSender() {
-				@Override
-				public String getName() {
-					return "";
-				}
-
-				@Override
-				public boolean canUseCommand(int permission, String command) {
-					return true;
-				}
-
-				@Override
-				public World getEntityWorld() {
-					return world;
-				}
-
-				@Override
-				public MinecraftServer getServer() {
-					return world.getMinecraftServer();
-				}
-
-				@Override
-				public boolean sendCommandFeedback() {
-					return false;
-				}
-
-				@Override
-				public BlockPos getPosition() {
-					return new BlockPos((int) x, (int) y, (int) z);
-				}
-
-				@Override
-				public Vec3d getPositionVector() {
-					return new Vec3d(x, y, z);
-				}
-			}, "effect @p minecraft:night_vision 10 255");
+		if (!world.isRemote && world.getServer() != null) {
+			world.getServer()
+					.getCommandManager()
+					.handleCommand(
+							new CommandSource(ICommandSource.field_213139_a_, new Vec3d(x, y, z), Vec2f.ZERO, (ServerWorld) world, 4, "",
+									new StringTextComponent(""), world.getServer(), null).withFeedbackDisabled(),
+							"effect @p minecraft:night_vision 10 255");
 		}
 	}
 }

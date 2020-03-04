@@ -1,27 +1,30 @@
 package net.mcreator.herobrines_fortress;
 
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.common.MinecraftForge;
 
+import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.World;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.init.Blocks;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.command.ICommandSource;
+import net.minecraft.command.CommandSource;
+import net.minecraft.block.Blocks;
 
 @Elementsherobrines_fortress.ModElement.Tag
 public class MCreatorCustommusicdisks extends Elementsherobrines_fortress.ModElement {
 	public MCreatorCustommusicdisks(Elementsherobrines_fortress instance) {
 		super(instance, 142);
+		MinecraftForge.EVENT_BUS.register(this);
 	}
 
 	public static void executeProcedure(java.util.HashMap<String, Object> dependencies) {
@@ -45,60 +48,22 @@ public class MCreatorCustommusicdisks extends Elementsherobrines_fortress.ModEle
 		int y = (int) dependencies.get("y");
 		int z = (int) dependencies.get("z");
 		World world = (World) dependencies.get("world");
-		if ((new Object() {
-			public boolean blockEquals(IBlockState a, IBlockState b) {
-				try {
-					return (a.getBlock() == b.getBlock()) && (a.getBlock().getMetaFromState(a) == b.getBlock().getMetaFromState(b));
-				} catch (Exception e) {
-					return (a.getBlock() == b.getBlock());
-				}
-			}
-		}.blockEquals((world.getBlockState(new BlockPos((int) x, (int) y, (int) z))), Blocks.JUKEBOX.getDefaultState()))) {
+		if (((world.getBlockState(new BlockPos((int) x, (int) y, (int) z))).getBlock() == Blocks.JUKEBOX.getDefaultState().getBlock())) {
 			if (((herobrines_fortressVariables.MapVariables.get(world).Dragon_hearted_Variable) == 1)) {
-				if (!world.isRemote && world.getMinecraftServer() != null) {
-					world.getMinecraftServer().getCommandManager().executeCommand(new ICommandSender() {
-						@Override
-						public String getName() {
-							return "";
-						}
-
-						@Override
-						public boolean canUseCommand(int permission, String command) {
-							return true;
-						}
-
-						@Override
-						public World getEntityWorld() {
-							return world;
-						}
-
-						@Override
-						public MinecraftServer getServer() {
-							return world.getMinecraftServer();
-						}
-
-						@Override
-						public boolean sendCommandFeedback() {
-							return false;
-						}
-
-						@Override
-						public BlockPos getPosition() {
-							return new BlockPos((int) x, (int) y, (int) z);
-						}
-
-						@Override
-						public Vec3d getPositionVector() {
-							return new Vec3d(x, y, z);
-						}
-					}, "stopsound @p master herobrines_fortress:Dragon_hearted");
+				if (!world.isRemote && world.getServer() != null) {
+					world.getServer()
+							.getCommandManager()
+							.handleCommand(
+									new CommandSource(ICommandSource.field_213139_a_, new Vec3d(x, y, z), Vec2f.ZERO, (ServerWorld) world, 4, "",
+											new StringTextComponent(""), world.getServer(), null).withFeedbackDisabled(),
+									"stopsound @p master herobrines_fortress:Dragon_hearted");
 				}
-				world.playSound((EntityPlayer) null, x, y, z, (net.minecraft.util.SoundEvent) net.minecraft.util.SoundEvent.REGISTRY
-						.getObject(new ResourceLocation("herobrines_fortress:Battlefield")), SoundCategory.NEUTRAL, (float) 0, (float) 0);
+				world.playSound((PlayerEntity) null, x, y, z, (net.minecraft.util.SoundEvent) ForgeRegistries.SOUND_EVENTS
+						.getValue(new ResourceLocation("herobrines_fortress:Battlefield")), SoundCategory.NEUTRAL, (float) 0, (float) 0);
 				if (!world.isRemote) {
-					EntityItem entityToSpawn = new EntityItem(world, x, (y + 2), z, new ItemStack(MCreatorDragonheartedmusicdisk.block, (int) (1)));
+					ItemEntity entityToSpawn = new ItemEntity(world, x, (y + 2), z, new ItemStack(MCreatorDragonheartedmusicdisk.block, (int) (1)));
 					entityToSpawn.setPickupDelay(10);
-					world.spawnEntity(entityToSpawn);
+					world.addEntity(entityToSpawn);
 				}
 				herobrines_fortressVariables.MapVariables.get(world).Stop_music = (double) 1;
 				herobrines_fortressVariables.MapVariables.get(world).syncData(world);
@@ -110,7 +75,7 @@ public class MCreatorCustommusicdisks extends Elementsherobrines_fortress.ModEle
 
 	@SubscribeEvent
 	public void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
-		EntityPlayer entity = event.getEntityPlayer();
+		PlayerEntity entity = event.getPlayer();
 		int i = event.getPos().getX();
 		int j = event.getPos().getY();
 		int k = event.getPos().getZ();
@@ -123,10 +88,5 @@ public class MCreatorCustommusicdisks extends Elementsherobrines_fortress.ModEle
 		dependencies.put("entity", entity);
 		dependencies.put("event", event);
 		this.executeProcedure(dependencies);
-	}
-
-	@Override
-	public void preInit(FMLPreInitializationEvent event) {
-		MinecraftForge.EVENT_BUS.register(this);
 	}
 }

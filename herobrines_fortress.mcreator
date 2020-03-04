@@ -1,7 +1,7 @@
 {
   "id_map": {
     "DIMENSION": 2,
-    "ENTITY": 18,
+    "ENTITY": 20,
     "GUI": 5
   },
   "mod_elements": [
@@ -43,20 +43,8 @@
       "metadata": {
         "dependencies": [
           {
-            "name": "x",
-            "type": "int"
-          },
-          {
-            "name": "y",
-            "type": "int"
-          },
-          {
-            "name": "z",
-            "type": "int"
-          },
-          {
-            "name": "world",
-            "type": "world"
+            "name": "entity",
+            "type": "entity"
           }
         ]
       }
@@ -71,20 +59,8 @@
       "metadata": {
         "dependencies": [
           {
-            "name": "x",
-            "type": "int"
-          },
-          {
-            "name": "y",
-            "type": "int"
-          },
-          {
-            "name": "z",
-            "type": "int"
-          },
-          {
-            "name": "world",
-            "type": "world"
+            "name": "entity",
+            "type": "entity"
           }
         ]
       }
@@ -388,14 +364,6 @@
       "name": "Sticksandstonesmaybreakmybonesbutwordswillneverhurtme",
       "type": "recipe",
       "sortid": 57,
-      "compiles": true,
-      "locked_code": false,
-      "ids": {}
-    },
-    {
-      "name": "Firedimension",
-      "type": "recipe",
-      "sortid": 58,
       "compiles": true,
       "locked_code": false,
       "ids": {}
@@ -2457,6 +2425,7 @@
       "compiles": true,
       "locked_code": false,
       "ids": {},
+      "registry_name": "projectile_result_entity_collids_in",
       "metadata": {
         "dependencies": [
           {
@@ -2493,9 +2462,481 @@
       "compiles": true,
       "locked_code": false,
       "ids": {},
+      "registry_name": "a_entitycolision_negative_x_projectile",
       "metadata": {
-        "dependencies": []
+        "dependencies": [
+          {
+            "name": "entity",
+            "type": "entity"
+          },
+          {
+            "name": "x",
+            "type": "int"
+          },
+          {
+            "name": "y",
+            "type": "int"
+          },
+          {
+            "name": "z",
+            "type": "int"
+          },
+          {
+            "name": "world",
+            "type": "world"
+          }
+        ]
       }
+    },
+    {
+      "name": "Projectile_result_colids_with_block",
+      "type": "procedure",
+      "sortid": 160,
+      "compiles": true,
+      "locked_code": false,
+      "ids": {},
+      "metadata": {
+        "dependencies": [
+          {
+            "name": "entity",
+            "type": "entity"
+          },
+          {
+            "name": "x",
+            "type": "int"
+          },
+          {
+            "name": "y",
+            "type": "int"
+          },
+          {
+            "name": "z",
+            "type": "int"
+          },
+          {
+            "name": "world",
+            "type": "world"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Speed",
+      "type": "procedure",
+      "sortid": 161,
+      "compiles": true,
+      "locked_code": false,
+      "ids": {},
+      "metadata": {
+        "dependencies": [
+          {
+            "name": "entity",
+            "type": "entity"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Sickwoodstairs",
+      "type": "block",
+      "sortid": 162,
+      "compiles": true,
+      "locked_code": false,
+      "ids": {}
+    },
+    {
+      "name": "Sickwoodfence",
+      "type": "block",
+      "sortid": 163,
+      "compiles": true,
+      "locked_code": false,
+      "ids": {}
+    },
+    {
+      "name": "Spawnsicknessvillage1",
+      "type": "procedure",
+      "sortid": 164,
+      "compiles": true,
+      "locked_code": false,
+      "ids": {},
+      "metadata": {
+        "dependencies": [
+          {
+            "name": "x",
+            "type": "int"
+          },
+          {
+            "name": "y",
+            "type": "int"
+          },
+          {
+            "name": "z",
+            "type": "int"
+          },
+          {
+            "name": "world",
+            "type": "world"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SpawnsicknessvillageStructure2BlockAdded",
+      "type": "procedure",
+      "sortid": 165,
+      "compiles": true,
+      "locked_code": false,
+      "ids": {},
+      "metadata": {
+        "dependencies": [
+          {
+            "name": "x",
+            "type": "int"
+          },
+          {
+            "name": "y",
+            "type": "int"
+          },
+          {
+            "name": "z",
+            "type": "int"
+          },
+          {
+            "name": "world",
+            "type": "world"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SpawnsicknessvillageStructure2",
+      "type": "block",
+      "sortid": 165,
+      "compiles": true,
+      "locked_code": false,
+      "ids": {}
+    },
+    {
+      "name": "Sicknesschest",
+      "type": "loottable",
+      "sortid": 166,
+      "compiles": true,
+      "locked_code": false,
+      "ids": {}
+    },
+    {
+      "name": "Sicknessvillagestructure2button",
+      "type": "procedure",
+      "sortid": 167,
+      "compiles": true,
+      "locked_code": false,
+      "ids": {},
+      "metadata": {
+        "dependencies": [
+          {
+            "name": "x",
+            "type": "int"
+          },
+          {
+            "name": "y",
+            "type": "int"
+          },
+          {
+            "name": "z",
+            "type": "int"
+          },
+          {
+            "name": "world",
+            "type": "world"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Testin",
+      "type": "mob",
+      "sortid": 168,
+      "compiles": true,
+      "locked_code": false,
+      "ids": {}
+    },
+    {
+      "name": "Sickdustore",
+      "type": "block",
+      "sortid": 169,
+      "compiles": true,
+      "locked_code": false,
+      "ids": {}
+    },
+    {
+      "name": "Sickdust",
+      "type": "item",
+      "sortid": 170,
+      "compiles": true,
+      "locked_code": false,
+      "ids": {}
+    },
+    {
+      "name": "SickdustItemInHandTick",
+      "type": "procedure",
+      "sortid": 171,
+      "compiles": true,
+      "locked_code": false,
+      "ids": {},
+      "metadata": {
+        "dependencies": [
+          {
+            "name": "entity",
+            "type": "entity"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Sickbar",
+      "type": "item",
+      "sortid": 172,
+      "compiles": true,
+      "locked_code": false,
+      "ids": {}
+    },
+    {
+      "name": "Sickdusttosickbar",
+      "type": "recipe",
+      "sortid": 173,
+      "compiles": true,
+      "locked_code": false,
+      "ids": {}
+    },
+    {
+      "name": "SickswordMobIsHitWithTool",
+      "type": "procedure",
+      "sortid": 174,
+      "compiles": true,
+      "locked_code": false,
+      "ids": {},
+      "metadata": {
+        "dependencies": [
+          {
+            "name": "entity",
+            "type": "entity"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SickswordOnPlayerStoppedUsing",
+      "type": "procedure",
+      "sortid": 175,
+      "compiles": true,
+      "locked_code": false,
+      "ids": {},
+      "metadata": {
+        "dependencies": [
+          {
+            "name": "entity",
+            "type": "entity"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Sicksword",
+      "type": "tool",
+      "sortid": 174,
+      "compiles": true,
+      "locked_code": false,
+      "ids": {}
+    },
+    {
+      "name": "Sicknessarmour",
+      "type": "armor",
+      "sortid": 176,
+      "compiles": true,
+      "locked_code": false,
+      "ids": {},
+      "metadata": {
+        "eh": true,
+        "el": true,
+        "eb": true,
+        "ec": true
+      }
+    },
+    {
+      "name": "LightningwaterMobplayerCollidesBlock",
+      "type": "procedure",
+      "sortid": 177,
+      "compiles": true,
+      "locked_code": false,
+      "ids": {},
+      "metadata": {
+        "dependencies": [
+          {
+            "name": "x",
+            "type": "int"
+          },
+          {
+            "name": "y",
+            "type": "int"
+          },
+          {
+            "name": "z",
+            "type": "int"
+          },
+          {
+            "name": "world",
+            "type": "world"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Lightningwater",
+      "type": "fluid",
+      "sortid": 177,
+      "compiles": true,
+      "locked_code": false,
+      "ids": {}
+    },
+    {
+      "name": "A_collision_Positive_x_Projectile",
+      "type": "procedure",
+      "sortid": 178,
+      "compiles": true,
+      "locked_code": false,
+      "ids": {},
+      "metadata": {
+        "dependencies": [
+          {
+            "name": "entity",
+            "type": "entity"
+          },
+          {
+            "name": "x",
+            "type": "int"
+          },
+          {
+            "name": "y",
+            "type": "int"
+          },
+          {
+            "name": "z",
+            "type": "int"
+          },
+          {
+            "name": "world",
+            "type": "world"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Projectile_Positive_z",
+      "type": "block",
+      "sortid": 179,
+      "compiles": true,
+      "locked_code": false,
+      "ids": {}
+    },
+    {
+      "name": "Projectile_Positive_z_Movement",
+      "type": "procedure",
+      "sortid": 180,
+      "compiles": true,
+      "locked_code": false,
+      "ids": {},
+      "metadata": {
+        "dependencies": [
+          {
+            "name": "x",
+            "type": "int"
+          },
+          {
+            "name": "y",
+            "type": "int"
+          },
+          {
+            "name": "z",
+            "type": "int"
+          },
+          {
+            "name": "world",
+            "type": "world"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Projectile_Positive_z_Collision",
+      "type": "procedure",
+      "sortid": 181,
+      "compiles": true,
+      "locked_code": false,
+      "ids": {},
+      "metadata": {
+        "dependencies": [
+          {
+            "name": "entity",
+            "type": "entity"
+          },
+          {
+            "name": "x",
+            "type": "int"
+          },
+          {
+            "name": "y",
+            "type": "int"
+          },
+          {
+            "name": "z",
+            "type": "int"
+          },
+          {
+            "name": "world",
+            "type": "world"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Projectile_Negative_z_collision",
+      "type": "procedure",
+      "sortid": 182,
+      "compiles": true,
+      "locked_code": false,
+      "ids": {},
+      "metadata": {
+        "dependencies": [
+          {
+            "name": "entity",
+            "type": "entity"
+          },
+          {
+            "name": "x",
+            "type": "int"
+          },
+          {
+            "name": "y",
+            "type": "int"
+          },
+          {
+            "name": "z",
+            "type": "int"
+          },
+          {
+            "name": "world",
+            "type": "world"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Projectile_negative_z",
+      "type": "block",
+      "sortid": 183,
+      "compiles": true,
+      "locked_code": false,
+      "ids": {}
     }
   ],
   "variable_elements": [
@@ -2706,22 +3147,22 @@
   ],
   "sound_elements": [
     {
-      "name": "Battlefield",
+      "name": "battlefield",
       "file": "battlefield 4 main theme battlefield 4 warsaw theme 1080p",
       "category": "master"
     },
     {
-      "name": "Firey",
+      "name": "firey",
       "file": "battlefield",
       "category": "master"
     },
     {
-      "name": "Firey_ambient_sound",
+      "name": "firey_ambient_sound",
       "file": "y2mate.com - battlefield_4_ost_main_theme_song_extended_1_hour_warsaw_theme_xjgugshxyp0",
       "category": "ambient"
     },
     {
-      "name": "Dragon_Hearted",
+      "name": "dragon_hearted",
       "file": "dragonhearted - a minecraft original music video",
       "category": "master"
     }
@@ -2734,6 +3175,7 @@
       "item.herobrines_fortress.knockbackstick": "Knockback stick",
       "item.herobrines_fortress.teleporttear": "Teleport tear",
       "item.minecraft.tipped_arrow.effect.nethered": "Arrow of Nethered",
+      "block.herobrines_fortress.sickdustore": "Sick dust ore",
       "tile.forstructures.name": "Command: F2 ",
       "item.herobrines_fortress.tntbow": "TnT Bow",
       "item.herobrines_fortress.silence": "Silence Spawn Egg",
@@ -2741,38 +3183,46 @@
       "item.firediamond.name": "Fire diamond",
       "block.herobrines_fortress.flames": "Flames",
       "block.herobrines_fortress.diamondbrickstairs": "Diamondbrickstairs",
+      "item.herobrines_fortress.lightningwater_bucket": "Lightningwater Bucket",
       "item.selfstabbingdagger.name": "Selfstabbingdagger",
       "item.herobrines_fortress.selfstabbingdagger": "Selfstabbingdagger",
       "item.herobrines_fortress.testing": "Testing Spawn Egg",
-      "block.herobrines_fortress.sicktnt": "Sick tnt",
       "entity.silence.name": "Silence",
+      "block.herobrines_fortress.sicktnt": "Sick tnt",
+      "item.herobrines_fortress.sickbar": "Sick bar",
+      "block.herobrines_fortress.projectile_positive_z": "Testingprojectile",
       "tile.diamondbrickblock.name": "Diamond brick block",
       "tile.flames.name": "Flames",
       "block.herobrines_fortress.onewaywindow": "Oneway window",
       "key.mcreator.firedungeonkeybind": "Structure_spawn_menu",
       "item.herobrines_fortress.steelingot": "Steel ingot",
+      "item.herobrines_fortress.sicksword": "Sick sword",
       "tile.onewaywindow.name": "Oneway window",
       "tile.sickleaves.name": "Sick leaves",
       "block.herobrines_fortress.goldbrickblock": "Goldbrickblock",
       "tile.firedirt.name": "Firedirt",
       "item.herobrines_fortress.fireaxe": "Fire axe",
+      "block.herobrines_fortress.testingprojectile_positive_x": "Testingprojectile",
       "block.herobrines_fortress.sickwoodplanks": "Sick Woodplanks",
       "item.firegem.name": "Fire gem",
       "block.herobrines_fortress.goldbrickstairs": "Goldbrickstairs",
       "item.herobrines_fortress.honey_bucket": "Honey Bucket",
       "item.herobrines_fortress.firey": "Fire glasses",
       "block.herobrines_fortress.blastprooffence": "Blast proof fence",
-      "item.herobrines_fortress.lightning": "Lightning Portal Igniter",
       "tile.taintedglass.name": "Taintedglass",
+      "item.herobrines_fortress.lightning": "Lightning Portal Igniter",
       "item.fireshovel.name": "Fireshovel",
+      "item.herobrines_fortress.sicknessarmourboots": "Sickness Boots",
       "item.lightningsword.name": "Lightning sword",
       "tile.testingprojectile_positive_x.name": "Testingprojectile",
       "block.herobrines_fortress.forstructures": "Command: F2 ",
+      "block.herobrines_fortress.spawnsicknessvillagestructure2": "Spawnsicknessvillage Structure2",
       "tile.sickwood.name": "Sick Wood",
       "tile.firedungeonstarter.name": "Fire dungeon starter",
       "biome.herobrines_fortress.sickness": "Sickness",
       "item.herobrines_fortress.firearmourhelmet": "Fire armour Helmet",
       "block.herobrines_fortress.testingprojectile": "Testingprojectile",
+      "tile.spawnsicknessvillagestructure2.name": "Spawnsicknessvillage Structure2",
       "item.knockbacklash1.name": "Knock back lash",
       "block.herobrines_fortress.steeloreblock": "Steel ore",
       "entity.herobrines_fortress.firedragon": "Fire dragon",
@@ -2788,10 +3238,13 @@
       "item.herobrines_fortress.firegem": "Fire gem",
       "item.minecraft.splash_potion.effect.nethered": "Splash Nethered",
       "item.herobrines_fortress.firediamond": "Fire diamond",
+      "block.herobrines_fortress.explosion": "Explosion",
       "item.minecraft.potion.effect.nethered": "Nethered",
       "item.herobrines_fortress.firepickaxe": "Firepickaxe",
       "tile.safe.name": "Safe",
+      "entity.herobrines_fortress.testin": "Testin",
       "block.herobrines_fortress.forfiredungeon": "Command: F3",
+      "fluid.lightningwater": "Lightningwater",
       "entity.firedragon.name": "Fire dragon",
       "item.tntbow.name": "TnT Bow",
       "block.herobrines_fortress.lightningdirt": "Lightningdirt",
@@ -2799,14 +3252,20 @@
       "item.firearmourbody.name": "Fire armour Body",
       "tile.fireore.name": "Fireore",
       "item.herobrines_fortress.firearmourbody": "Fire armour Body",
+      "item.herobrines_fortress.sicknessarmourbody": "Sickness Body",
       "item.firearmourhelmet.name": "Fire armour Helmet",
       "item.knockbackstick.name": "Knockback stick",
       "block.herobrines_fortress.fireore": "Fireore",
+      "block.herobrines_fortress.sickwoodstairs": "Sick wood stairs",
       "biome.herobrines_fortress.fire": "Fire",
       "block.herobrines_fortress.homeblock": "Homeblock",
       "tile.sicktnt.name": "Sick tnt",
+      "tile.sickwoodfence.name": "Sick wood fence",
+      "item.herobrines_fortress.testin": "Testin Spawn Egg",
       "item.teleporttear.name": "Teleport tear",
+      "block.herobrines_fortress.sickwoodfence": "Sick wood fence",
       "item.firesword.name": "Fire sword",
+      "item.herobrines_fortress.sicknessarmourhelmet": "Sickness Helmet",
       "tile.forfiredungeon.name": "Command: F3",
       "tile.steeloreblock.name": "Steel ore",
       "item.steelingot.name": "Steel ingot",
@@ -2815,6 +3274,7 @@
       "tipped_arrow.effect.nethered": "Arrow of Nethered",
       "item.herobrines_fortress.firethrowingdagger": "Fire throwing dagger",
       "item.minecraft.lingering_potion.effect.nethered": "Lingering Nethered",
+      "tile.sickwoodstairs.name": "Sick wood stairs",
       "item.firearmourlegs.name": "Fire armour Leggings",
       "item.herobrines_fortress.skeletonhorsespawneggbecausemcreatorisbad": "custom Skeleton Horse spawn egg",
       "tile.goldbrickblock.name": "Goldbrickblock",
@@ -2834,16 +3294,20 @@
       "item.lightning.name": "Lightning Portal Igniter",
       "biome.herobrines_fortress.lightingbiome": "Lighting biome",
       "item.herobrines_fortress.firesword": "Fire sword",
+      "item.herobrines_fortress.sicknessarmourlegs": "Sickness Leggings",
       "block.herobrines_fortress.sickleaves": "Sick leaves",
       "item.herobrines_fortress.firearmourlegs": "Fire armour Leggings",
+      "block.herobrines_fortress.projectilenegativex": "Projectilenegativex",
       "fluid.bloodgas": "Bloodgas",
       "entity.herobrines_fortress.testing": "Testing",
+      "block.herobrines_fortress.projectile_negative_z": "Testingprojectile",
       "item.skeletonhorsespawneggbecausemcreatorisbad.name": "custom Skeleton Horse spawn egg",
       "item.firearmourboots.name": "Fire armour Boots",
       "item.dragonheartedmusicdisk.name": "Dragon hearted music disk",
       "item.firethrowingdagger.name": "Fire throwing dagger",
       "block.herobrines_fortress.firedirt": "Firedirt",
       "block.herobrines_fortress.firedungeonstarter": "Fire dungeon starter",
+      "item.herobrines_fortress.sickdust": "Sick dust",
       "splash_potion.effect.nethered": "Splash Nethered"
     }
   },
@@ -2859,9 +3323,9 @@
     "dependencies": [],
     "dependants": [],
     "mcreatorDependencies": [],
-    "currentGenerator": "1.12.2",
+    "currentGenerator": "1.14.4",
     "usesProFeatures": false,
     "lockBaseModFiles": false
   },
-  "mcreatorVersion": 202000104519
+  "mcreatorVersion": 202000105419
 }

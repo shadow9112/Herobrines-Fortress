@@ -1,7 +1,7 @@
 package net.mcreator.herobrines_fortress;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.init.Enchantments;
+import net.minecraft.enchantment.Enchantments;
 
 @Elementsherobrines_fortress.ModElement.Tag
 public class MCreatorKnockbackstickItemIsCraftedsmelted extends Elementsherobrines_fortress.ModElement {

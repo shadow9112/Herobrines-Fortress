@@ -2,7 +2,7 @@ package net.mcreator.herobrines_fortress;
 
 import net.minecraft.world.World;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.Blocks;
 
 @Elementsherobrines_fortress.ModElement.Tag
 public class MCreatorTesting_projectile_negative_x extends Elementsherobrines_fortress.ModElement {
@@ -46,6 +46,8 @@ public class MCreatorTesting_projectile_negative_x extends Elementsherobrines_fo
 						.get(world).Projectile_Movement) + 1);
 				herobrines_fortressVariables.MapVariables.get(world).syncData(world);
 			}
+		} else {
+			world.setBlockState(new BlockPos((int) x, (int) y, (int) z), Blocks.AIR.getDefaultState(), 3);
 		}
 	}
 }

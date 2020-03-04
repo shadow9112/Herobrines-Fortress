@@ -1,6 +1,7 @@
 package net.mcreator.herobrines_fortress;
 
 import net.minecraft.world.World;
+import net.minecraft.world.Explosion;
 
 @Elementsherobrines_fortress.ModElement.Tag
 public class MCreatorTnTBowBulletHitsBlock extends Elementsherobrines_fortress.ModElement {
@@ -30,7 +31,7 @@ public class MCreatorTnTBowBulletHitsBlock extends Elementsherobrines_fortress.M
 		int z = (int) dependencies.get("z");
 		World world = (World) dependencies.get("world");
 		if (!world.isRemote) {
-			world.createExplosion(null, (int) x, (int) y, (int) z, (float) 2, true);
+			world.createExplosion(null, (int) x, (int) y, (int) z, (float) 2, Explosion.Mode.BREAK);
 		}
 	}
 }

@@ -1,119 +1,147 @@
 package net.mcreator.herobrines_fortress;
 
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.common.registry.EntityRegistry;
-import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.registries.ObjectHolder;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.fml.network.FMLPlayMessages;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.common.DungeonHooks;
+import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.Dist;
 
+import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.World;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.DamageSource;
+import net.minecraft.particles.ParticleTypes;
+import net.minecraft.network.IPacket;
+import net.minecraft.item.SpawnEggItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.Item;
-import net.minecraft.entity.projectile.EntityTippedArrow;
-import net.minecraft.entity.monster.EntityBlaze;
-import net.minecraft.entity.ai.EntityMoveHelper;
-import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAILookIdle;
-import net.minecraft.entity.ai.EntityAILeapAtTarget;
-import net.minecraft.entity.ai.EntityAIHurtByTarget;
-import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.ai.EntityAIAttackRanged;
+import net.minecraft.entity.projectile.AbstractArrowEntity;
+import net.minecraft.entity.monster.MonsterEntity;
+import net.minecraft.entity.monster.BlazeEntity;
+import net.minecraft.entity.ai.goal.SwimGoal;
+import net.minecraft.entity.ai.goal.RangedAttackGoal;
+import net.minecraft.entity.ai.goal.RandomWalkingGoal;
+import net.minecraft.entity.ai.goal.LookRandomlyGoal;
+import net.minecraft.entity.ai.goal.LeapAtTargetGoal;
+import net.minecraft.entity.ai.goal.HurtByTargetGoal;
+import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.MoverType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.IRendersAsItem;
 import net.minecraft.entity.IRangedAttackMob;
-import net.minecraft.entity.EnumCreatureType;
-import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.EntitySpawnPlacementRegistry;
+import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.Entity;
-import net.minecraft.client.renderer.entity.RenderSnowball;
-import net.minecraft.client.renderer.entity.RenderLiving;
-import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.client.model.ModelBox;
-import net.minecraft.client.model.ModelBase;
+import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.client.renderer.model.ModelBox;
+import net.minecraft.client.renderer.entity.model.RendererModel;
+import net.minecraft.client.renderer.entity.model.EntityModel;
+import net.minecraft.client.renderer.entity.SpriteRenderer;
+import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 
 import java.util.Random;
+import java.util.EnumSet;
 
 @Elementsherobrines_fortress.ModElement.Tag
 public class MCreatorSilence extends Elementsherobrines_fortress.ModElement {
-	public static final int ENTITYID = 2;
-	public static final int ENTITYID_RANGED = 3;
+	public static EntityType entity = null;
+	@ObjectHolder("herobrines_fortress:entitybulletsilence")
+	public static final EntityType arrow = null;
 
 	public MCreatorSilence(Elementsherobrines_fortress instance) {
 		super(instance, 48);
+		FMLJavaModLoadingContext.get().getModEventBus().register(this);
 	}
 
 	@Override
 	public void initElements() {
-		elements.entities.add(() -> EntityEntryBuilder.create().entity(EntityCustom.class)
-				.id(new ResourceLocation("herobrines_fortress", "silence"), ENTITYID).name("silence").tracker(64, 1, true).egg(-10027162, -52429)
-				.build());
-		elements.entities.add(() -> EntityEntryBuilder.create().entity(EntityArrowCustom.class)
-				.id(new ResourceLocation("herobrines_fortress", "entitybulletsilence"), ENTITYID_RANGED).name("entitybulletsilence")
-				.tracker(64, 1, true).build());
+		entity = (EntityType.Builder.<CustomEntity> create(CustomEntity::new, EntityClassification.MONSTER).setShouldReceiveVelocityUpdates(true)
+				.setTrackingRange(64).setUpdateInterval(1).setCustomClientFactory(CustomEntity::new).immuneToFire().size(1f, 3f)).build("silence")
+				.setRegistryName("silence");
+		elements.entities.add(() -> entity);
+		elements.items.add(() -> new SpawnEggItem(entity, -10027162, -52429, new Item.Properties().group(ItemGroup.MISC)).setRegistryName("silence"));
+		elements.entities.add(() -> (EntityType.Builder.<ArrowCustomEntity> create(ArrowCustomEntity::new, EntityClassification.MISC)
+				.setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(1).setCustomClientFactory(ArrowCustomEntity::new).size(
+				0.5f, 0.5f)).build("entitybulletsilence").setRegistryName("entitybulletsilence"));
 	}
 
 	@Override
-	public void init(FMLInitializationEvent event) {
-		Biome[] spawnBiomes = {Biome.REGISTRY.getObject(new ResourceLocation("herobrines_fortress:sickness")),};
-		EntityRegistry.addSpawn(EntityCustom.class, 1000, 1, 3, EnumCreatureType.MONSTER, spawnBiomes);
-		DungeonHooks.addDungeonMob(new ResourceLocation("herobrines_fortress:silence"), 180);
+	public void init(FMLCommonSetupEvent event) {
+		for (Biome biome : ForgeRegistries.BIOMES.getValues()) {
+			boolean biomeCriteria = false;
+			if (ForgeRegistries.BIOMES.getKey(biome).equals(new ResourceLocation("herobrines_fortress:sickness")))
+				biomeCriteria = true;
+			if (!biomeCriteria)
+				continue;
+			biome.getSpawns(EntityClassification.MONSTER).add(new Biome.SpawnListEntry(entity, 1000, 1, 3));
+		}
+		EntitySpawnPlacementRegistry.register(entity, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
+				MonsterEntity::func_223315_a);
+		DungeonHooks.addDungeonMob(entity, 180);
 	}
 
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void preInit(FMLPreInitializationEvent event) {
-		RenderingRegistry.registerEntityRenderingHandler(EntityCustom.class, renderManager -> {
-			return new RenderLiving(renderManager, new ModelHuman(), 1f) {
+	@SubscribeEvent
+	@OnlyIn(Dist.CLIENT)
+	public void registerModels(ModelRegistryEvent event) {
+		RenderingRegistry.registerEntityRenderingHandler(CustomEntity.class, renderManager -> {
+			return new MobRenderer(renderManager, new Modelsilence(), 1f) {
 				protected ResourceLocation getEntityTexture(Entity entity) {
 					return new ResourceLocation("herobrines_fortress:textures/flyghts.png");
 				}
 			};
 		});
-		RenderingRegistry.registerEntityRenderingHandler(EntityArrowCustom.class, renderManager -> {
-			return new RenderSnowball<EntityArrowCustom>(renderManager, null, Minecraft.getMinecraft().getRenderItem()) {
-				public ItemStack getStackToRender(EntityArrowCustom entity) {
-					return new ItemStack(MCreatorTnTBow.block, (int) (1));
-				}
-			};
+		RenderingRegistry.registerEntityRenderingHandler(ArrowCustomEntity.class, renderManager -> {
+			return new SpriteRenderer(renderManager, Minecraft.getInstance().getItemRenderer());
 		});
 	}
 
-	public static class EntityCustom extends EntityBlaze implements IRangedAttackMob {
-		public EntityCustom(World world) {
-			super(world);
-			setSize(1f, 3f);
+	public static class CustomEntity extends BlazeEntity implements IRangedAttackMob {
+		public CustomEntity(FMLPlayMessages.SpawnEntity packet, World world) {
+			this(entity, world);
+		}
+
+		public CustomEntity(EntityType<CustomEntity> type, World world) {
+			super(type, world);
 			experienceValue = 10;
-			this.isImmuneToFire = true;
-			setNoAI(!true);
-			this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
-			this.tasks.addTask(2, new EntityAIWander(this, 1));
-			this.tasks.addTask(3, new EntityAIBase() {
+			setNoAI(false);
+		}
+
+		@Override
+		protected void registerGoals() {
+			this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+			this.goalSelector.addGoal(2, new RandomWalkingGoal(this, 1));
+			this.goalSelector.addGoal(3, new Goal() {
 				{
-					this.setMutexBits(1);
+					this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE));
 				}
 
 				@Override
 				public boolean shouldExecute() {
-					EntityMoveHelper entitymovehelper = EntityCustom.this.getMoveHelper();
-					if (!entitymovehelper.isUpdating()) {
+					MovementController movecontroller = CustomEntity.this.getMoveHelper();
+					if (!movecontroller.isUpdating()) {
 						return true;
 					} else {
-						double dx = entitymovehelper.getX() - EntityCustom.this.posX;
-						double dy = entitymovehelper.getY() - EntityCustom.this.posY;
-						double dz = entitymovehelper.getZ() - EntityCustom.this.posZ;
+						double dx = movecontroller.getX() - CustomEntity.this.posX;
+						double dy = movecontroller.getY() - CustomEntity.this.posY;
+						double dz = movecontroller.getZ() - CustomEntity.this.posZ;
 						double d = dx * dx + dy * dy + dz * dz;
 						return d < 1 || d > 3600;
 					}
@@ -126,80 +154,76 @@ public class MCreatorSilence extends Elementsherobrines_fortress.ModElement {
 
 				@Override
 				public void startExecuting() {
-					Random random = EntityCustom.this.getRNG();
-					double dir_x = EntityCustom.this.posX + ((random.nextFloat() * 2 - 1) * 16);
-					double dir_y = EntityCustom.this.posY + ((random.nextFloat() * 2 - 1) * 16);
-					double dir_z = EntityCustom.this.posZ + ((random.nextFloat() * 2 - 1) * 16);
-					EntityCustom.this.getMoveHelper().setMoveTo(dir_x, dir_y, dir_z, 1);
+					Random random = CustomEntity.this.getRNG();
+					double dir_x = CustomEntity.this.posX + ((random.nextFloat() * 2 - 1) * 16);
+					double dir_y = CustomEntity.this.posY + ((random.nextFloat() * 2 - 1) * 16);
+					double dir_z = CustomEntity.this.posZ + ((random.nextFloat() * 2 - 1) * 16);
+					CustomEntity.this.getMoveHelper().setMoveTo(dir_x, dir_y, dir_z, 1);
 				}
 			});
-			this.moveHelper = new EntityMoveHelper(this) {
+			this.moveController = new MovementController(this) {
 				private int patchChangeTimer;
 
 				@Override
-				public void onUpdateMoveHelper() {
-					if (this.action == EntityMoveHelper.Action.MOVE_TO) {
-						double dx = this.posX - EntityCustom.this.posX;
-						double dy = this.posY - EntityCustom.this.posY;
-						double dz = this.posZ - EntityCustom.this.posZ;
+				public void tick() {
+					if (this.action == MovementController.Action.MOVE_TO) {
+						double dx = this.posX - CustomEntity.this.posX;
+						double dy = this.posY - CustomEntity.this.posY;
+						double dz = this.posZ - CustomEntity.this.posZ;
 						double d = dx * dx + dy * dy + dz * dz;
 						if (this.patchChangeTimer-- <= 0) {
-							this.patchChangeTimer += EntityCustom.this.getRNG().nextInt(5) + 2;
+							this.patchChangeTimer += CustomEntity.this.getRNG().nextInt(5) + 2;
 							d = (double) MathHelper.sqrt(d);
-							if (this.isNotColliding(this.posX, this.posY, this.posZ, d)) {
-								EntityCustom.this.motionX += dx / d * 0.1;
-								EntityCustom.this.motionY += dy / d * 0.1;
-								EntityCustom.this.motionZ += dz / d * 0.1;
+							if (this.checkCollision(this.posX, this.posY, this.posZ, d)) {
+								CustomEntity.this.moveRelative(1, new Vec3d(dx / d * 0.1, dy / d * 0.1, dz / d * 0.1));
 							} else {
-								this.action = EntityMoveHelper.Action.WAIT;
+								this.action = MovementController.Action.WAIT;
 							}
 						}
 					}
 				}
 
-				private boolean isNotColliding(double x, double y, double z, double par) {
-					double dx = (x - EntityCustom.this.posX) / par;
-					double dy = (y - EntityCustom.this.posY) / par;
-					double dz = (z - EntityCustom.this.posZ) / par;
-					AxisAlignedBB axisalignedbb = EntityCustom.this.getEntityBoundingBox();
+				private boolean checkCollision(double x, double y, double z, double par) {
+					double dx = (x - CustomEntity.this.posX) / par;
+					double dy = (y - CustomEntity.this.posY) / par;
+					double dz = (z - CustomEntity.this.posZ) / par;
+					AxisAlignedBB axisalignedbb = CustomEntity.this.getBoundingBox();
 					for (int i = 1; (double) i < par; ++i) {
 						axisalignedbb = axisalignedbb.offset(dx, dy, dz);
-						if (!EntityCustom.this.world.getCollisionBoxes(EntityCustom.this, axisalignedbb).isEmpty())
+						if (!CustomEntity.this.world.getEntitiesWithinAABBExcludingEntity(CustomEntity.this, axisalignedbb).isEmpty())
 							return false;
 					}
 					return true;
 				}
 			};
-			this.tasks.addTask(4, new EntityAILookIdle(this));
-			this.tasks.addTask(5, new EntityAISwimming(this));
-			this.tasks.addTask(6, new EntityAILeapAtTarget(this, (float) 0.8));
-			this.tasks.addTask(1, new EntityAIAttackRanged(this, 1.25D, 20, 10.0F));
+			this.goalSelector.addGoal(4, new LookRandomlyGoal(this));
+			this.goalSelector.addGoal(5, new SwimGoal(this));
+			this.goalSelector.addGoal(6, new LeapAtTargetGoal(this, (float) 0.8));
+			this.goalSelector.addGoal(1, new RangedAttackGoal(this, 1.25D, 20, 10.0F));
 		}
 
 		@Override
-		public EnumCreatureAttribute getCreatureAttribute() {
-			return EnumCreatureAttribute.UNDEFINED;
+		public CreatureAttribute getCreatureAttribute() {
+			return CreatureAttribute.UNDEFINED;
 		}
 
-		@Override
-		protected Item getDropItem() {
-			return null;
+		protected void dropSpecialItems(DamageSource source, int looting, boolean recentlyHitIn) {
+			super.dropSpecialItems(source, looting, recentlyHitIn);
 		}
 
 		@Override
 		public net.minecraft.util.SoundEvent getAmbientSound() {
-			return (net.minecraft.util.SoundEvent) net.minecraft.util.SoundEvent.REGISTRY
-					.getObject(new ResourceLocation("block.furnace.fire_crackle"));
+			return (net.minecraft.util.SoundEvent) ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.furnace.fire_crackle"));
 		}
 
 		@Override
 		public net.minecraft.util.SoundEvent getHurtSound(DamageSource ds) {
-			return (net.minecraft.util.SoundEvent) net.minecraft.util.SoundEvent.REGISTRY.getObject(new ResourceLocation(""));
+			return (net.minecraft.util.SoundEvent) ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(""));
 		}
 
 		@Override
 		public net.minecraft.util.SoundEvent getDeathSound() {
-			return (net.minecraft.util.SoundEvent) net.minecraft.util.SoundEvent.REGISTRY.getObject(new ResourceLocation(""));
+			return (net.minecraft.util.SoundEvent) ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(""));
 		}
 
 		@Override
@@ -221,68 +245,52 @@ public class MCreatorSilence extends Elementsherobrines_fortress.ModElement {
 		}
 
 		@Override
-		protected void applyEntityAttributes() {
-			super.applyEntityAttributes();
-			if (this.getEntityAttribute(SharedMonsterAttributes.ARMOR) != null)
-				this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(3D);
-			if (this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED) != null)
-				this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.5D);
-			if (this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH) != null)
-				this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(50D);
-			if (this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE) != null)
-				this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(40D);
+		protected void registerAttributes() {
+			super.registerAttributes();
+			if (this.getAttribute(SharedMonsterAttributes.ARMOR) != null)
+				this.getAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(3);
+			if (this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED) != null)
+				this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.5);
+			if (this.getAttribute(SharedMonsterAttributes.MAX_HEALTH) != null)
+				this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(50);
+			if (this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE) != null)
+				this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(40);
 		}
 
-		@Override
-		public void setSwingingArms(boolean swingingArms) {
-		}
-
-		public void attackEntityWithRangedAttack(EntityLivingBase target, float flval) {
-			EntityArrowCustom entityarrow = new EntityArrowCustom(this.world, this);
+		public void attackEntityWithRangedAttack(LivingEntity target, float flval) {
+			ArrowCustomEntity entityarrow = new ArrowCustomEntity(arrow, this, this.world);
 			double d0 = target.posY + (double) target.getEyeHeight() - 1.1;
 			double d1 = target.posX - this.posX;
 			double d3 = target.posZ - this.posZ;
 			entityarrow.shoot(d1, d0 - entityarrow.posY + (double) MathHelper.sqrt(d1 * d1 + d3 * d3) * 0.2F, d3, 1.6F, 12.0F);
-			this.world.spawnEntity(entityarrow);
+			world.addEntity(entityarrow);
 		}
 
 		@Override
-		public void travel(float ti, float tj, float tk) {
+		public void travel(Vec3d dir) {
 			if (this.isInWater()) {
-				this.moveRelative(ti, tj, tk, 0.02f);
-				this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
-				this.motionX *= 0.8;
-				this.motionY *= 0.8;
-				this.motionZ *= 0.8;
+				this.moveRelative(0.02f, dir);
+				this.move(MoverType.SELF, this.getMotion());
+				this.setMotion(this.getMotion().scale((double) 0.8f));
 				return;
 			}
 			if (this.isInLava()) {
-				this.moveRelative(ti, tj, tk, 0.02f);
-				this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
-				this.motionX *= 0.5;
-				this.motionY *= 0.5;
-				this.motionZ *= 0.5;
+				this.moveRelative(0.02f, dir);
+				this.move(MoverType.SELF, this.getMotion());
+				this.setMotion(this.getMotion().scale((double) 0.5f));
 				return;
 			}
-			float f = 0.91F;
-			if (this.onGround) {
-				BlockPos underPos = new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getEntityBoundingBox().minY) - 1,
-						MathHelper.floor(this.posZ));
-				IBlockState underState = this.world.getBlockState(underPos);
-				f = underState.getBlock().getSlipperiness(underState, this.world, underPos, this) * 0.91F;
-			}
-			this.moveRelative(ti, tj, tk, this.onGround ? 0.1f * 0.16f / (f * f * f) : 0.02F);
-			f = 0.91F;
-			if (this.onGround) {
-				BlockPos underPos = new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getEntityBoundingBox().minY) - 1,
-						MathHelper.floor(this.posZ));
-				IBlockState underState = this.world.getBlockState(underPos);
-				f = underState.getBlock().getSlipperiness(underState, this.world, underPos, this) * 0.91F;
-			}
-			this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
-			this.motionX *= (double) f;
-			this.motionY *= (double) f;
-			this.motionZ *= (double) f;
+			BlockPos ground = new BlockPos(this.posX, this.getBoundingBox().minY - 1, this.posZ);
+			float f = 0.91f;
+			if (this.onGround)
+				f = this.world.getBlockState(ground).getSlipperiness(world, ground, this) * 0.91f;
+			float f1 = 0.16f / (f * f * f);
+			f = 0.91f;
+			if (this.onGround)
+				f = this.world.getBlockState(ground).getSlipperiness(world, ground, this) * 0.91f;
+			this.moveRelative(this.onGround ? 0.1f * f1 : 0.02f, dir);
+			this.move(MoverType.SELF, this.getMotion());
+			this.setMotion(this.getMotion().scale((double) f));
 			this.prevLimbSwingAmount = this.limbSwingAmount;
 			double d1 = this.posX - this.prevPosX;
 			double d0 = this.posZ - this.prevPosZ;
@@ -294,11 +302,11 @@ public class MCreatorSilence extends Elementsherobrines_fortress.ModElement {
 		}
 
 		@Override
-		protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos) {
+		protected void updateFallState(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
 		}
 
-		public void onLivingUpdate() {
-			super.onLivingUpdate();
+		public void livingTick() {
+			super.livingTick();
 			int i = (int) this.posX;
 			int j = (int) this.posY;
 			int k = (int) this.posZ;
@@ -312,36 +320,56 @@ public class MCreatorSilence extends Elementsherobrines_fortress.ModElement {
 					double d3 = (random.nextFloat() - 0.5D) * 0.5D;
 					double d4 = (random.nextFloat() - 0.5D) * 0.5D;
 					double d5 = (random.nextFloat() - 0.5D) * 0.5D;
-					world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, d0, d1, d2, d3, d4, d5);
+					world.addParticle(ParticleTypes.EXPLOSION, d0, d1, d2, d3, d4, d5);
 				}
 		}
 	}
 
-	public static class EntityArrowCustom extends EntityTippedArrow {
-		public EntityArrowCustom(World a) {
-			super(a);
+	@OnlyIn(value = Dist.CLIENT, _interface = IRendersAsItem.class)
+	public static class ArrowCustomEntity extends AbstractArrowEntity implements IRendersAsItem {
+		public ArrowCustomEntity(FMLPlayMessages.SpawnEntity packet, World world) {
+			super(arrow, world);
 		}
 
-		public EntityArrowCustom(World worldIn, double x, double y, double z) {
-			super(worldIn, x, y, z);
+		public ArrowCustomEntity(EntityType<? extends ArrowCustomEntity> type, World world) {
+			super(type, world);
 		}
 
-		public EntityArrowCustom(World worldIn, EntityLivingBase shooter) {
-			super(worldIn, shooter);
+		public ArrowCustomEntity(EntityType<? extends ArrowCustomEntity> type, double x, double y, double z, World world) {
+			super(type, x, y, z, world);
+		}
+
+		public ArrowCustomEntity(EntityType<? extends ArrowCustomEntity> type, LivingEntity entity, World world) {
+			super(type, entity, world);
+		}
+
+		@Override
+		public IPacket<?> createSpawnPacket() {
+			return NetworkHooks.getEntitySpawningPacket(this);
+		}
+
+		@Override
+		@OnlyIn(Dist.CLIENT)
+		public ItemStack getItem() {
+			return new ItemStack(MCreatorTnTBow.block, (int) (1));
+		}
+
+		@Override
+		protected ItemStack getArrowStack() {
+			return new ItemStack(MCreatorTnTBow.block, (int) (1));
 		}
 	}
 
 	// Made with Blockbench
 	// Paste this code into your mod.
-	public static class ModelHuman extends ModelBase {
-		private final ModelRenderer bone;
+	public static class Modelsilence extends EntityModel<Entity> {
+		private final RendererModel bone;
 
-		public ModelHuman() {
+		public Modelsilence() {
 			textureWidth = 16;
 			textureHeight = 16;
-			bone = new ModelRenderer(this);
+			bone = new RendererModel(this);
 			bone.setRotationPoint(0.0F, 24.0F, 0.0F);
-			setRotationAngle(bone, 0.9599F, 0.0F, 0.0F);
 			bone.cubeList.add(new ModelBox(bone, 0, 8, -5.0F, -6.0F, 0.0F, 2, 6, 2, 0.0F, false));
 			bone.cubeList.add(new ModelBox(bone, 0, 8, -2.0F, -6.0F, 0.0F, 2, 6, 2, 0.0F, false));
 			bone.cubeList.add(new ModelBox(bone, 2, 2, -5.0F, -13.0F, 0.0F, 5, 7, 2, 0.0F, false));
@@ -414,16 +442,10 @@ public class MCreatorSilence extends Elementsherobrines_fortress.ModElement {
 			bone.render(f5);
 		}
 
-		public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {
+		public void setRotationAngle(RendererModel modelRenderer, float x, float y, float z) {
 			modelRenderer.rotateAngleX = x;
 			modelRenderer.rotateAngleY = y;
 			modelRenderer.rotateAngleZ = z;
-		}
-
-		public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity e) {
-			super.setRotationAngles(f, f1, f2, f3, f4, f5, e);
-			this.bone.rotateAngleY = f3 / (180F / (float) Math.PI);
-			this.bone.rotateAngleX = f4 / (180F / (float) Math.PI);
 		}
 	}
 }

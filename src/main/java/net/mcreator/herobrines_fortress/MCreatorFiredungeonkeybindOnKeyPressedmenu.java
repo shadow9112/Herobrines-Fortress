@@ -1,8 +1,20 @@
 package net.mcreator.herobrines_fortress;
 
+import net.minecraftforge.fml.network.NetworkHooks;
+
 import net.minecraft.world.World;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.Entity;
+
+import io.netty.buffer.Unpooled;
 
 @Elementsherobrines_fortress.ModElement.Tag
 public class MCreatorFiredungeonkeybindOnKeyPressedmenu extends Elementsherobrines_fortress.ModElement {
@@ -36,9 +48,20 @@ public class MCreatorFiredungeonkeybindOnKeyPressedmenu extends Elementsherobrin
 		int y = (int) dependencies.get("y");
 		int z = (int) dependencies.get("z");
 		World world = (World) dependencies.get("world");
-		if (((entity instanceof EntityPlayer) ? ((EntityPlayer) entity).capabilities.isCreativeMode : false)) {
-			if (entity instanceof EntityPlayer)
-				((EntityPlayer) entity).openGui(herobrines_fortress.instance, MCreatorStrucutreGui.GUIID, world, x, y, z);
+		if (((entity instanceof PlayerEntity) ? ((PlayerEntity) entity).abilities.isCreativeMode : false)) {
+			if (entity instanceof ServerPlayerEntity)
+				NetworkHooks.openGui((ServerPlayerEntity) entity, new INamedContainerProvider() {
+					@Override
+					public ITextComponent getDisplayName() {
+						return new StringTextComponent("StrucutreGui");
+					}
+
+					@Override
+					public Container createMenu(int id, PlayerInventory inventory, PlayerEntity player) {
+						return new MCreatorStrucutreGui.GuiContainerMod(id, inventory, new PacketBuffer(Unpooled.buffer())
+								.writeBlockPos(new BlockPos(x, y, z)));
+					}
+				}, new BlockPos(x, y, z));
 		}
 	}
 }

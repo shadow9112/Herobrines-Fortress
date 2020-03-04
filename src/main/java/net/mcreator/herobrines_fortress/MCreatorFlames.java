@@ -1,37 +1,44 @@
 package net.mcreator.herobrines_fortress;
 
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.common.EnumPlantType;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.registries.ObjectHolder;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.common.PlantType;
 
-import net.minecraft.world.gen.feature.WorldGenFlowers;
-import net.minecraft.world.gen.IChunkGenerator;
-import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.storage.loot.LootContext;
+import net.minecraft.world.gen.placement.Placement;
+import net.minecraft.world.gen.placement.FrequencyConfig;
+import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.world.gen.feature.IFeatureConfig;
+import net.minecraft.world.gen.feature.FlowersFeature;
+import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.World;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.NonNullList;
+import net.minecraft.potion.Effects;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.Item;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.BlockItem;
+import net.minecraft.fluid.IFluidState;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.BlockFlower;
+import net.minecraft.block.FlowerBlock;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Block;
 
 import java.util.Random;
+import java.util.List;
+import java.util.Collections;
 
 @Elementsherobrines_fortress.ModElement.Tag
 public class MCreatorFlames extends Elementsherobrines_fortress.ModElement {
-	@GameRegistry.ObjectHolder("herobrines_fortress:flames")
+	@ObjectHolder("herobrines_fortress:flames")
 	public static final Block block = null;
 
 	public MCreatorFlames(Elementsherobrines_fortress instance) {
@@ -41,78 +48,58 @@ public class MCreatorFlames extends Elementsherobrines_fortress.ModElement {
 	@Override
 	public void initElements() {
 		elements.blocks.add(() -> new BlockCustomFlower());
-		elements.items.add(() -> new ItemBlock(block).setRegistryName(block.getRegistryName()));
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerModels(ModelRegistryEvent event) {
-		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation("herobrines_fortress:flames",
-				"inventory"));
+		elements.items.add(() -> new BlockItem(block, new Item.Properties().group(MCreatorCustomelements.tab)).setRegistryName(block
+				.getRegistryName()));
 	}
 
 	@Override
-	public void generateWorld(Random random, int chunkX, int chunkZ, World world, int dimID, IChunkGenerator cg, IChunkProvider cp) {
-		boolean dimensionCriteria = false;
-		if (dimID == MCreatorFirey.DIMID)
-			dimensionCriteria = true;
-		if (!dimensionCriteria)
-			return;
-		for (int i = 0; i < 20; i++) {
-			int l6 = chunkX + random.nextInt(16) + 8;
-			int i11 = random.nextInt(128);
-			int l14 = chunkZ + random.nextInt(16) + 8;
-			(new WorldGenFlowers(((BlockFlower) block), BlockFlower.EnumFlowerType.DANDELION)).generate(world, random, new BlockPos(l6, i11, l14));
+	public void init(FMLCommonSetupEvent event) {
+		FlowersFeature feature = new FlowersFeature(NoFeatureConfig::deserialize) {
+			@Override
+			public BlockState getRandomFlower(Random random, BlockPos pos) {
+				return block.getDefaultState();
+			}
+
+			@Override
+			public boolean place(IWorld world, ChunkGenerator generator, Random random, BlockPos pos, NoFeatureConfig config) {
+				DimensionType dimensionType = world.getDimension().getType();
+				boolean dimensionCriteria = false;
+				if (dimensionType == MCreatorFirey.type)
+					dimensionCriteria = true;
+				if (!dimensionCriteria)
+					return false;
+				return super.place(world, generator, random, pos, config);
+			}
+		};
+		for (Biome biome : ForgeRegistries.BIOMES.getValues()) {
+			biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION,
+					Biome.createDecoratedFeature(feature, IFeatureConfig.NO_FEATURE_CONFIG, Placement.COUNT_HEIGHTMAP_32, new FrequencyConfig(20)));
 		}
 	}
 
-	public static class BlockCustomFlower extends BlockFlower {
+	public static class BlockCustomFlower extends FlowerBlock {
 		public BlockCustomFlower() {
-			setSoundType(SoundType.PLANT);
-			setCreativeTab(MCreatorCustomelements.tab);
-			setHardness(0.01F);
-			setResistance(2F);
-			setLightLevel(0F);
-			setUnlocalizedName("flames");
+			super(Effects.SATURATION, 0, Block.Properties.create(Material.PLANTS).doesNotBlockMovement().sound(SoundType.PLANT)
+					.hardnessAndResistance(0.01f, 2f).lightValue(0));
 			setRegistryName("flames");
 		}
 
 		@Override
-		public int quantityDropped(Random random) {
-			return 0;
+		public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+			List<ItemStack> dropsOriginal = super.getDrops(state, builder);
+			if (!dropsOriginal.isEmpty())
+				return dropsOriginal;
+			return Collections.singletonList(new ItemStack(this, 0));
 		}
 
 		@Override
-		public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-			drops.add(new ItemStack(this));
+		public PlantType getPlantType(IBlockReader world, BlockPos pos) {
+			return PlantType.Desert;
 		}
 
 		@Override
-		public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
-			return new ItemStack(Item.getItemFromBlock(this), 1, this.damageDropped(state));
-		}
-
-		@Override
-		public EnumPlantType getPlantType(IBlockAccess world, BlockPos pos) {
-			return EnumPlantType.Desert;
-		}
-
-		@Override
-		public BlockFlower.EnumFlowerColor getBlockType() {
-			return BlockFlower.EnumFlowerColor.YELLOW;
-		}
-
-		@SideOnly(Side.CLIENT)
-		@Override
-		public void getSubBlocks(CreativeTabs tab, net.minecraft.util.NonNullList<ItemStack> list) {
-			for (BlockFlower.EnumFlowerType blockflower$enumflowertype : BlockFlower.EnumFlowerType.getTypes(this.getBlockType())) {
-				list.add(new ItemStack(this, 1, blockflower$enumflowertype.getMeta()));
-			}
-		}
-
-		@Override
-		public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
-			super.onEntityCollidedWithBlock(world, pos, state, entity);
+		public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
+			super.onEntityCollision(state, world, pos, entity);
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();
@@ -128,8 +115,8 @@ public class MCreatorFlames extends Elementsherobrines_fortress.ModElement {
 		}
 
 		@Override
-		public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer entity, boolean willHarvest) {
-			boolean retval = super.removedByPlayer(state, world, pos, entity, willHarvest);
+		public boolean removedByPlayer(BlockState state, World world, BlockPos pos, PlayerEntity entity, boolean willHarvest, IFluidState fluid) {
+			boolean retval = super.removedByPlayer(state, world, pos, entity, willHarvest, fluid);
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();

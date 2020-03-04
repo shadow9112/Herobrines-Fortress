@@ -1,28 +1,23 @@
 package net.mcreator.herobrines_fortress;
 
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.registries.ObjectHolder;
 
 import net.minecraft.world.World;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.Item;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.block.BlockState;
 
 import com.google.common.collect.Multimap;
 
 @Elementsherobrines_fortress.ModElement.Tag
 public class MCreatorKnockbackstick extends Elementsherobrines_fortress.ModElement {
-	@GameRegistry.ObjectHolder("herobrines_fortress:knockbackstick")
+	@ObjectHolder("herobrines_fortress:knockbackstick")
 	public static final Item block = null;
 
 	public MCreatorKnockbackstick(Elementsherobrines_fortress instance) {
@@ -33,8 +28,8 @@ public class MCreatorKnockbackstick extends Elementsherobrines_fortress.ModEleme
 	public void initElements() {
 		elements.items.add(() -> new ItemToolCustom() {
 			@Override
-			public boolean hitEntity(ItemStack itemstack, EntityLivingBase entity, EntityLivingBase entity2) {
-				super.hitEntity(itemstack, entity, entity2);
+			public boolean hitEntity(ItemStack itemstack, LivingEntity entity, LivingEntity entity2) {
+				boolean retval = super.hitEntity(itemstack, entity, entity2);
 				int x = (int) entity.posX;
 				int y = (int) entity.posY;
 				int z = (int) entity.posZ;
@@ -44,59 +39,48 @@ public class MCreatorKnockbackstick extends Elementsherobrines_fortress.ModEleme
 					$_dependencies.put("itemstack", itemstack);
 					MCreatorKnockbackstickItemIsCraftedsmelted.executeProcedure($_dependencies);
 				}
-				return true;
+				return retval;
 			}
-		}.setUnlocalizedName("knockbackstick").setRegistryName("knockbackstick").setCreativeTab(CreativeTabs.TOOLS));
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerModels(ModelRegistryEvent event) {
-		ModelLoader.setCustomModelResourceLocation(block, 0, new ModelResourceLocation("herobrines_fortress:knockbackstick", "inventory"));
+		}.setRegistryName("knockbackstick"));
 	}
 
 	private static class ItemToolCustom extends Item {
 		protected ItemToolCustom() {
-			setMaxDamage(130);
-			setMaxStackSize(1);
+			super(new Item.Properties().group(ItemGroup.TOOLS).maxDamage(130));
 		}
 
 		@Override
-		public Multimap<String, AttributeModifier> getItemAttributeModifiers(EntityEquipmentSlot equipmentSlot) {
-			Multimap<String, AttributeModifier> multimap = super.getItemAttributeModifiers(equipmentSlot);
-			if (equipmentSlot == EntityEquipmentSlot.MAINHAND) {
-				multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Tool modifier", -1f, 0));
-				multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Tool modifier", -2, 0));
-			}
-			return multimap;
-		}
-
-		@Override
-		public float getDestroySpeed(ItemStack par1ItemStack, IBlockState par2Block) {
-			IBlockState require;
+		public float getDestroySpeed(ItemStack itemstack, BlockState blockstate) {
 			return 0;
 		}
 
 		@Override
-		public boolean onBlockDestroyed(ItemStack stack, World worldIn, IBlockState state, BlockPos pos, EntityLivingBase entityLiving) {
-			stack.damageItem(1, entityLiving);
+		public boolean onBlockDestroyed(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
+			stack.damageItem(1, entityLiving, i -> i.sendBreakAnimation(EquipmentSlotType.MAINHAND));
 			return true;
 		}
 
 		@Override
-		public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
-			stack.damageItem(2, attacker);
-			return true;
-		}
-
-		@Override
-		public boolean isFull3D() {
+		public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+			stack.damageItem(2, attacker, i -> i.sendBreakAnimation(EquipmentSlotType.MAINHAND));
 			return true;
 		}
 
 		@Override
 		public int getItemEnchantability() {
 			return 3;
+		}
+
+		@Override
+		public Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType equipmentSlot) {
+			Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(equipmentSlot);
+			if (equipmentSlot == EquipmentSlotType.MAINHAND) {
+				multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Tool modifier", 1f,
+						AttributeModifier.Operation.ADDITION));
+				multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Tool modifier", -2,
+						AttributeModifier.Operation.ADDITION));
+			}
+			return multimap;
 		}
 	}
 }

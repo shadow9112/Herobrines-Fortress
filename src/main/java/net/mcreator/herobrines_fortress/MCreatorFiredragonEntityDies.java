@@ -2,7 +2,7 @@ package net.mcreator.herobrines_fortress;
 
 import net.minecraft.world.World;
 import net.minecraft.item.ItemStack;
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.ItemEntity;
 
 @Elementsherobrines_fortress.ModElement.Tag
 public class MCreatorFiredragonEntityDies extends Elementsherobrines_fortress.ModElement {
@@ -32,23 +32,23 @@ public class MCreatorFiredragonEntityDies extends Elementsherobrines_fortress.Mo
 		int z = (int) dependencies.get("z");
 		World world = (World) dependencies.get("world");
 		if (!world.isRemote) {
-			EntityItem entityToSpawn = new EntityItem(world, x, y, z, new ItemStack(MCreatorLightning.block, (int) (1)));
+			ItemEntity entityToSpawn = new ItemEntity(world, x, y, z, new ItemStack(MCreatorLightning.block, (int) (1)));
 			entityToSpawn.setPickupDelay(10);
-			world.spawnEntity(entityToSpawn);
+			world.addEntity(entityToSpawn);
 		}
 		for (int index0 = 0; index0 < (int) (5); index0++) {
 			if (!world.isRemote) {
-				EntityItem entityToSpawn = new EntityItem(world, x, y, z, new ItemStack(MCreatorFirediamond.block, (int) (1)));
+				ItemEntity entityToSpawn = new ItemEntity(world, x, y, z, new ItemStack(MCreatorFirediamond.block, (int) (1)));
 				entityToSpawn.setPickupDelay(10);
-				world.spawnEntity(entityToSpawn);
+				world.addEntity(entityToSpawn);
 			}
 		}
 		if ((Math.random() <= 0.75)) {
 			if (!world.isRemote) {
-				EntityItem entityToSpawn = new EntityItem(world, x, y, z, new ItemStack(MCreatorSkeletonhorsespawneggbecauseMcreatorisbad.block,
+				ItemEntity entityToSpawn = new ItemEntity(world, x, y, z, new ItemStack(MCreatorSkeletonhorsespawneggbecauseMcreatorisbad.block,
 						(int) (1)));
 				entityToSpawn.setPickupDelay(10);
-				world.spawnEntity(entityToSpawn);
+				world.addEntity(entityToSpawn);
 			}
 		}
 	}

@@ -5,7 +5,7 @@
     "mobName": "Silence",
     "mobLabel": "",
     "mobModelTexture": "flyghts.png",
-    "mobModelName": "ModelHuman",
+    "mobModelName": "Modelsilence",
     "modelWidth": 1.0,
     "modelHeight": 3.0,
     "modelShadowSize": 1.0,
@@ -18,6 +18,9 @@
     "spawnEggDotColor": {
       "value": -52429,
       "falpha": 0.0
+    },
+    "creativeTab": {
+      "value": "MISC"
     },
     "isBoss": false,
     "bossBarColor": "PINK",

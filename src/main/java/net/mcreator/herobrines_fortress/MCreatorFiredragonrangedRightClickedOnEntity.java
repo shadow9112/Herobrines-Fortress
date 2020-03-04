@@ -1,6 +1,6 @@
 package net.mcreator.herobrines_fortress;
 
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Entity;
 
 @Elementsherobrines_fortress.ModElement.Tag
@@ -15,7 +15,7 @@ public class MCreatorFiredragonrangedRightClickedOnEntity extends Elementsherobr
 			return;
 		}
 		Entity entity = (Entity) dependencies.get("entity");
-		if (entity instanceof EntityLivingBase)
-			((EntityLivingBase) entity).setPositionAndUpdate(Math.random(), Math.random(), Math.random());
+		if (entity instanceof LivingEntity)
+			((LivingEntity) entity).setPositionAndUpdate(Math.random(), Math.random(), Math.random());
 	}
 }

@@ -1,0 +1,26 @@
+{
+  "group": "herobrines_fortress",
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "01",
+    "23"
+  ],
+  "key": {
+    "0": {
+      "item": "herobrines_fortress:sickdust"
+    },
+    "1": {
+      "item": "herobrines_fortress:sickdust"
+    },
+    "2": {
+      "item": "herobrines_fortress:sickdust"
+    },
+    "3": {
+      "item": "herobrines_fortress:sickdust"
+    }
+  },
+  "result": {
+    "item": "herobrines_fortress:sickbar",
+    "count": 1
+  }
+}

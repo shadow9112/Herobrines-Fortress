@@ -1,0 +1,24 @@
+{
+  "_fv": 5,
+  "_type": "fluid",
+  "definition": {
+    "name": "Lightningwater",
+    "textureStill": "lightning_water_still",
+    "textureFlowing": "lightning_water_flowing",
+    "luminosity": 25,
+    "density": 1000,
+    "viscosity": 1000,
+    "isGas": false,
+    "type": "WATER",
+    "generateBucket": true,
+    "creativeTab": {
+      "value": "MISC"
+    },
+    "spawnWorldTypes": [
+      "CUSTOM:Lightning"
+    ],
+    "onEntityCollides": {
+      "name": "LightningwaterMobplayerCollidesBlock"
+    }
+  }
+}

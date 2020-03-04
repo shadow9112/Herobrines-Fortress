@@ -1,11 +1,12 @@
 package net.mcreator.herobrines_fortress;
 
-import net.minecraft.world.WorldServer;
+import net.minecraftforge.registries.ForgeRegistries;
+
 import net.minecraft.world.World;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.particles.ParticleTypes;
+import net.minecraft.entity.player.PlayerEntity;
 
 @Elementsherobrines_fortress.ModElement.Tag
 public class MCreatorTnTBowBlockDestroyedWithTool extends Elementsherobrines_fortress.ModElement {
@@ -34,10 +35,11 @@ public class MCreatorTnTBowBlockDestroyedWithTool extends Elementsherobrines_for
 		int y = (int) dependencies.get("y");
 		int z = (int) dependencies.get("z");
 		World world = (World) dependencies.get("world");
-		if (world instanceof WorldServer)
-			((WorldServer) world).spawnParticle(EnumParticleTypes.FLAME, x, y, z, (int) 5, 3, 3, 3, 1, new int[0]);
-		world.playSound((EntityPlayer) null, x, y, z,
-				(net.minecraft.util.SoundEvent) net.minecraft.util.SoundEvent.REGISTRY.getObject(new ResourceLocation("block.fire.extinguish")),
+		for (int _ct = 0; _ct < 5; _ct++) {
+			world.addOptionalParticle(ParticleTypes.FLAME, x, y, z, 3, 3, 3);
+		}
+		world.playSound((PlayerEntity) null, x, y, z,
+				(net.minecraft.util.SoundEvent) ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.fire.extinguish")),
 				SoundCategory.NEUTRAL, (float) 1, (float) 1);
 	}
 }

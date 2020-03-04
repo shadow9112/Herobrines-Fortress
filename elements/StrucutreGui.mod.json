@@ -21,6 +21,34 @@
           "x": 88,
           "y": 49
         }
+      },
+      {
+        "type": "button",
+        "data": {
+          "text": "Sickness structure 1",
+          "onClick": {
+            "name": "Spawnsicknessvillage1"
+          },
+          "width": 560,
+          "height": 40,
+          "name": "Sickness structure 1",
+          "x": 88,
+          "y": 112
+        }
+      },
+      {
+        "type": "button",
+        "data": {
+          "text": "Sickness structure 2",
+          "onClick": {
+            "name": "Sicknessvillagestructure2button"
+          },
+          "width": 400,
+          "height": 40,
+          "name": "Sickness structure 2",
+          "x": 88,
+          "y": 178
+        }
       }
     ],
     "inventories": []

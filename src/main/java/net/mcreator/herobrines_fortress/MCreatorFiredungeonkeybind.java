@@ -1,82 +1,75 @@
 package net.mcreator.herobrines_fortress;
 
-import org.lwjgl.input.Keyboard;
+import org.lwjgl.glfw.GLFW;
 
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.gameevent.InputEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraft.world.World;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.client.gui.GuiChat;
+import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.Minecraft;
+
+import java.util.function.Supplier;
 
 @Elementsherobrines_fortress.ModElement.Tag
 public class MCreatorFiredungeonkeybind extends Elementsherobrines_fortress.ModElement {
+	@OnlyIn(Dist.CLIENT)
 	private KeyBinding keys;
 
 	public MCreatorFiredungeonkeybind(Elementsherobrines_fortress instance) {
 		super(instance, 110);
+		elements.addNetworkMessage(KeyBindingPressedMessage.class, KeyBindingPressedMessage::buffer, KeyBindingPressedMessage::new,
+				KeyBindingPressedMessage::handler);
 	}
 
 	@Override
-	public void preInit(FMLPreInitializationEvent event) {
-		elements.addNetworkMessage(KeyBindingPressedMessageHandler.class, KeyBindingPressedMessage.class, Side.SERVER);
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void init(FMLInitializationEvent event) {
-		keys = new KeyBinding("key.mcreator.firedungeonkeybind", Keyboard.KEY_N, "key.categories.misc");
+	@OnlyIn(Dist.CLIENT)
+	public void initElements() {
+		keys = new KeyBinding("key.mcreator.firedungeonkeybind", GLFW.GLFW_KEY_Z, "key.categories.misc");
 		ClientRegistry.registerKeyBinding(keys);
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 
 	@SubscribeEvent
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void onKeyInput(InputEvent.KeyInputEvent event) {
-		if (!FMLClientHandler.instance().isGUIOpen(GuiChat.class)) {
-			if (org.lwjgl.input.Keyboard.isKeyDown(keys.getKeyCode())) {
+		if (!(Minecraft.getInstance().currentScreen instanceof ChatScreen)) {
+			if (event.getKey() == keys.getKey().getKeyCode() && event.getAction() == GLFW.GLFW_PRESS) {
 				herobrines_fortress.PACKET_HANDLER.sendToServer(new KeyBindingPressedMessage());
-				pressAction(Minecraft.getMinecraft().player);
+				pressAction(Minecraft.getInstance().player);
 			}
 		}
 	}
 
-	public static class KeyBindingPressedMessageHandler implements IMessageHandler<KeyBindingPressedMessage, IMessage> {
-		@Override
-		public IMessage onMessage(KeyBindingPressedMessage message, MessageContext context) {
-			EntityPlayerMP entity = context.getServerHandler().player;
-			entity.getServerWorld().addScheduledTask(() -> {
-				pressAction(entity);
+	public static class KeyBindingPressedMessage {
+		public KeyBindingPressedMessage() {
+		}
+
+		public KeyBindingPressedMessage(PacketBuffer buffer) {
+		}
+
+		public static void buffer(KeyBindingPressedMessage message, PacketBuffer buffer) {
+		}
+
+		public static void handler(KeyBindingPressedMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
+			NetworkEvent.Context context = contextSupplier.get();
+			context.enqueueWork(() -> {
+				pressAction(context.getSender());
 			});
-			return null;
+			context.setPacketHandled(true);
 		}
 	}
 
-	public static class KeyBindingPressedMessage implements IMessage {
-		@Override
-		public void toBytes(io.netty.buffer.ByteBuf buf) {
-		}
-
-		@Override
-		public void fromBytes(io.netty.buffer.ByteBuf buf) {
-		}
-	}
-
-	private static void pressAction(EntityPlayer entity) {
+	private static void pressAction(PlayerEntity entity) {
 		World world = entity.world;
 		int x = (int) entity.posX;
 		int y = (int) entity.posY;

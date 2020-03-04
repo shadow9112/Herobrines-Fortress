@@ -2,7 +2,7 @@ package net.mcreator.herobrines_fortress;
 
 import net.minecraft.world.World;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.Blocks;
 
 @Elementsherobrines_fortress.ModElement.Tag
 public class MCreatorTestingprojectileRandomTickUpdateEvent extends Elementsherobrines_fortress.ModElement {

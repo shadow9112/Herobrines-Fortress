@@ -2,7 +2,7 @@ package net.mcreator.herobrines_fortress;
 
 import net.minecraft.world.World;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.Blocks;
 
 @Elementsherobrines_fortress.ModElement.Tag
 public class MCreatorFlamesMobplayerCollidesWithPlant extends Elementsherobrines_fortress.ModElement {
@@ -31,7 +31,7 @@ public class MCreatorFlamesMobplayerCollidesWithPlant extends Elementsherobrines
 		int y = (int) dependencies.get("y");
 		int z = (int) dependencies.get("z");
 		World world = (World) dependencies.get("world");
-		world.setBlockToAir(new BlockPos((int) x, (int) y, (int) z));
+		world.setBlockState(new BlockPos((int) x, (int) y, (int) z), Blocks.AIR.getDefaultState(), 3);
 		world.setBlockState(new BlockPos((int) x, (int) y, (int) z), Blocks.FIRE.getDefaultState(), 3);
 	}
 }

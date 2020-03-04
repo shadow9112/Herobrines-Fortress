@@ -1,8 +1,8 @@
 package net.mcreator.herobrines_fortress;
 
-import net.minecraft.world.gen.structure.template.Template;
-import net.minecraft.world.gen.structure.template.PlacementSettings;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.gen.feature.template.Template;
+import net.minecraft.world.gen.feature.template.PlacementSettings;
 import net.minecraft.world.World;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.BlockPos;
@@ -10,8 +10,6 @@ import net.minecraft.util.Rotation;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Mirror;
 import net.minecraft.entity.Entity;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.block.Block;
 
 @Elementsherobrines_fortress.ModElement.Tag
 public class MCreatorForFIredungeonBlockAdded extends Elementsherobrines_fortress.ModElement {
@@ -41,25 +39,17 @@ public class MCreatorForFIredungeonBlockAdded extends Elementsherobrines_fortres
 		int z = (int) dependencies.get("z");
 		World world = (World) dependencies.get("world");
 		if (!world.isRemote) {
-			Template template = ((WorldServer) world).getStructureTemplateManager().getTemplate(world.getMinecraftServer(),
-					new ResourceLocation("herobrines_fortress", "fire_dungeon3"));
+			Template template = ((ServerWorld) world.getWorld()).getSaveHandler().getStructureTemplateManager()
+					.getTemplateDefaulted(new ResourceLocation("herobrines_fortress", "fire_dungeon3"));
 			if (template != null) {
-				BlockPos spawnTo = new BlockPos((int) x, (int) y, (int) z);
-				IBlockState iblockstate = world.getBlockState(spawnTo);
-				world.notifyBlockUpdate(spawnTo, iblockstate, iblockstate, 3);
-				template.addBlocksToWorldChunk(
-						world,
-						spawnTo,
-						new PlacementSettings().setRotation(Rotation.NONE).setMirror(Mirror.NONE).setChunk((ChunkPos) null)
-								.setReplacedBlock((Block) null).setIgnoreStructureBlock(false).setIgnoreEntities(false));
+				template.addBlocksToWorldChunk(world, new BlockPos((int) x, (int) y, (int) z), new PlacementSettings().setRotation(Rotation.NONE)
+						.setMirror(Mirror.NONE).setChunk((ChunkPos) null).setIgnoreEntities(false));
 			}
 		}
 		if (!world.isRemote) {
-			Entity entityToSpawn = new MCreatorFiredragon.EntityCustom(world);
-			if (entityToSpawn != null) {
-				entityToSpawn.setLocationAndAngles((x + 16), (y + 3), (z + 2), world.rand.nextFloat() * 360F, 0.0F);
-				world.spawnEntity(entityToSpawn);
-			}
+			Entity entityToSpawn = new MCreatorFiredragon.CustomEntity(MCreatorFiredragon.entity, world);
+			entityToSpawn.setLocationAndAngles((x + 16), (y + 3), (z + 2), world.rand.nextFloat() * 360F, 0);
+			world.addEntity(entityToSpawn);
 		}
 	}
 }

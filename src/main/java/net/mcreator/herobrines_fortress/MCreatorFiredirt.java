@@ -1,32 +1,35 @@
 package net.mcreator.herobrines_fortress;
 
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.registries.ObjectHolder;
+import net.minecraftforge.common.ToolType;
+import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.Dist;
 
+import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.World;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.item.ItemBlock;
+import net.minecraft.util.Direction;
+import net.minecraft.particles.ParticleTypes;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Item;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.item.BlockItem;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.client.Minecraft;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.material.MaterialColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.material.MapColor;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Block;
 
 import java.util.Random;
+import java.util.List;
+import java.util.Collections;
 
 @Elementsherobrines_fortress.ModElement.Tag
 public class MCreatorFiredirt extends Elementsherobrines_fortress.ModElement {
-	@GameRegistry.ObjectHolder("herobrines_fortress:firedirt")
+	@ObjectHolder("herobrines_fortress:firedirt")
 	public static final Block block = null;
 
 	public MCreatorFiredirt(Elementsherobrines_fortress instance) {
@@ -35,52 +38,41 @@ public class MCreatorFiredirt extends Elementsherobrines_fortress.ModElement {
 
 	@Override
 	public void initElements() {
-		elements.blocks.add(() -> new BlockCustom());
-		elements.items.add(() -> new ItemBlock(block).setRegistryName(block.getRegistryName()));
+		elements.blocks.add(() -> new CustomBlock());
+		elements.items.add(() -> new BlockItem(block, new Item.Properties().group(MCreatorCustomelements.tab)).setRegistryName(block
+				.getRegistryName()));
 	}
 
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerModels(ModelRegistryEvent event) {
-		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation("herobrines_fortress:firedirt",
-				"inventory"));
-	}
-
-	public static class BlockCustom extends Block {
-		public BlockCustom() {
-			super(Material.GRASS);
+	public static class CustomBlock extends Block {
+		public CustomBlock() {
+			super(Block.Properties.create(Material.ORGANIC).sound(SoundType.GROUND).hardnessAndResistance(20f, 20f).lightValue(0).harvestLevel(1)
+					.harvestTool(ToolType.SHOVEL));
 			setRegistryName("firedirt");
-			setUnlocalizedName("firedirt");
-			setSoundType(SoundType.GROUND);
-			setHarvestLevel("shovel", 1);
-			setHardness(20F);
-			setResistance(20F);
-			setLightLevel(0F);
-			setLightOpacity(255);
-			setCreativeTab(MCreatorCustomelements.tab);
 		}
 
 		@Override
-		public MapColor getMapColor(IBlockState state, IBlockAccess blockAccess, BlockPos pos) {
-			return MapColor.GRASS;
+		public MaterialColor getMaterialColor(BlockState state, IBlockReader blockAccess, BlockPos pos) {
+			return MaterialColor.GRASS;
 		}
 
 		@Override
-		public boolean canSilkHarvest(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
-			return false;
-		}
-
-		@Override
-		public boolean canSustainPlant(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing direction,
-				net.minecraftforge.common.IPlantable plantable) {
+		public boolean canSustainPlant(BlockState state, IBlockReader world, BlockPos pos, Direction direction, IPlantable plantable) {
 			return true;
 		}
 
-		@SideOnly(Side.CLIENT)
 		@Override
-		public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random random) {
-			super.randomDisplayTick(state, world, pos, random);
-			EntityPlayer entity = Minecraft.getMinecraft().player;
+		public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+			List<ItemStack> dropsOriginal = super.getDrops(state, builder);
+			if (!dropsOriginal.isEmpty())
+				return dropsOriginal;
+			return Collections.singletonList(new ItemStack(this, 1));
+		}
+
+		@OnlyIn(Dist.CLIENT)
+		@Override
+		public void animateTick(BlockState state, World world, BlockPos pos, Random random) {
+			super.animateTick(state, world, pos, random);
+			PlayerEntity entity = Minecraft.getInstance().player;
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();
@@ -97,7 +89,7 @@ public class MCreatorFiredirt extends Elementsherobrines_fortress.ModElement {
 					double d3 = (random.nextFloat() - 0.5D) * 0.5D;
 					double d4 = (random.nextFloat() - 0.5D) * 0.5D;
 					double d5 = (random.nextFloat() - 0.5D) * 0.5D;
-					world.spawnParticle(EnumParticleTypes.LAVA, d0, d1, d2, d3, d4, d5);
+					world.addParticle(ParticleTypes.LAVA, d0, d1, d2, d3, d4, d5);
 				}
 		}
 	}

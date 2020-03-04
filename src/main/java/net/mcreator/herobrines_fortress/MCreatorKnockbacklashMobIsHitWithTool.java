@@ -1,8 +1,8 @@
 package net.mcreator.herobrines_fortress;
 
 import net.minecraft.world.World;
-import net.minecraft.entity.projectile.EntityTippedArrow;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.projectile.ArrowEntity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Entity;
 
 @Elementsherobrines_fortress.ModElement.Tag
@@ -22,12 +22,12 @@ public class MCreatorKnockbacklashMobIsHitWithTool extends Elementsherobrines_fo
 		}
 		Entity entity = (Entity) dependencies.get("entity");
 		World world = (World) dependencies.get("world");
-		if (!world.isRemote && entity instanceof EntityLivingBase) {
-			EntityTippedArrow entityToSpawn = new EntityTippedArrow(world, (EntityLivingBase) entity);
+		if (!world.isRemote && entity instanceof LivingEntity) {
+			ArrowEntity entityToSpawn = new ArrowEntity(world, (LivingEntity) entity);
 			entityToSpawn.shoot(entity.getLookVec().x, entity.getLookVec().y, entity.getLookVec().z, ((float) 100) * 2.0F, 0);
 			entityToSpawn.setDamage(((float) 2) * 2.0F);
 			entityToSpawn.setKnockbackStrength((int) 1e+36);
-			world.spawnEntity(entityToSpawn);
+			world.addEntity(entityToSpawn);
 		}
 	}
 }

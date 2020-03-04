@@ -1,42 +1,45 @@
 package net.mcreator.herobrines_fortress;
 
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.registries.ObjectHolder;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.fml.network.FMLPlayMessages;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraft.world.World;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.ActionResult;
+import net.minecraft.network.IPacket;
+import net.minecraft.item.UseAction;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.Item;
-import net.minecraft.item.EnumAction;
-import net.minecraft.init.Enchantments;
-import net.minecraft.init.Blocks;
-import net.minecraft.entity.projectile.EntityTippedArrow;
-import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.projectile.AbstractArrowEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.IRendersAsItem;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.Entity;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.client.renderer.entity.RenderSnowball;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.entity.SpriteRenderer;
 import net.minecraft.client.Minecraft;
+import net.minecraft.block.Blocks;
 
 @Elementsherobrines_fortress.ModElement.Tag
 public class MCreatorTnTBow extends Elementsherobrines_fortress.ModElement {
-	@GameRegistry.ObjectHolder("herobrines_fortress:tntbow")
+	@ObjectHolder("herobrines_fortress:tntbow")
 	public static final Item block = null;
-	public static final int ENTITYID = 1;
+	@ObjectHolder("herobrines_fortress:entitybullettntbow")
+	public static final EntityType arrow = null;
 
 	public MCreatorTnTBow(Elementsherobrines_fortress instance) {
 		super(instance, 37);
@@ -44,82 +47,88 @@ public class MCreatorTnTBow extends Elementsherobrines_fortress.ModElement {
 
 	@Override
 	public void initElements() {
-		elements.items.add(() -> new RangedItem());
-		elements.entities.add(() -> EntityEntryBuilder.create().entity(EntityArrowCustom.class)
-				.id(new ResourceLocation("herobrines_fortress", "entitybullettntbow"), ENTITYID).name("entitybullettntbow").tracker(64, 1, true)
-				.build());
+		elements.items.add(() -> new ItemRanged());
+		elements.entities.add(() -> (EntityType.Builder.<ArrowCustomEntity> create(ArrowCustomEntity::new, EntityClassification.MISC)
+				.setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(1).setCustomClientFactory(ArrowCustomEntity::new).size(
+				0.5f, 0.5f)).build("entitybullettntbow").setRegistryName("entitybullettntbow"));
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerModels(ModelRegistryEvent event) {
-		ModelLoader.setCustomModelResourceLocation(block, 0, new ModelResourceLocation("herobrines_fortress:tntbow", "inventory"));
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void preInit(FMLPreInitializationEvent event) {
-		RenderingRegistry.registerEntityRenderingHandler(EntityArrowCustom.class, renderManager -> {
-			return new RenderSnowball(renderManager, new ItemStack(MCreatorSicktnt.block, (int) (1)).getItem(), Minecraft.getMinecraft()
-					.getRenderItem());
+	@OnlyIn(Dist.CLIENT)
+	public void init(FMLCommonSetupEvent event) {
+		RenderingRegistry.registerEntityRenderingHandler(ArrowCustomEntity.class, renderManager -> {
+			return new SpriteRenderer(renderManager, Minecraft.getInstance().getItemRenderer());
 		});
 	}
 
-	public static class RangedItem extends Item {
-		public RangedItem() {
-			super();
-			setMaxDamage(100);
-			setFull3D();
-			setUnlocalizedName("tntbow");
+	public static class ItemRanged extends Item {
+		public ItemRanged() {
+			super(new Item.Properties().group(ItemGroup.COMBAT).maxDamage(100));
 			setRegistryName("tntbow");
-			maxStackSize = 1;
-			setCreativeTab(CreativeTabs.COMBAT);
 		}
 
 		@Override
-		public void onPlayerStoppedUsing(ItemStack itemstack, World world, EntityLivingBase entityLivingBase, int timeLeft) {
-			if (!world.isRemote && entityLivingBase instanceof EntityPlayerMP) {
-				EntityPlayerMP entity = (EntityPlayerMP) entityLivingBase;
+		public UseAction getUseAction(ItemStack stack) {
+			return UseAction.BOW;
+		}
+
+		@Override
+		public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity entity, Hand hand) {
+			entity.setActiveHand(hand);
+			return new ActionResult(ActionResultType.SUCCESS, entity.getHeldItem(hand));
+		}
+
+		@Override
+		public int getUseDuration(ItemStack itemstack) {
+			return 72000;
+		}
+
+		@Override
+		public void onPlayerStoppedUsing(ItemStack itemstack, World world, LivingEntity entityLiving, int timeLeft) {
+			if (!world.isRemote && entityLiving instanceof ServerPlayerEntity) {
+				ServerPlayerEntity entity = (ServerPlayerEntity) entityLiving;
 				int slotID = -1;
 				for (int i = 0; i < entity.inventory.mainInventory.size(); i++) {
 					ItemStack stack = entity.inventory.mainInventory.get(i);
-					if (stack != null && stack.getItem() == new ItemStack(Blocks.TNT, (int) (1)).getItem()
-							&& stack.getMetadata() == new ItemStack(Blocks.TNT, (int) (1)).getMetadata()) {
+					if (stack != null && stack.getItem() == new ItemStack(Blocks.TNT, (int) (1)).getItem()) {
 						slotID = i;
 						break;
 					}
 				}
-				if (entity.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, itemstack) > 0 || slotID != -1) {
+				if (entity.abilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, itemstack) > 0 || slotID != -1) {
 					float power = 2f;
-					EntityArrowCustom entityarrow = new EntityArrowCustom(world, entity);
+					ArrowCustomEntity entityarrow = new ArrowCustomEntity(arrow, entity, world);
 					entityarrow.shoot(entity.getLookVec().x, entity.getLookVec().y, entity.getLookVec().z, power * 2, 0);
 					entityarrow.setSilent(true);
 					entityarrow.setIsCritical(true);
 					entityarrow.setDamage(10);
 					entityarrow.setKnockbackStrength(20);
 					entityarrow.setFire(100);
-					itemstack.damageItem(1, entity);
+					itemstack.damageItem(1, entity, e -> e.sendBreakAnimation(entity.getActiveHand()));
 					int x = (int) entity.posX;
 					int y = (int) entity.posY;
 					int z = (int) entity.posZ;
-					world.playSound((EntityPlayer) null, (double) x, (double) y, (double) z,
-							(net.minecraft.util.SoundEvent) net.minecraft.util.SoundEvent.REGISTRY.getObject(new ResourceLocation(
-									("entity.arrow.shoot"))), SoundCategory.NEUTRAL, 1, 1f / (itemRand.nextFloat() * 0.5f + 1f) + (power / 2));
-					if (entity.capabilities.isCreativeMode) {
-						entityarrow.pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY;
+					world.playSound((PlayerEntity) null, (double) x, (double) y, (double) z,
+							(net.minecraft.util.SoundEvent) ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.arrow.shoot")),
+							SoundCategory.PLAYERS, 1, 1f / (random.nextFloat() * 0.5f + 1) + (power / 2));
+					if (entity.abilities.isCreativeMode) {
+						entityarrow.pickupStatus = AbstractArrowEntity.PickupStatus.CREATIVE_ONLY;
 					} else {
-						if (new ItemStack(Blocks.TNT, (int) (1)).isItemStackDamageable()) {
-							ItemStack stack = entity.inventory.getStackInSlot(slotID);
-							if (stack.attemptDamageItem(1, itemRand, entity)) {
+						ItemStack stack = entity.inventory.getStackInSlot(slotID);
+						if (new ItemStack(Blocks.TNT, (int) (1)).isDamageable()) {
+							if (stack.attemptDamageItem(1, random, entity)) {
 								stack.shrink(1);
-								stack.setItemDamage(0);
+								stack.setDamage(0);
+								if (stack.isEmpty())
+									entity.inventory.deleteStack(stack);
 							}
 						} else {
-							entity.inventory.clearMatchingItems(new ItemStack(Blocks.TNT, (int) (1)).getItem(), -1, 1, null);
+							stack.shrink(1);
+							if (stack.isEmpty())
+								entity.inventory.deleteStack(stack);
 						}
 					}
-					if (!world.isRemote)
-						world.spawnEntity(entityarrow);
+					world.addEntity(entityarrow);
 					{
 						java.util.HashMap<String, Object> $_dependencies = new java.util.HashMap<>();
 						$_dependencies.put("entity", entity);
@@ -128,39 +137,44 @@ public class MCreatorTnTBow extends Elementsherobrines_fortress.ModElement {
 				}
 			}
 		}
-
-		@Override
-		public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer entity, EnumHand hand) {
-			entity.setActiveHand(hand);
-			return new ActionResult(EnumActionResult.SUCCESS, entity.getHeldItem(hand));
-		}
-
-		@Override
-		public EnumAction getItemUseAction(ItemStack itemstack) {
-			return EnumAction.BOW;
-		}
-
-		@Override
-		public int getMaxItemUseDuration(ItemStack itemstack) {
-			return 72000;
-		}
 	}
 
-	public static class EntityArrowCustom extends EntityTippedArrow {
-		public EntityArrowCustom(World a) {
-			super(a);
+	@OnlyIn(value = Dist.CLIENT, _interface = IRendersAsItem.class)
+	public static class ArrowCustomEntity extends AbstractArrowEntity implements IRendersAsItem {
+		public ArrowCustomEntity(FMLPlayMessages.SpawnEntity packet, World world) {
+			super(arrow, world);
 		}
 
-		public EntityArrowCustom(World worldIn, double x, double y, double z) {
-			super(worldIn, x, y, z);
+		public ArrowCustomEntity(EntityType<? extends ArrowCustomEntity> type, World world) {
+			super(type, world);
 		}
 
-		public EntityArrowCustom(World worldIn, EntityLivingBase shooter) {
-			super(worldIn, shooter);
+		public ArrowCustomEntity(EntityType<? extends ArrowCustomEntity> type, double x, double y, double z, World world) {
+			super(type, x, y, z, world);
+		}
+
+		public ArrowCustomEntity(EntityType<? extends ArrowCustomEntity> type, LivingEntity entity, World world) {
+			super(type, entity, world);
 		}
 
 		@Override
-		public void onCollideWithPlayer(EntityPlayer entity) {
+		public IPacket<?> createSpawnPacket() {
+			return NetworkHooks.getEntitySpawningPacket(this);
+		}
+
+		@Override
+		@OnlyIn(Dist.CLIENT)
+		public ItemStack getItem() {
+			return new ItemStack(MCreatorSicktnt.block, (int) (1));
+		}
+
+		@Override
+		protected ItemStack getArrowStack() {
+			return new ItemStack(Blocks.TNT, (int) (1));
+		}
+
+		@Override
+		public void onCollideWithPlayer(PlayerEntity entity) {
 			super.onCollideWithPlayer(entity);
 			int x = (int) this.posX;
 			int y = (int) this.posY;
@@ -177,7 +191,7 @@ public class MCreatorTnTBow extends Elementsherobrines_fortress.ModElement {
 		}
 
 		@Override
-		protected void arrowHit(EntityLivingBase entity) {
+		protected void arrowHit(LivingEntity entity) {
 			super.arrowHit(entity);
 			entity.setArrowCountInEntity(entity.getArrowCountInEntity() - 1);
 			int x = (int) this.posX;
@@ -195,13 +209,13 @@ public class MCreatorTnTBow extends Elementsherobrines_fortress.ModElement {
 		}
 
 		@Override
-		public void onUpdate() {
-			super.onUpdate();
+		public void tick() {
+			super.tick();
 			int x = (int) this.posX;
 			int y = (int) this.posY;
 			int z = (int) this.posZ;
 			World world = this.world;
-			Entity entity = (Entity) shootingEntity;
+			Entity entity = this.getShooter();
 			if (this.inGround) {
 				{
 					java.util.HashMap<String, Object> $_dependencies = new java.util.HashMap<>();
@@ -211,7 +225,7 @@ public class MCreatorTnTBow extends Elementsherobrines_fortress.ModElement {
 					$_dependencies.put("world", world);
 					MCreatorTnTBowBulletHitsBlock.executeProcedure($_dependencies);
 				}
-				this.world.removeEntity(this);
+				this.remove();
 			}
 		}
 	}

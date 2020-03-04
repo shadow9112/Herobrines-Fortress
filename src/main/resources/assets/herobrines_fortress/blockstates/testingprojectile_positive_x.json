@@ -1,7 +1,7 @@
 {
   "variants": {
-    "normal": {
-      "model": "herobrines_fortress:testingprojectile_positive_x"
+    "": {
+      "model": "herobrines_fortress:block/testingprojectile_positive_x"
     }
   }
 }

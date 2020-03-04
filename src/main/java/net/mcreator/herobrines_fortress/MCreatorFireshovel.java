@@ -1,27 +1,20 @@
 package net.mcreator.herobrines_fortress;
 
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.common.util.EnumHelper;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.registries.ObjectHolder;
 
 import net.minecraft.world.World;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.ShovelItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSpade;
 import net.minecraft.item.Item;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.block.state.IBlockState;
-
-import java.util.Set;
-import java.util.HashMap;
+import net.minecraft.item.IItemTier;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.block.BlockState;
 
 @Elementsherobrines_fortress.ModElement.Tag
 public class MCreatorFireshovel extends Elementsherobrines_fortress.ModElement {
-	@GameRegistry.ObjectHolder("herobrines_fortress:fireshovel")
+	@ObjectHolder("herobrines_fortress:fireshovel")
 	public static final Item block = null;
 
 	public MCreatorFireshovel(Elementsherobrines_fortress instance) {
@@ -30,19 +23,33 @@ public class MCreatorFireshovel extends Elementsherobrines_fortress.ModElement {
 
 	@Override
 	public void initElements() {
-		elements.items.add(() -> new ItemSpade(EnumHelper.addToolMaterial("FIRESHOVEL", 4, 2026, 6f, 1f, 4)) {
-			{
-				this.attackSpeed = -1.2f;
+		elements.items.add(() -> new ShovelItem(new IItemTier() {
+			public int getMaxUses() {
+				return 2026;
 			}
 
-			public Set<String> getToolClasses(ItemStack stack) {
-				HashMap<String, Integer> ret = new HashMap<String, Integer>();
-				ret.put("spade", 4);
-				return ret.keySet();
+			public float getEfficiency() {
+				return 6f;
 			}
 
+			public float getAttackDamage() {
+				return 3f;
+			}
+
+			public int getHarvestLevel() {
+				return 4;
+			}
+
+			public int getEnchantability() {
+				return 4;
+			}
+
+			public Ingredient getRepairMaterial() {
+				return null;
+			}
+		}, 1, -1.2F, new Item.Properties().group(MCreatorCustomelements.tab)) {
 			@Override
-			public boolean onBlockDestroyed(ItemStack itemstack, World world, IBlockState bl, BlockPos pos, EntityLivingBase entity) {
+			public boolean onBlockDestroyed(ItemStack itemstack, World world, BlockState bl, BlockPos pos, LivingEntity entity) {
 				boolean retval = super.onBlockDestroyed(itemstack, world, bl, pos, entity);
 				int x = pos.getX();
 				int y = pos.getY();
@@ -59,8 +66,8 @@ public class MCreatorFireshovel extends Elementsherobrines_fortress.ModElement {
 			}
 
 			@Override
-			public boolean hitEntity(ItemStack itemstack, EntityLivingBase entity, EntityLivingBase entity2) {
-				super.hitEntity(itemstack, entity, entity2);
+			public boolean hitEntity(ItemStack itemstack, LivingEntity entity, LivingEntity entity2) {
+				boolean retval = super.hitEntity(itemstack, entity, entity2);
 				int x = (int) entity.posX;
 				int y = (int) entity.posY;
 				int z = (int) entity.posZ;
@@ -73,14 +80,8 @@ public class MCreatorFireshovel extends Elementsherobrines_fortress.ModElement {
 					$_dependencies.put("world", world);
 					MCreatorFirethrowingdaggerBulletHitsBlock.executeProcedure($_dependencies);
 				}
-				return true;
+				return retval;
 			}
-		}.setUnlocalizedName("fireshovel").setRegistryName("fireshovel").setCreativeTab(MCreatorCustomelements.tab));
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerModels(ModelRegistryEvent event) {
-		ModelLoader.setCustomModelResourceLocation(block, 0, new ModelResourceLocation("herobrines_fortress:fireshovel", "inventory"));
+		}.setRegistryName("fireshovel"));
 	}
 }

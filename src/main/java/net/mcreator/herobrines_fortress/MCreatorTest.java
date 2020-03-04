@@ -1,8 +1,20 @@
 package net.mcreator.herobrines_fortress;
 
+import net.minecraftforge.fml.network.NetworkHooks;
+
 import net.minecraft.world.World;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.Entity;
+
+import io.netty.buffer.Unpooled;
 
 @Elementsherobrines_fortress.ModElement.Tag
 public class MCreatorTest extends Elementsherobrines_fortress.ModElement {
@@ -38,8 +50,19 @@ public class MCreatorTest extends Elementsherobrines_fortress.ModElement {
 		World world = (World) dependencies.get("world");
 		double NEIN_hail_hitler = 0;
 		if (((herobrines_fortressVariables.MapVariables.get(world).Password_entered) == 0)) {
-			if (entity instanceof EntityPlayer)
-				((EntityPlayer) entity).openGui(herobrines_fortress.instance, MCreatorVaultpassword.GUIID, world, x, y, z);
+			if (entity instanceof ServerPlayerEntity)
+				NetworkHooks.openGui((ServerPlayerEntity) entity, new INamedContainerProvider() {
+					@Override
+					public ITextComponent getDisplayName() {
+						return new StringTextComponent("Vaultpassword");
+					}
+
+					@Override
+					public Container createMenu(int id, PlayerInventory inventory, PlayerEntity player) {
+						return new MCreatorVaultpassword.GuiContainerMod(id, inventory, new PacketBuffer(Unpooled.buffer())
+								.writeBlockPos(new BlockPos(x, y, z)));
+					}
+				}, new BlockPos(x, y, z));
 			herobrines_fortressVariables.MapVariables.get(world).Password_entered = (double) 1;
 			herobrines_fortressVariables.MapVariables.get(world).syncData(world);
 		}

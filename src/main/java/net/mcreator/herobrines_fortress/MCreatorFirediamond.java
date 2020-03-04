@@ -1,25 +1,22 @@
 package net.mcreator.herobrines_fortress;
 
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.registries.ObjectHolder;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraft.world.World;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.Direction;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Item;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.block.BlockState;
 
 @Elementsherobrines_fortress.ModElement.Tag
 public class MCreatorFirediamond extends Elementsherobrines_fortress.ModElement {
-	@GameRegistry.ObjectHolder("herobrines_fortress:firediamond")
+	@ObjectHolder("herobrines_fortress:firediamond")
 	public static final Item block = null;
 
 	public MCreatorFirediamond(Elementsherobrines_fortress instance) {
@@ -31,19 +28,10 @@ public class MCreatorFirediamond extends Elementsherobrines_fortress.ModElement 
 		elements.items.add(() -> new ItemCustom());
 	}
 
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerModels(ModelRegistryEvent event) {
-		ModelLoader.setCustomModelResourceLocation(block, 0, new ModelResourceLocation("herobrines_fortress:firediamond", "inventory"));
-	}
-
 	public static class ItemCustom extends Item {
 		public ItemCustom() {
-			setMaxDamage(0);
-			maxStackSize = 64;
-			setUnlocalizedName("firediamond");
+			super(new Item.Properties().group(MCreatorCustomelements.tab).maxStackSize(64));
 			setRegistryName("firediamond");
-			setCreativeTab(MCreatorCustomelements.tab);
 		}
 
 		@Override
@@ -52,28 +40,32 @@ public class MCreatorFirediamond extends Elementsherobrines_fortress.ModElement 
 		}
 
 		@Override
-		public int getMaxItemUseDuration(ItemStack itemstack) {
+		public int getUseDuration(ItemStack itemstack) {
 			return 0;
 		}
 
 		@Override
-		public float getDestroySpeed(ItemStack par1ItemStack, IBlockState par2Block) {
+		public float getDestroySpeed(ItemStack par1ItemStack, BlockState par2Block) {
 			return 1F;
 		}
 
 		@Override
-		@SideOnly(Side.CLIENT)
+		@OnlyIn(Dist.CLIENT)
 		public boolean hasEffect(ItemStack itemstack) {
 			return true;
 		}
 
 		@Override
-		public EnumActionResult onItemUseFirst(EntityPlayer entity, World world, BlockPos pos, EnumFacing direction, float hitX, float hitY,
-				float hitZ, EnumHand hand) {
-			ItemStack itemstack = entity.getHeldItem(hand);
+		public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
+			ActionResultType retval = super.onItemUse(context);
+			World world = context.getWorld();
+			BlockPos pos = context.getPos();
+			PlayerEntity entity = context.getPlayer();
+			Direction direction = context.getFace();
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();
+			ItemStack itemstack = context.getItem();
 			{
 				java.util.HashMap<String, Object> $_dependencies = new java.util.HashMap<>();
 				$_dependencies.put("x", x);
@@ -82,11 +74,11 @@ public class MCreatorFirediamond extends Elementsherobrines_fortress.ModElement 
 				$_dependencies.put("world", world);
 				MCreatorFlamesMobplayerCollidesWithPlant.executeProcedure($_dependencies);
 			}
-			return EnumActionResult.PASS;
+			return retval;
 		}
 
 		@Override
-		public void onCreated(ItemStack itemstack, World world, EntityPlayer entity) {
+		public void onCreated(ItemStack itemstack, World world, PlayerEntity entity) {
 			super.onCreated(itemstack, world, entity);
 			int x = (int) entity.posX;
 			int y = (int) entity.posY;

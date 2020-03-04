@@ -1,21 +1,16 @@
 package net.mcreator.herobrines_fortress;
 
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.registries.ObjectHolder;
 
 import net.minecraft.world.World;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Item;
 import net.minecraft.entity.Entity;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 
 @Elementsherobrines_fortress.ModElement.Tag
 public class MCreatorSelfstabbingdagger extends Elementsherobrines_fortress.ModElement {
-	@GameRegistry.ObjectHolder("herobrines_fortress:selfstabbingdagger")
+	@ObjectHolder("herobrines_fortress:selfstabbingdagger")
 	public static final Item block = null;
 
 	public MCreatorSelfstabbingdagger(Elementsherobrines_fortress instance) {
@@ -27,19 +22,10 @@ public class MCreatorSelfstabbingdagger extends Elementsherobrines_fortress.ModE
 		elements.items.add(() -> new ItemCustom());
 	}
 
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerModels(ModelRegistryEvent event) {
-		ModelLoader.setCustomModelResourceLocation(block, 0, new ModelResourceLocation("herobrines_fortress:selfstabbingdagger", "inventory"));
-	}
-
 	public static class ItemCustom extends Item {
 		public ItemCustom() {
-			setMaxDamage(1);
-			maxStackSize = 1;
-			setUnlocalizedName("selfstabbingdagger");
+			super(new Item.Properties().group(MCreatorCustomelements.tab).maxDamage(1));
 			setRegistryName("selfstabbingdagger");
-			setCreativeTab(MCreatorCustomelements.tab);
 		}
 
 		@Override
@@ -48,18 +34,18 @@ public class MCreatorSelfstabbingdagger extends Elementsherobrines_fortress.ModE
 		}
 
 		@Override
-		public int getMaxItemUseDuration(ItemStack itemstack) {
+		public int getUseDuration(ItemStack itemstack) {
 			return 1;
 		}
 
 		@Override
-		public float getDestroySpeed(ItemStack par1ItemStack, IBlockState par2Block) {
+		public float getDestroySpeed(ItemStack par1ItemStack, BlockState par2Block) {
 			return 1F;
 		}
 
 		@Override
-		public void onUpdate(ItemStack itemstack, World world, Entity entity, int slot, boolean par5) {
-			super.onUpdate(itemstack, world, entity, slot, par5);
+		public void inventoryTick(ItemStack itemstack, World world, Entity entity, int slot, boolean selected) {
+			super.inventoryTick(itemstack, world, entity, slot, selected);
 			int x = (int) entity.posX;
 			int y = (int) entity.posY;
 			int z = (int) entity.posZ;

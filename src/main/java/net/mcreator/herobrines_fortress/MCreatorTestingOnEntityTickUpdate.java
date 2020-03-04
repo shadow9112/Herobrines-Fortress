@@ -1,10 +1,10 @@
 package net.mcreator.herobrines_fortress;
 
 import net.minecraft.world.World;
+import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.init.Blocks;
 import net.minecraft.entity.Entity;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.Blocks;
 
 @Elementsherobrines_fortress.ModElement.Tag
 public class MCreatorTestingOnEntityTickUpdate extends Elementsherobrines_fortress.ModElement {
@@ -38,137 +38,45 @@ public class MCreatorTestingOnEntityTickUpdate extends Elementsherobrines_fortre
 		int y = (int) dependencies.get("y");
 		int z = (int) dependencies.get("z");
 		World world = (World) dependencies.get("world");
-		if (((entity.world.rayTraceBlocks(entity.getPositionEyes(1f),
-				entity.getPositionEyes(1f).addVector(entity.getLook(1f).x * 100, entity.getLook(1f).y * 100, entity.getLook(1f).z * 100), false,
-				false, true).getBlockPos().getX()) == Math.max(20, 80))) {
-			if ((new Object() {
-				public boolean blockEquals(IBlockState a, IBlockState b) {
-					try {
-						return (a.getBlock() == b.getBlock()) && (a.getBlock().getMetaFromState(a) == b.getBlock().getMetaFromState(b));
-					} catch (Exception e) {
-						return (a.getBlock() == b.getBlock());
-					}
-				}
-			}.blockEquals((world.getBlockState(new BlockPos((int) (x + 1), (int) (y + 2), (int) z))), Blocks.AIR.getDefaultState()))) {
+		if (((entity.world.rayTraceBlocks(
+				new RayTraceContext(entity.getEyePosition(1f), entity.getEyePosition(1f).add(entity.getLook(1f).x * 100, entity.getLook(1f).y * 100,
+						entity.getLook(1f).z * 100), RayTraceContext.BlockMode.OUTLINE, RayTraceContext.FluidMode.NONE, entity)).getPos().getX()) == Math
+				.max(20, 80))) {
+			if (((world.getBlockState(new BlockPos((int) (x + 1), (int) (y + 2), (int) z))).getBlock() == Blocks.AIR.getDefaultState().getBlock())) {
 				world.setBlockState(new BlockPos((int) (x + 1), (int) (y + 2), (int) z), MCreatorTestingprojectile.block.getDefaultState(), 3);
-				if ((new Object() {
-					public boolean blockEquals(IBlockState a, IBlockState b) {
-						try {
-							return (a.getBlock() == b.getBlock()) && (a.getBlock().getMetaFromState(a) == b.getBlock().getMetaFromState(b));
-						} catch (Exception e) {
-							return (a.getBlock() == b.getBlock());
-						}
-					}
-				}.blockEquals((world.getBlockState(new BlockPos((int) (x + 2), (int) (y + 1), (int) z))), Blocks.AIR.getDefaultState()))) {
+				if (((world.getBlockState(new BlockPos((int) (x + 2), (int) (y + 1), (int) z))).getBlock() == Blocks.AIR.getDefaultState().getBlock())) {
 					world.setBlockState(new BlockPos((int) (x + 2), (int) (y + 1), (int) z), MCreatorTestingprojectile.block.getDefaultState(), 3);
-					if ((new Object() {
-						public boolean blockEquals(IBlockState a, IBlockState b) {
-							try {
-								return (a.getBlock() == b.getBlock()) && (a.getBlock().getMetaFromState(a) == b.getBlock().getMetaFromState(b));
-							} catch (Exception e) {
-								return (a.getBlock() == b.getBlock());
-							}
-						}
-					}.blockEquals((world.getBlockState(new BlockPos((int) (x + 3), (int) y, (int) z))), Blocks.AIR.getDefaultState()))) {
+					if (((world.getBlockState(new BlockPos((int) (x + 3), (int) y, (int) z))).getBlock() == Blocks.AIR.getDefaultState().getBlock())) {
 						world.setBlockState(new BlockPos((int) (x + 3), (int) y, (int) z), MCreatorTestingprojectile.block.getDefaultState(), 3);
-						if ((new Object() {
-							public boolean blockEquals(IBlockState a, IBlockState b) {
-								try {
-									return (a.getBlock() == b.getBlock()) && (a.getBlock().getMetaFromState(a) == b.getBlock().getMetaFromState(b));
-								} catch (Exception e) {
-									return (a.getBlock() == b.getBlock());
-								}
-							}
-						}.blockEquals((world.getBlockState(new BlockPos((int) (x + 4), (int) y, (int) z))), Blocks.AIR.getDefaultState()))) {
+						if (((world.getBlockState(new BlockPos((int) (x + 4), (int) y, (int) z))).getBlock() == Blocks.AIR.getDefaultState()
+								.getBlock())) {
 							world.setBlockState(new BlockPos((int) (x + 4), (int) y, (int) z), MCreatorTestingprojectile.block.getDefaultState(), 3);
-							if ((new Object() {
-								public boolean blockEquals(IBlockState a, IBlockState b) {
-									try {
-										return (a.getBlock() == b.getBlock())
-												&& (a.getBlock().getMetaFromState(a) == b.getBlock().getMetaFromState(b));
-									} catch (Exception e) {
-										return (a.getBlock() == b.getBlock());
-									}
-								}
-							}.blockEquals((world.getBlockState(new BlockPos((int) (x + 5), (int) (y - 1), (int) z))), Blocks.AIR.getDefaultState()))) {
+							if (((world.getBlockState(new BlockPos((int) (x + 5), (int) (y - 1), (int) z))).getBlock() == Blocks.AIR
+									.getDefaultState().getBlock())) {
 								world.setBlockState(new BlockPos((int) (x + 5), (int) (y - 1), (int) z),
 										MCreatorTestingprojectile.block.getDefaultState(), 3);
-								if ((new Object() {
-									public boolean blockEquals(IBlockState a, IBlockState b) {
-										try {
-											return (a.getBlock() == b.getBlock())
-													&& (a.getBlock().getMetaFromState(a) == b.getBlock().getMetaFromState(b));
-										} catch (Exception e) {
-											return (a.getBlock() == b.getBlock());
-										}
-									}
-								}.blockEquals((world.getBlockState(new BlockPos((int) (x + 6), (int) (y - 2), (int) z))),
-										Blocks.AIR.getDefaultState()))) {
+								if (((world.getBlockState(new BlockPos((int) (x + 6), (int) (y - 2), (int) z))).getBlock() == Blocks.AIR
+										.getDefaultState().getBlock())) {
 									world.setBlockState(new BlockPos((int) (x + 6), (int) (y - 2), (int) z),
 											MCreatorTestingprojectile.block.getDefaultState(), 3);
-									if ((new Object() {
-										public boolean blockEquals(IBlockState a, IBlockState b) {
-											try {
-												return (a.getBlock() == b.getBlock())
-														&& (a.getBlock().getMetaFromState(a) == b.getBlock().getMetaFromState(b));
-											} catch (Exception e) {
-												return (a.getBlock() == b.getBlock());
-											}
-										}
-									}.blockEquals((world.getBlockState(new BlockPos((int) (x + 7), (int) (y - 3), (int) z))),
-											Blocks.AIR.getDefaultState()))) {
+									if (((world.getBlockState(new BlockPos((int) (x + 7), (int) (y - 3), (int) z))).getBlock() == Blocks.AIR
+											.getDefaultState().getBlock())) {
 										world.setBlockState(new BlockPos((int) (x + 7), (int) (y - 3), (int) z),
 												MCreatorTestingprojectile.block.getDefaultState(), 3);
-										if ((new Object() {
-											public boolean blockEquals(IBlockState a, IBlockState b) {
-												try {
-													return (a.getBlock() == b.getBlock())
-															&& (a.getBlock().getMetaFromState(a) == b.getBlock().getMetaFromState(b));
-												} catch (Exception e) {
-													return (a.getBlock() == b.getBlock());
-												}
-											}
-										}.blockEquals((world.getBlockState(new BlockPos((int) (x + 8), (int) (y - 3), (int) z))),
-												Blocks.AIR.getDefaultState()))) {
+										if (((world.getBlockState(new BlockPos((int) (x + 8), (int) (y - 3), (int) z))).getBlock() == Blocks.AIR
+												.getDefaultState().getBlock())) {
 											world.setBlockState(new BlockPos((int) (x + 8), (int) (y - 3), (int) z),
 													MCreatorTestingprojectile.block.getDefaultState(), 3);
-											if ((new Object() {
-												public boolean blockEquals(IBlockState a, IBlockState b) {
-													try {
-														return (a.getBlock() == b.getBlock())
-																&& (a.getBlock().getMetaFromState(a) == b.getBlock().getMetaFromState(b));
-													} catch (Exception e) {
-														return (a.getBlock() == b.getBlock());
-													}
-												}
-											}.blockEquals((world.getBlockState(new BlockPos((int) (x + 9), (int) (y - 4), (int) z))),
-													Blocks.AIR.getDefaultState()))) {
+											if (((world.getBlockState(new BlockPos((int) (x + 9), (int) (y - 4), (int) z))).getBlock() == Blocks.AIR
+													.getDefaultState().getBlock())) {
 												world.setBlockState(new BlockPos((int) (x + 9), (int) (y - 4), (int) z),
 														MCreatorTestingprojectile.block.getDefaultState(), 3);
-												if ((new Object() {
-													public boolean blockEquals(IBlockState a, IBlockState b) {
-														try {
-															return (a.getBlock() == b.getBlock())
-																	&& (a.getBlock().getMetaFromState(a) == b.getBlock().getMetaFromState(b));
-														} catch (Exception e) {
-															return (a.getBlock() == b.getBlock());
-														}
-													}
-												}.blockEquals((world.getBlockState(new BlockPos((int) (x + 10), (int) (y - 5), (int) z))),
-														Blocks.AIR.getDefaultState()))) {
+												if (((world.getBlockState(new BlockPos((int) (x + 10), (int) (y - 5), (int) z))).getBlock() == Blocks.AIR
+														.getDefaultState().getBlock())) {
 													world.setBlockState(new BlockPos((int) (x + 10), (int) (y - 5), (int) z),
 															MCreatorTestingprojectile.block.getDefaultState(), 3);
-													if ((new Object() {
-														public boolean blockEquals(IBlockState a, IBlockState b) {
-															try {
-																return (a.getBlock() == b.getBlock())
-																		&& (a.getBlock().getMetaFromState(a) == b.getBlock().getMetaFromState(b));
-															} catch (Exception e) {
-																return (a.getBlock() == b.getBlock());
-															}
-														}
-													}.blockEquals((world.getBlockState(new BlockPos((int) (x + 11), (int) (y - 6), (int) z))),
-															Blocks.AIR.getDefaultState()))) {
+													if (((world.getBlockState(new BlockPos((int) (x + 11), (int) (y - 6), (int) z))).getBlock() == Blocks.AIR
+															.getDefaultState().getBlock())) {
 														world.setBlockState(new BlockPos((int) (x + 10), (int) (y - 6), (int) z),
 																MCreatorTestingprojectile.block.getDefaultState(), 3);
 													}
@@ -182,137 +90,45 @@ public class MCreatorTestingOnEntityTickUpdate extends Elementsherobrines_fortre
 					}
 				}
 			}
-		} else if (((entity.world.rayTraceBlocks(entity.getPositionEyes(1f),
-				entity.getPositionEyes(1f).addVector(entity.getLook(1f).x * 100, entity.getLook(1f).y * 100, entity.getLook(1f).z * 100), false,
-				false, true).getBlockPos().getX()) == Math.max(-80, -20))) {
-			if ((new Object() {
-				public boolean blockEquals(IBlockState a, IBlockState b) {
-					try {
-						return (a.getBlock() == b.getBlock()) && (a.getBlock().getMetaFromState(a) == b.getBlock().getMetaFromState(b));
-					} catch (Exception e) {
-						return (a.getBlock() == b.getBlock());
-					}
-				}
-			}.blockEquals((world.getBlockState(new BlockPos((int) (x - 1), (int) (y + 2), (int) z))), Blocks.AIR.getDefaultState()))) {
+		} else if (((entity.world.rayTraceBlocks(
+				new RayTraceContext(entity.getEyePosition(1f), entity.getEyePosition(1f).add(entity.getLook(1f).x * 100, entity.getLook(1f).y * 100,
+						entity.getLook(1f).z * 100), RayTraceContext.BlockMode.OUTLINE, RayTraceContext.FluidMode.NONE, entity)).getPos().getX()) == Math
+				.max(-80, -20))) {
+			if (((world.getBlockState(new BlockPos((int) (x - 1), (int) (y + 2), (int) z))).getBlock() == Blocks.AIR.getDefaultState().getBlock())) {
 				world.setBlockState(new BlockPos((int) (x - 1), (int) (y + 2), (int) z), MCreatorTestingprojectile.block.getDefaultState(), 3);
-				if ((new Object() {
-					public boolean blockEquals(IBlockState a, IBlockState b) {
-						try {
-							return (a.getBlock() == b.getBlock()) && (a.getBlock().getMetaFromState(a) == b.getBlock().getMetaFromState(b));
-						} catch (Exception e) {
-							return (a.getBlock() == b.getBlock());
-						}
-					}
-				}.blockEquals((world.getBlockState(new BlockPos((int) (x - 2), (int) (y + 1), (int) z))), Blocks.AIR.getDefaultState()))) {
+				if (((world.getBlockState(new BlockPos((int) (x - 2), (int) (y + 1), (int) z))).getBlock() == Blocks.AIR.getDefaultState().getBlock())) {
 					world.setBlockState(new BlockPos((int) (x - 2), (int) (y + 1), (int) z), MCreatorTestingprojectile.block.getDefaultState(), 3);
-					if ((new Object() {
-						public boolean blockEquals(IBlockState a, IBlockState b) {
-							try {
-								return (a.getBlock() == b.getBlock()) && (a.getBlock().getMetaFromState(a) == b.getBlock().getMetaFromState(b));
-							} catch (Exception e) {
-								return (a.getBlock() == b.getBlock());
-							}
-						}
-					}.blockEquals((world.getBlockState(new BlockPos((int) (x - 3), (int) y, (int) z))), Blocks.AIR.getDefaultState()))) {
+					if (((world.getBlockState(new BlockPos((int) (x - 3), (int) y, (int) z))).getBlock() == Blocks.AIR.getDefaultState().getBlock())) {
 						world.setBlockState(new BlockPos((int) (x - 3), (int) y, (int) z), MCreatorTestingprojectile.block.getDefaultState(), 3);
-						if ((new Object() {
-							public boolean blockEquals(IBlockState a, IBlockState b) {
-								try {
-									return (a.getBlock() == b.getBlock()) && (a.getBlock().getMetaFromState(a) == b.getBlock().getMetaFromState(b));
-								} catch (Exception e) {
-									return (a.getBlock() == b.getBlock());
-								}
-							}
-						}.blockEquals((world.getBlockState(new BlockPos((int) (x - 4), (int) y, (int) z))), Blocks.AIR.getDefaultState()))) {
+						if (((world.getBlockState(new BlockPos((int) (x - 4), (int) y, (int) z))).getBlock() == Blocks.AIR.getDefaultState()
+								.getBlock())) {
 							world.setBlockState(new BlockPos((int) (x - 4), (int) y, (int) z), MCreatorTestingprojectile.block.getDefaultState(), 3);
-							if ((new Object() {
-								public boolean blockEquals(IBlockState a, IBlockState b) {
-									try {
-										return (a.getBlock() == b.getBlock())
-												&& (a.getBlock().getMetaFromState(a) == b.getBlock().getMetaFromState(b));
-									} catch (Exception e) {
-										return (a.getBlock() == b.getBlock());
-									}
-								}
-							}.blockEquals((world.getBlockState(new BlockPos((int) (x - 5), (int) (y - 1), (int) z))), Blocks.AIR.getDefaultState()))) {
+							if (((world.getBlockState(new BlockPos((int) (x - 5), (int) (y - 1), (int) z))).getBlock() == Blocks.AIR
+									.getDefaultState().getBlock())) {
 								world.setBlockState(new BlockPos((int) (x - 5), (int) (y - 1), (int) z),
 										MCreatorTestingprojectile.block.getDefaultState(), 3);
-								if ((new Object() {
-									public boolean blockEquals(IBlockState a, IBlockState b) {
-										try {
-											return (a.getBlock() == b.getBlock())
-													&& (a.getBlock().getMetaFromState(a) == b.getBlock().getMetaFromState(b));
-										} catch (Exception e) {
-											return (a.getBlock() == b.getBlock());
-										}
-									}
-								}.blockEquals((world.getBlockState(new BlockPos((int) (x - 6), (int) (y - 2), (int) z))),
-										Blocks.AIR.getDefaultState()))) {
+								if (((world.getBlockState(new BlockPos((int) (x - 6), (int) (y - 2), (int) z))).getBlock() == Blocks.AIR
+										.getDefaultState().getBlock())) {
 									world.setBlockState(new BlockPos((int) (x - 6), (int) (y - 2), (int) z),
 											MCreatorTestingprojectile.block.getDefaultState(), 3);
-									if ((new Object() {
-										public boolean blockEquals(IBlockState a, IBlockState b) {
-											try {
-												return (a.getBlock() == b.getBlock())
-														&& (a.getBlock().getMetaFromState(a) == b.getBlock().getMetaFromState(b));
-											} catch (Exception e) {
-												return (a.getBlock() == b.getBlock());
-											}
-										}
-									}.blockEquals((world.getBlockState(new BlockPos((int) (x - 7), (int) (y - 3), (int) z))),
-											Blocks.AIR.getDefaultState()))) {
+									if (((world.getBlockState(new BlockPos((int) (x - 7), (int) (y - 3), (int) z))).getBlock() == Blocks.AIR
+											.getDefaultState().getBlock())) {
 										world.setBlockState(new BlockPos((int) (x - 7), (int) (y - 3), (int) z),
 												MCreatorTestingprojectile.block.getDefaultState(), 3);
-										if ((new Object() {
-											public boolean blockEquals(IBlockState a, IBlockState b) {
-												try {
-													return (a.getBlock() == b.getBlock())
-															&& (a.getBlock().getMetaFromState(a) == b.getBlock().getMetaFromState(b));
-												} catch (Exception e) {
-													return (a.getBlock() == b.getBlock());
-												}
-											}
-										}.blockEquals((world.getBlockState(new BlockPos((int) (x - 8), (int) (y - 3), (int) z))),
-												Blocks.AIR.getDefaultState()))) {
+										if (((world.getBlockState(new BlockPos((int) (x - 8), (int) (y - 3), (int) z))).getBlock() == Blocks.AIR
+												.getDefaultState().getBlock())) {
 											world.setBlockState(new BlockPos((int) (x - 8), (int) (y - 3), (int) z),
 													MCreatorTestingprojectile.block.getDefaultState(), 3);
-											if ((new Object() {
-												public boolean blockEquals(IBlockState a, IBlockState b) {
-													try {
-														return (a.getBlock() == b.getBlock())
-																&& (a.getBlock().getMetaFromState(a) == b.getBlock().getMetaFromState(b));
-													} catch (Exception e) {
-														return (a.getBlock() == b.getBlock());
-													}
-												}
-											}.blockEquals((world.getBlockState(new BlockPos((int) (x - 9), (int) (y - 4), (int) z))),
-													Blocks.AIR.getDefaultState()))) {
+											if (((world.getBlockState(new BlockPos((int) (x - 9), (int) (y - 4), (int) z))).getBlock() == Blocks.AIR
+													.getDefaultState().getBlock())) {
 												world.setBlockState(new BlockPos((int) (x - 9), (int) (y - 4), (int) z),
 														MCreatorTestingprojectile.block.getDefaultState(), 3);
-												if ((new Object() {
-													public boolean blockEquals(IBlockState a, IBlockState b) {
-														try {
-															return (a.getBlock() == b.getBlock())
-																	&& (a.getBlock().getMetaFromState(a) == b.getBlock().getMetaFromState(b));
-														} catch (Exception e) {
-															return (a.getBlock() == b.getBlock());
-														}
-													}
-												}.blockEquals((world.getBlockState(new BlockPos((int) (x - 10), (int) (y - 5), (int) z))),
-														Blocks.AIR.getDefaultState()))) {
+												if (((world.getBlockState(new BlockPos((int) (x - 10), (int) (y - 5), (int) z))).getBlock() == Blocks.AIR
+														.getDefaultState().getBlock())) {
 													world.setBlockState(new BlockPos((int) (x - 10), (int) (y - 5), (int) z),
 															MCreatorTestingprojectile.block.getDefaultState(), 3);
-													if ((new Object() {
-														public boolean blockEquals(IBlockState a, IBlockState b) {
-															try {
-																return (a.getBlock() == b.getBlock())
-																		&& (a.getBlock().getMetaFromState(a) == b.getBlock().getMetaFromState(b));
-															} catch (Exception e) {
-																return (a.getBlock() == b.getBlock());
-															}
-														}
-													}.blockEquals((world.getBlockState(new BlockPos((int) (x - 11), (int) (y - 6), (int) z))),
-															Blocks.AIR.getDefaultState()))) {
+													if (((world.getBlockState(new BlockPos((int) (x - 11), (int) (y - 6), (int) z))).getBlock() == Blocks.AIR
+															.getDefaultState().getBlock())) {
 														world.setBlockState(new BlockPos((int) (x - 10), (int) (y - 6), (int) z),
 																MCreatorTestingprojectile.block.getDefaultState(), 3);
 													}

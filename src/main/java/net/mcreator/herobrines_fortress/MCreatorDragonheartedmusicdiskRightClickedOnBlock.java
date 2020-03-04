@@ -1,15 +1,17 @@
 package net.mcreator.herobrines_fortress;
 
+import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.World;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.init.Blocks;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.command.ICommandSource;
+import net.minecraft.command.CommandSource;
+import net.minecraft.block.Blocks;
 
 @Elementsherobrines_fortress.ModElement.Tag
 public class MCreatorDragonheartedmusicdiskRightClickedOnBlock extends Elementsherobrines_fortress.ModElement {
@@ -43,58 +45,20 @@ public class MCreatorDragonheartedmusicdiskRightClickedOnBlock extends Elementsh
 		int y = (int) dependencies.get("y");
 		int z = (int) dependencies.get("z");
 		World world = (World) dependencies.get("world");
-		if ((new Object() {
-			public boolean blockEquals(IBlockState a, IBlockState b) {
-				try {
-					return (a.getBlock() == b.getBlock()) && (a.getBlock().getMetaFromState(a) == b.getBlock().getMetaFromState(b));
-				} catch (Exception e) {
-					return (a.getBlock() == b.getBlock());
-				}
-			}
-		}.blockEquals((world.getBlockState(new BlockPos((int) x, (int) y, (int) z))), Blocks.JUKEBOX.getDefaultState()))) {
+		if (((world.getBlockState(new BlockPos((int) x, (int) y, (int) z))).getBlock() == Blocks.JUKEBOX.getDefaultState().getBlock())) {
 			herobrines_fortressVariables.MapVariables.get(world).Dragon_hearted_Variable = (double) 1;
 			herobrines_fortressVariables.MapVariables.get(world).syncData(world);
-			if (!world.isRemote && world.getMinecraftServer() != null) {
-				world.getMinecraftServer().getCommandManager().executeCommand(new ICommandSender() {
-					@Override
-					public String getName() {
-						return "";
-					}
-
-					@Override
-					public boolean canUseCommand(int permission, String command) {
-						return true;
-					}
-
-					@Override
-					public World getEntityWorld() {
-						return world;
-					}
-
-					@Override
-					public MinecraftServer getServer() {
-						return world.getMinecraftServer();
-					}
-
-					@Override
-					public boolean sendCommandFeedback() {
-						return false;
-					}
-
-					@Override
-					public BlockPos getPosition() {
-						return new BlockPos((int) x, (int) y, (int) z);
-					}
-
-					@Override
-					public Vec3d getPositionVector() {
-						return new Vec3d(x, y, z);
-					}
-				}, "playsound herobrines_fortress:Dragon_hearted master @p");
+			if (!world.isRemote && world.getServer() != null) {
+				world.getServer()
+						.getCommandManager()
+						.handleCommand(
+								new CommandSource(ICommandSource.field_213139_a_, new Vec3d(x, y, z), Vec2f.ZERO, (ServerWorld) world, 4, "",
+										new StringTextComponent(""), world.getServer(), null).withFeedbackDisabled(),
+								"playsound herobrines_fortress:Dragon_hearted master @p");
 			}
-			if (entity instanceof EntityPlayer)
-				((EntityPlayer) entity).inventory.clearMatchingItems(new ItemStack(MCreatorDragonheartedmusicdisk.block, (int) (1)).getItem(), -1,
-						(int) 1, null);
+			if (entity instanceof PlayerEntity)
+				((PlayerEntity) entity).inventory.clearMatchingItems(
+						p -> new ItemStack(MCreatorDragonheartedmusicdisk.block, (int) (1)).getItem() == p.getItem(), (int) 1);
 		}
 	}
 }

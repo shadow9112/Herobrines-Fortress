@@ -1,8 +1,8 @@
 package net.mcreator.herobrines_fortress;
 
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.init.MobEffects;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.potion.Effects;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Entity;
 
 @Elementsherobrines_fortress.ModElement.Tag
@@ -17,11 +17,11 @@ public class MCreatorHoneyMobplayerCollidesBlock extends Elementsherobrines_fort
 			return;
 		}
 		Entity entity = (Entity) dependencies.get("entity");
-		if (entity instanceof EntityLivingBase)
-			((EntityLivingBase) entity).addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, (int) 100, (int) 5));
-		if (entity instanceof EntityLivingBase)
-			((EntityLivingBase) entity).addPotionEffect(new PotionEffect(MobEffects.INSTANT_HEALTH, (int) 30, (int) 1));
-		if (entity instanceof EntityLivingBase)
-			((EntityLivingBase) entity).addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, (int) 30, (int) 1));
+		if (entity instanceof LivingEntity)
+			((LivingEntity) entity).addPotionEffect(new EffectInstance(Effects.SLOWNESS, (int) 100, (int) 5));
+		if (entity instanceof LivingEntity)
+			((LivingEntity) entity).addPotionEffect(new EffectInstance(Effects.INSTANT_HEALTH, (int) 30, (int) 1));
+		if (entity instanceof LivingEntity)
+			((LivingEntity) entity).addPotionEffect(new EffectInstance(Effects.FIRE_RESISTANCE, (int) 30, (int) 1));
 	}
 }

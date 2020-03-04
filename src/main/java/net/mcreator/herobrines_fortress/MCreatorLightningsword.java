@@ -1,36 +1,27 @@
 package net.mcreator.herobrines_fortress;
 
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.common.util.EnumHelper;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.registries.ObjectHolder;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraft.world.World;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.Direction;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.ActionResult;
-import net.minecraft.item.ItemSword;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.SwordItem;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Item;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-
-import java.util.Set;
-import java.util.HashMap;
-
-import com.google.common.collect.Multimap;
+import net.minecraft.item.IItemTier;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.LivingEntity;
 
 @Elementsherobrines_fortress.ModElement.Tag
 public class MCreatorLightningsword extends Elementsherobrines_fortress.ModElement {
-	@GameRegistry.ObjectHolder("herobrines_fortress:lightningsword")
+	@ObjectHolder("herobrines_fortress:lightningsword")
 	public static final Item block = null;
 
 	public MCreatorLightningsword(Elementsherobrines_fortress instance) {
@@ -39,26 +30,33 @@ public class MCreatorLightningsword extends Elementsherobrines_fortress.ModEleme
 
 	@Override
 	public void initElements() {
-		elements.items.add(() -> new ItemSword(EnumHelper.addToolMaterial("LIGHTNINGSWORD", 1, 3548, 4f, 2f, 5)) {
-			public Multimap<String, AttributeModifier> getItemAttributeModifiers(EntityEquipmentSlot slot) {
-				Multimap<String, AttributeModifier> multimap = super.getItemAttributeModifiers(slot);
-				if (slot == EntityEquipmentSlot.MAINHAND) {
-					multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier",
-							(double) this.getAttackDamage(), 0));
-					multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier",
-							-1.2, 0));
-				}
-				return multimap;
+		elements.items.add(() -> new SwordItem(new IItemTier() {
+			public int getMaxUses() {
+				return 3548;
 			}
 
-			public Set<String> getToolClasses(ItemStack stack) {
-				HashMap<String, Integer> ret = new HashMap<String, Integer>();
-				ret.put("sword", 1);
-				return ret.keySet();
+			public float getEfficiency() {
+				return 4f;
 			}
 
+			public float getAttackDamage() {
+				return 4f;
+			}
+
+			public int getHarvestLevel() {
+				return 1;
+			}
+
+			public int getEnchantability() {
+				return 5;
+			}
+
+			public Ingredient getRepairMaterial() {
+				return null;
+			}
+		}, 3, -1.2F, new Item.Properties().group(MCreatorCustomelements.tab)) {
 			@Override
-			public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer entity, EnumHand hand) {
+			public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity entity, Hand hand) {
 				ActionResult<ItemStack> retval = super.onItemRightClick(world, entity, hand);
 				ItemStack itemstack = retval.getResult();
 				int x = (int) entity.posX;
@@ -76,13 +74,16 @@ public class MCreatorLightningsword extends Elementsherobrines_fortress.ModEleme
 			}
 
 			@Override
-			public EnumActionResult onItemUse(EntityPlayer entity, World world, BlockPos pos, EnumHand hand, EnumFacing direction, float hitX,
-					float hitY, float hitZ) {
-				EnumActionResult retval = super.onItemUse(entity, world, pos, hand, direction, hitX, hitY, hitZ);
+			public ActionResultType onItemUse(ItemUseContext context) {
+				ActionResultType retval = super.onItemUse(context);
+				World world = context.getWorld();
+				BlockPos pos = context.getPos();
+				PlayerEntity entity = context.getPlayer();
+				Direction direction = context.getFace();
 				int x = pos.getX();
 				int y = pos.getY();
 				int z = pos.getZ();
-				ItemStack itemstack = entity.getHeldItem(hand);
+				ItemStack itemstack = context.getItem();
 				{
 					java.util.HashMap<String, Object> $_dependencies = new java.util.HashMap<>();
 					$_dependencies.put("x", x);
@@ -95,7 +96,7 @@ public class MCreatorLightningsword extends Elementsherobrines_fortress.ModEleme
 			}
 
 			@Override
-			public void onCreated(ItemStack itemstack, World world, EntityPlayer entity) {
+			public void onCreated(ItemStack itemstack, World world, PlayerEntity entity) {
 				super.onCreated(itemstack, world, entity);
 				int x = (int) entity.posX;
 				int y = (int) entity.posY;
@@ -108,8 +109,8 @@ public class MCreatorLightningsword extends Elementsherobrines_fortress.ModEleme
 			}
 
 			@Override
-			public boolean hitEntity(ItemStack itemstack, EntityLivingBase entity, EntityLivingBase entity2) {
-				super.hitEntity(itemstack, entity, entity2);
+			public boolean hitEntity(ItemStack itemstack, LivingEntity entity, LivingEntity entity2) {
+				boolean retval = super.hitEntity(itemstack, entity, entity2);
 				int x = (int) entity.posX;
 				int y = (int) entity.posY;
 				int z = (int) entity.posZ;
@@ -122,20 +123,14 @@ public class MCreatorLightningsword extends Elementsherobrines_fortress.ModEleme
 					$_dependencies.put("world", world);
 					MCreatorLightningswordMobIsHitWithTool.executeProcedure($_dependencies);
 				}
-				return true;
+				return retval;
 			}
 
 			@Override
-			@SideOnly(Side.CLIENT)
+			@OnlyIn(Dist.CLIENT)
 			public boolean hasEffect(ItemStack itemstack) {
 				return true;
 			}
-		}.setUnlocalizedName("lightningsword").setRegistryName("lightningsword").setCreativeTab(MCreatorCustomelements.tab));
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerModels(ModelRegistryEvent event) {
-		ModelLoader.setCustomModelResourceLocation(block, 0, new ModelResourceLocation("herobrines_fortress:lightningsword", "inventory"));
+		}.setRegistryName("lightningsword"));
 	}
 }

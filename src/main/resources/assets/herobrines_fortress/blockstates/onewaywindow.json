@@ -1,29 +1,26 @@
 {
   "variants": {
-    "normal": {
-      "model": "herobrines_fortress:onewaywindow"
-    },
     "facing=north": {
-      "model": "herobrines_fortress:onewaywindow"
+      "model": "herobrines_fortress:block/onewaywindow"
     },
     "facing=east": {
-      "model": "herobrines_fortress:onewaywindow",
+      "model": "herobrines_fortress:block/onewaywindow",
       "y": 90
     },
     "facing=south": {
-      "model": "herobrines_fortress:onewaywindow",
+      "model": "herobrines_fortress:block/onewaywindow",
       "y": 180
     },
     "facing=west": {
-      "model": "herobrines_fortress:onewaywindow",
+      "model": "herobrines_fortress:block/onewaywindow",
       "y": 270
     },
     "facing=up": {
-      "model": "herobrines_fortress:onewaywindow",
+      "model": "herobrines_fortress:block/onewaywindow",
       "x": 270
     },
     "facing=down": {
-      "model": "herobrines_fortress:onewaywindow",
+      "model": "herobrines_fortress:block/onewaywindow",
       "x": 90
     }
   }

@@ -1,0 +1,7 @@
+{
+  "parent": "block/fence_post",
+  "textures": {
+    "texture": "herobrines_fortress:blocks/sick-wooden_planks",
+    "particle": "herobrines_fortress:blocks/sick-wooden_planks"
+  }
+}

@@ -1,26 +1,28 @@
 package net.mcreator.herobrines_fortress;
 
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.registries.ObjectHolder;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.Dist;
 
-import net.minecraft.world.World;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.item.ItemBlock;
+import net.minecraft.world.storage.loot.LootContext;
+import net.minecraft.util.Direction;
+import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Item;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.BlockItem;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.BlockFence;
+import net.minecraft.block.FenceGateBlock;
+import net.minecraft.block.FenceBlock;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Block;
+
+import java.util.List;
+import java.util.Collections;
 
 @Elementsherobrines_fortress.ModElement.Tag
 public class MCreatorBlastprooffence extends Elementsherobrines_fortress.ModElement {
-	@GameRegistry.ObjectHolder("herobrines_fortress:blastprooffence")
+	@ObjectHolder("herobrines_fortress:blastprooffence")
 	public static final Block block = null;
 
 	public MCreatorBlastprooffence(Elementsherobrines_fortress instance) {
@@ -29,38 +31,36 @@ public class MCreatorBlastprooffence extends Elementsherobrines_fortress.ModElem
 
 	@Override
 	public void initElements() {
-		elements.blocks.add(() -> new BlockCustom());
-		elements.items.add(() -> new ItemBlock(block).setRegistryName(block.getRegistryName()));
+		elements.blocks.add(() -> new CustomBlock());
+		elements.items.add(() -> new BlockItem(block, new Item.Properties().group(MCreatorCustomelements.tab)).setRegistryName(block
+				.getRegistryName()));
 	}
 
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerModels(ModelRegistryEvent event) {
-		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation("herobrines_fortress:blastprooffence",
-				"inventory"));
-	}
-
-	public static class BlockCustom extends BlockFence {
-		public BlockCustom() {
-			super(Material.ROCK, Material.ROCK.getMaterialMapColor());
+	public static class CustomBlock extends FenceBlock {
+		public CustomBlock() {
+			super(Block.Properties.create(Material.ROCK).sound(SoundType.STONE).hardnessAndResistance(1000f, 1000f).lightValue(0));
 			setRegistryName("blastprooffence");
-			setUnlocalizedName("blastprooffence");
-			setSoundType(SoundType.STONE);
-			setHardness(1000F);
-			setResistance(1000F);
-			setLightLevel(0F);
-			setLightOpacity(0);
-			setCreativeTab(MCreatorCustomelements.tab);
 		}
 
 		@Override
-		public boolean isOpaqueCube(IBlockState state) {
-			return false;
+		public boolean func_220111_a(BlockState state, boolean checkattach, Direction face) {
+			boolean flag = state.getBlock() instanceof FenceBlock && state.getMaterial() == this.material;
+			boolean flag1 = state.getBlock() instanceof FenceGateBlock && FenceGateBlock.isParallel(state, face);
+			return !cannotAttach(state.getBlock()) && checkattach || flag || flag1;
+		}
+
+		@OnlyIn(Dist.CLIENT)
+		@Override
+		public BlockRenderLayer getRenderLayer() {
+			return BlockRenderLayer.CUTOUT;
 		}
 
 		@Override
-		public boolean canSilkHarvest(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
-			return false;
+		public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+			List<ItemStack> dropsOriginal = super.getDrops(state, builder);
+			if (!dropsOriginal.isEmpty())
+				return dropsOriginal;
+			return Collections.singletonList(new ItemStack(this, 1));
 		}
 	}
 }

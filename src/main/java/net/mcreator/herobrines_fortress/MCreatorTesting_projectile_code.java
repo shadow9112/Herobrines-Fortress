@@ -1,14 +1,14 @@
 package net.mcreator.herobrines_fortress;
 
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
 import net.minecraft.world.World;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.init.Blocks;
 import net.minecraft.entity.Entity;
+import net.minecraft.block.Blocks;
 
 @Elementsherobrines_fortress.ModElement.Tag
 public class MCreatorTesting_projectile_code extends Elementsherobrines_fortress.ModElement {
@@ -42,39 +42,39 @@ public class MCreatorTesting_projectile_code extends Elementsherobrines_fortress
 		int y = (int) dependencies.get("y");
 		int z = (int) dependencies.get("z");
 		World world = (World) dependencies.get("world");
-		if (((entity.getHorizontalFacing()) == EnumFacing.NORTH)) {
+		if (((entity.getHorizontalFacing()) == Direction.NORTH)) {
 			world.setBlockState(new BlockPos((int) x, (int) y, (int) (z - 1)), Blocks.GOLD_ORE.getDefaultState(), 3);
 			{
-				MinecraftServer mcserv = FMLCommonHandler.instance().getMinecraftServerInstance();
+				MinecraftServer mcserv = ServerLifecycleHooks.getCurrentServer();
 				if (mcserv != null)
-					mcserv.getPlayerList().sendMessage(new TextComponentString("North"));
+					mcserv.getPlayerList().sendMessage(new StringTextComponent("North"));
 			}
-		} else if (((entity.getHorizontalFacing()) == EnumFacing.EAST)) {
+		} else if (((entity.getHorizontalFacing()) == Direction.EAST)) {
 			world.setBlockState(new BlockPos((int) (x + 1), (int) (y + 2), (int) z), MCreatorTestingprojectile.block.getDefaultState(), 3);
 			{
-				MinecraftServer mcserv = FMLCommonHandler.instance().getMinecraftServerInstance();
+				MinecraftServer mcserv = ServerLifecycleHooks.getCurrentServer();
 				if (mcserv != null)
-					mcserv.getPlayerList().sendMessage(new TextComponentString("East"));
+					mcserv.getPlayerList().sendMessage(new StringTextComponent("East"));
 			}
-		} else if (((entity.getHorizontalFacing()) == EnumFacing.SOUTH)) {
+		} else if (((entity.getHorizontalFacing()) == Direction.SOUTH)) {
 			world.setBlockState(new BlockPos((int) x, (int) y, (int) (z + 1)), Blocks.DIAMOND_ORE.getDefaultState(), 3);
 			{
-				MinecraftServer mcserv = FMLCommonHandler.instance().getMinecraftServerInstance();
+				MinecraftServer mcserv = ServerLifecycleHooks.getCurrentServer();
 				if (mcserv != null)
-					mcserv.getPlayerList().sendMessage(new TextComponentString("South"));
+					mcserv.getPlayerList().sendMessage(new StringTextComponent("South"));
 			}
-		} else if (((entity.getHorizontalFacing()) == EnumFacing.WEST)) {
+		} else if (((entity.getHorizontalFacing()) == Direction.WEST)) {
 			world.setBlockState(new BlockPos((int) (x - 1), (int) y, (int) z), MCreatorProjectilenegativex.block.getDefaultState(), 3);
 			{
-				MinecraftServer mcserv = FMLCommonHandler.instance().getMinecraftServerInstance();
+				MinecraftServer mcserv = ServerLifecycleHooks.getCurrentServer();
 				if (mcserv != null)
-					mcserv.getPlayerList().sendMessage(new TextComponentString("West"));
+					mcserv.getPlayerList().sendMessage(new StringTextComponent("West"));
 			}
 		}
 		{
-			MinecraftServer mcserv = FMLCommonHandler.instance().getMinecraftServerInstance();
+			MinecraftServer mcserv = ServerLifecycleHooks.getCurrentServer();
 			if (mcserv != null)
-				mcserv.getPlayerList().sendMessage(new TextComponentString("Repeat"));
+				mcserv.getPlayerList().sendMessage(new StringTextComponent("Repeat"));
 		}
 	}
 }

@@ -1,17 +1,60 @@
 package net.mcreator.herobrines_fortress;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
+import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.fml.LogicalSide;
 
 import net.minecraft.world.storage.WorldSavedData;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.World;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.client.Minecraft;
 
+import java.util.function.Supplier;
+
 public class herobrines_fortressVariables {
+	public static class WorldVariables extends WorldSavedData {
+		public static final String DATA_NAME = "herobrines_fortress_worldvars";
+
+		public WorldVariables() {
+			super(DATA_NAME);
+		}
+
+		public WorldVariables(String s) {
+			super(s);
+		}
+
+		@Override
+		public void read(CompoundNBT nbt) {
+		}
+
+		@Override
+		public CompoundNBT write(CompoundNBT nbt) {
+			return nbt;
+		}
+
+		public void syncData(World world) {
+			this.markDirty();
+			if (world.isRemote) {
+				herobrines_fortress.PACKET_HANDLER.sendToServer(new WorldSavedDataSyncMessage(1, this));
+			} else {
+				herobrines_fortress.PACKET_HANDLER.send(PacketDistributor.DIMENSION.with(world.dimension::getType), new WorldSavedDataSyncMessage(1,
+						this));
+			}
+		}
+		static WorldVariables clientSide = new WorldVariables();
+
+		public static WorldVariables get(World world) {
+			if (world instanceof ServerWorld) {
+				return ((ServerWorld) world).getSavedData().getOrCreate(WorldVariables::new, DATA_NAME);
+			} else {
+				return clientSide;
+			}
+		}
+	}
+
 	public static class MapVariables extends WorldSavedData {
 		public static final String DATA_NAME = "herobrines_fortress_mapvars";
 		public double Vault_password_5_password = 0;
@@ -58,7 +101,7 @@ public class herobrines_fortressVariables {
 		}
 
 		@Override
-		public void readFromNBT(NBTTagCompound nbt) {
+		public void read(CompoundNBT nbt) {
 			Vault_password_5_password = nbt.getDouble("Vault_password_5_password");
 			Lightnings = nbt.getDouble("Lightnings");
 			Home_x = nbt.getDouble("Home_x");
@@ -96,41 +139,41 @@ public class herobrines_fortressVariables {
 		}
 
 		@Override
-		public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-			nbt.setDouble("Vault_password_5_password", Vault_password_5_password);
-			nbt.setDouble("Lightnings", Lightnings);
-			nbt.setDouble("Home_x", Home_x);
-			nbt.setDouble("Home_y", Home_y);
-			nbt.setDouble("Home_z", Home_z);
-			nbt.setDouble("Home_item_give", Home_item_give);
-			nbt.setDouble("Teleport_timer", Teleport_timer);
-			nbt.setDouble("Vault_password_1", Vault_password_1);
-			nbt.setDouble("Vault_password_2", Vault_password_2);
-			nbt.setDouble("Vault_password_3", Vault_password_3);
-			nbt.setDouble("Vault_password_4", Vault_password_4);
-			nbt.setDouble("Vault_password_5", Vault_password_5);
-			nbt.setDouble("Vault_password_number1", Vault_password_number1);
-			nbt.setDouble("Vault_password_number2", Vault_password_number2);
-			nbt.setDouble("Vault_password_number3", Vault_password_number3);
-			nbt.setDouble("Vault_password_number_4", Vault_password_number_4);
-			nbt.setDouble("Vault_password_number5", Vault_password_number5);
-			nbt.setDouble("Test", Test);
-			nbt.setDouble("Dragon_hearted_Variable", Dragon_hearted_Variable);
-			nbt.setDouble("Stop_music", Stop_music);
-			nbt.setDouble("Fire_Dragon_spawn", Fire_Dragon_spawn);
-			nbt.setDouble("Password_entered", Password_entered);
-			nbt.setDouble("Set_vault_password", Set_vault_password);
-			nbt.setDouble("Vault_password_1_password", Vault_password_1_password);
-			nbt.setDouble("Vault_password_2_password", Vault_password_2_password);
-			nbt.setDouble("Vault_password_3_password", Vault_password_3_password);
-			nbt.setDouble("Vault_password_4_password", Vault_password_4_password);
-			nbt.setDouble("flightx", flightx);
-			nbt.setDouble("flighty", flighty);
-			nbt.setDouble("Flightz", Flightz);
-			nbt.setDouble("Projectile_Movement", Projectile_Movement);
-			nbt.setDouble("Player_Collision_x", Player_Collision_x);
-			nbt.setDouble("Player_collison_y", Player_collison_y);
-			nbt.setDouble("Player_collision_z", Player_collision_z);
+		public CompoundNBT write(CompoundNBT nbt) {
+			nbt.putDouble("Vault_password_5_password", Vault_password_5_password);
+			nbt.putDouble("Lightnings", Lightnings);
+			nbt.putDouble("Home_x", Home_x);
+			nbt.putDouble("Home_y", Home_y);
+			nbt.putDouble("Home_z", Home_z);
+			nbt.putDouble("Home_item_give", Home_item_give);
+			nbt.putDouble("Teleport_timer", Teleport_timer);
+			nbt.putDouble("Vault_password_1", Vault_password_1);
+			nbt.putDouble("Vault_password_2", Vault_password_2);
+			nbt.putDouble("Vault_password_3", Vault_password_3);
+			nbt.putDouble("Vault_password_4", Vault_password_4);
+			nbt.putDouble("Vault_password_5", Vault_password_5);
+			nbt.putDouble("Vault_password_number1", Vault_password_number1);
+			nbt.putDouble("Vault_password_number2", Vault_password_number2);
+			nbt.putDouble("Vault_password_number3", Vault_password_number3);
+			nbt.putDouble("Vault_password_number_4", Vault_password_number_4);
+			nbt.putDouble("Vault_password_number5", Vault_password_number5);
+			nbt.putDouble("Test", Test);
+			nbt.putDouble("Dragon_hearted_Variable", Dragon_hearted_Variable);
+			nbt.putDouble("Stop_music", Stop_music);
+			nbt.putDouble("Fire_Dragon_spawn", Fire_Dragon_spawn);
+			nbt.putDouble("Password_entered", Password_entered);
+			nbt.putDouble("Set_vault_password", Set_vault_password);
+			nbt.putDouble("Vault_password_1_password", Vault_password_1_password);
+			nbt.putDouble("Vault_password_2_password", Vault_password_2_password);
+			nbt.putDouble("Vault_password_3_password", Vault_password_3_password);
+			nbt.putDouble("Vault_password_4_password", Vault_password_4_password);
+			nbt.putDouble("flightx", flightx);
+			nbt.putDouble("flighty", flighty);
+			nbt.putDouble("Flightz", Flightz);
+			nbt.putDouble("Projectile_Movement", Projectile_Movement);
+			nbt.putDouble("Player_Collision_x", Player_Collision_x);
+			nbt.putDouble("Player_collison_y", Player_collison_y);
+			nbt.putDouble("Player_collision_z", Player_collision_z);
 			return nbt;
 		}
 
@@ -139,90 +182,31 @@ public class herobrines_fortressVariables {
 			if (world.isRemote) {
 				herobrines_fortress.PACKET_HANDLER.sendToServer(new WorldSavedDataSyncMessage(0, this));
 			} else {
-				herobrines_fortress.PACKET_HANDLER.sendToAll(new WorldSavedDataSyncMessage(0, this));
+				herobrines_fortress.PACKET_HANDLER.send(PacketDistributor.ALL.noArg(), new WorldSavedDataSyncMessage(0, this));
 			}
 		}
+		static MapVariables clientSide = new MapVariables();
 
 		public static MapVariables get(World world) {
-			MapVariables instance = (MapVariables) world.getMapStorage().getOrLoadData(MapVariables.class, DATA_NAME);
-			if (instance == null) {
-				instance = new MapVariables();
-				world.getMapStorage().setData(DATA_NAME, instance);
-			}
-			return instance;
-		}
-	}
-
-	public static class WorldVariables extends WorldSavedData {
-		public static final String DATA_NAME = "herobrines_fortress_worldvars";
-
-		public WorldVariables() {
-			super(DATA_NAME);
-		}
-
-		public WorldVariables(String s) {
-			super(s);
-		}
-
-		@Override
-		public void readFromNBT(NBTTagCompound nbt) {
-		}
-
-		@Override
-		public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-			return nbt;
-		}
-
-		public void syncData(World world) {
-			this.markDirty();
-			if (world.isRemote) {
-				herobrines_fortress.PACKET_HANDLER.sendToServer(new WorldSavedDataSyncMessage(1, this));
+			if (world instanceof ServerWorld) {
+				return world.getServer().getWorld(DimensionType.OVERWORLD).getSavedData().getOrCreate(MapVariables::new, DATA_NAME);
 			} else {
-				herobrines_fortress.PACKET_HANDLER.sendToDimension(new WorldSavedDataSyncMessage(1, this), world.provider.getDimension());
-			}
-		}
-
-		public static WorldVariables get(World world) {
-			WorldVariables instance = (WorldVariables) world.getPerWorldStorage().getOrLoadData(WorldVariables.class, DATA_NAME);
-			if (instance == null) {
-				instance = new WorldVariables();
-				world.getPerWorldStorage().setData(DATA_NAME, instance);
-			}
-			return instance;
-		}
-	}
-
-	public static class WorldSavedDataSyncMessageHandler implements IMessageHandler<WorldSavedDataSyncMessage, IMessage> {
-		@Override
-		public IMessage onMessage(WorldSavedDataSyncMessage message, MessageContext context) {
-			if (context.side == Side.SERVER)
-				context.getServerHandler().player.getServerWorld().addScheduledTask(
-						() -> syncData(message, context, context.getServerHandler().player.world));
-			else
-				Minecraft.getMinecraft().addScheduledTask(() -> syncData(message, context, Minecraft.getMinecraft().player.world));
-			return null;
-		}
-
-		private void syncData(WorldSavedDataSyncMessage message, MessageContext context, World world) {
-			if (context.side == Side.SERVER) {
-				if (message.type == 0)
-					herobrines_fortress.PACKET_HANDLER.sendToAll(message);
-				else
-					herobrines_fortress.PACKET_HANDLER.sendToDimension(message, world.provider.getDimension());
-			}
-			if (message.type == 0) {
-				world.getMapStorage().setData(MapVariables.DATA_NAME, message.data);
-			} else {
-				world.getPerWorldStorage().setData(WorldVariables.DATA_NAME, message.data);
+				return clientSide;
 			}
 		}
 	}
 
-	public static class WorldSavedDataSyncMessage implements IMessage {
+	public static class WorldSavedDataSyncMessage {
 		public int type;
 		public WorldSavedData data;
 
-		public WorldSavedDataSyncMessage() {
+		public WorldSavedDataSyncMessage(PacketBuffer buffer) {
+			this.type = buffer.readInt();
+			if (this.type == 0)
+				this.data = new MapVariables();
+			else
+				this.data = new WorldVariables();
+			this.data.read(buffer.readCompoundTag());
 		}
 
 		public WorldSavedDataSyncMessage(int type, WorldSavedData data) {
@@ -230,20 +214,39 @@ public class herobrines_fortressVariables {
 			this.data = data;
 		}
 
-		@Override
-		public void toBytes(io.netty.buffer.ByteBuf buf) {
-			buf.writeInt(this.type);
-			ByteBufUtils.writeTag(buf, this.data.writeToNBT(new NBTTagCompound()));
+		public static void buffer(WorldSavedDataSyncMessage message, PacketBuffer buffer) {
+			buffer.writeInt(message.type);
+			buffer.writeCompoundTag(message.data.write(new CompoundNBT()));
 		}
 
-		@Override
-		public void fromBytes(io.netty.buffer.ByteBuf buf) {
-			this.type = buf.readInt();
-			if (this.type == 0)
-				this.data = new MapVariables();
-			else
-				this.data = new WorldVariables();
-			this.data.readFromNBT(ByteBufUtils.readTag(buf));
+		public static void handler(WorldSavedDataSyncMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
+			NetworkEvent.Context context = contextSupplier.get();
+			context.enqueueWork(() -> {
+				if (context.getDirection().getReceptionSide().isServer())
+					syncData(message, context.getDirection().getReceptionSide(), context.getSender().world);
+				else
+					syncData(message, context.getDirection().getReceptionSide(), Minecraft.getInstance().player.world);
+			});
+			context.setPacketHandled(true);
+		}
+
+		private static void syncData(WorldSavedDataSyncMessage message, LogicalSide side, World world) {
+			if (side.isServer()) {
+				message.data.markDirty();
+				if (message.type == 0) {
+					herobrines_fortress.PACKET_HANDLER.send(PacketDistributor.ALL.noArg(), message);
+					world.getServer().getWorld(DimensionType.OVERWORLD).getSavedData().set(message.data);
+				} else {
+					herobrines_fortress.PACKET_HANDLER.send(PacketDistributor.DIMENSION.with(world.dimension::getType), message);
+					((ServerWorld) world).getSavedData().set(message.data);
+				}
+			} else {
+				if (message.type == 0) {
+					MapVariables.clientSide = (MapVariables) message.data;
+				} else {
+					WorldVariables.clientSide = (WorldVariables) message.data;
+				}
+			}
 		}
 	}
 }

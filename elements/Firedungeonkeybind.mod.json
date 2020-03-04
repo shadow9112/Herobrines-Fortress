@@ -2,7 +2,7 @@
   "_fv": 5,
   "_type": "keybind",
   "definition": {
-    "triggerKey": "N",
+    "triggerKey": "Z",
     "keyBindingName": "Structure_spawn_menu",
     "onKeyPressed": {
       "name": "FiredungeonkeybindOnKeyPressedmenu"

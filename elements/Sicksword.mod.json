@@ -1,0 +1,29 @@
+{
+  "_fv": 5,
+  "_type": "tool",
+  "definition": {
+    "renderType": 0,
+    "texture": "sick_sword",
+    "customModelName": "Normal",
+    "name": "Sick sword",
+    "creativeTab": {
+      "value": "CUSTOM:Customelements"
+    },
+    "toolType": "Sword",
+    "harvestLevel": 1,
+    "efficiency": 4.0,
+    "attackSpeed": 1.5,
+    "enchantability": 2,
+    "damageVsEntity": 5.0,
+    "usageCount": 1000,
+    "blocksAffected": [],
+    "hasGlow": false,
+    "repairItems": [],
+    "onEntityHitWith": {
+      "name": "SickswordMobIsHitWithTool"
+    },
+    "onStoppedUsing": {
+      "name": "SickswordOnPlayerStoppedUsing"
+    }
+  }
+}

@@ -1,9 +1,9 @@
 package net.mcreator.herobrines_fortress;
 
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
 import net.minecraft.world.World;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.server.MinecraftServer;
 
 @Elementsherobrines_fortress.ModElement.Tag
@@ -54,9 +54,9 @@ public class MCreatorVaultpassword1ButtonClicked extends Elementsherobrines_fort
 			herobrines_fortressVariables.MapVariables.get(world).Vault_password_5 = (double) 0;
 			herobrines_fortressVariables.MapVariables.get(world).syncData(world);
 			{
-				MinecraftServer mcserv = FMLCommonHandler.instance().getMinecraftServerInstance();
+				MinecraftServer mcserv = ServerLifecycleHooks.getCurrentServer();
 				if (mcserv != null)
-					mcserv.getPlayerList().sendMessage(new TextComponentString("Password Maximum Number reached"));
+					mcserv.getPlayerList().sendMessage(new StringTextComponent("Password Maximum Number reached"));
 			}
 		}
 	}

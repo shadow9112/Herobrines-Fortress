@@ -1,12 +1,12 @@
 {
   "parent": "block/cube",
   "textures": {
-    "down": "herobrines_fortress:blocks/sick_ branches",
-    "up": "herobrines_fortress:blocks/sick_ branches",
-    "north": "herobrines_fortress:blocks/sick_ branches",
-    "east": "herobrines_fortress:blocks/sick_ branches",
-    "south": "herobrines_fortress:blocks/sick_ branches",
-    "west": "herobrines_fortress:blocks/sick_ branches",
-    "particle": "herobrines_fortress:blocks/sick_ branches"
+    "down": "herobrines_fortress:blocks/sick_branch",
+    "up": "herobrines_fortress:blocks/sick_branch",
+    "north": "herobrines_fortress:blocks/sick_branch",
+    "east": "herobrines_fortress:blocks/sick_branch",
+    "south": "herobrines_fortress:blocks/sick_branch",
+    "west": "herobrines_fortress:blocks/sick_branch",
+    "particle": "herobrines_fortress:blocks/sick_branch"
   }
 }

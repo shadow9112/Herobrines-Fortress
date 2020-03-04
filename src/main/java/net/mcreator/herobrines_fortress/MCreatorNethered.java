@@ -1,62 +1,70 @@
 package net.mcreator.herobrines_fortress;
 
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.registries.ObjectHolder;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.event.RegistryEvent;
 
 import net.minecraft.world.World;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.potion.PotionType;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.Potion;
+import net.minecraft.potion.EffectType;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effect;
+import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.init.Items;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.Minecraft;
 
 import java.util.List;
 import java.util.ArrayList;
 
 @Elementsherobrines_fortress.ModElement.Tag
 public class MCreatorNethered extends Elementsherobrines_fortress.ModElement {
-	@GameRegistry.ObjectHolder("herobrines_fortress:nethered")
-	public static final Potion potion = null;
-	@GameRegistry.ObjectHolder("herobrines_fortress:nethered")
-	public static final PotionType potionType = null;
+	@ObjectHolder("herobrines_fortress:nethered")
+	public static final Effect potion = null;
+	@ObjectHolder("herobrines_fortress:nethered")
+	public static final Potion potionType = null;
 
 	public MCreatorNethered(Elementsherobrines_fortress instance) {
 		super(instance, 53);
+		FMLJavaModLoadingContext.get().getModEventBus().register(this);
 	}
 
-	@Override
-	public void initElements() {
-		elements.potions.add(() -> new PotionCustom());
+	@SubscribeEvent
+	public void registerEffect(RegistryEvent.Register<Effect> event) {
+		event.getRegistry().register(new EffectCustom());
 	}
 
-	@Override
-	public void init(FMLInitializationEvent event) {
-		ForgeRegistries.POTION_TYPES.register(new PotionTypeCustom());
+	@SubscribeEvent
+	public void registerPotion(RegistryEvent.Register<Potion> event) {
+		event.getRegistry().register(new PotionCustom());
 	}
 
-	public static class PotionTypeCustom extends PotionType {
-		public PotionTypeCustom() {
-			super(new PotionEffect[]{new PotionEffect(potion, 3600)});
+	public static class PotionCustom extends Potion {
+		public PotionCustom() {
+			super(new EffectInstance(potion, 3600));
 			setRegistryName("nethered");
 		}
 	}
 
-	public static class PotionCustom extends Potion {
+	public static class EffectCustom extends Effect {
 		private final ResourceLocation potionIcon;
 
-		public PotionCustom() {
-			super(true, -16711732);
+		public EffectCustom() {
+			super(EffectType.HARMFUL, -16711732);
 			setRegistryName("nethered");
-			setPotionName("effect.nethered");
-			potionIcon = new ResourceLocation("herobrines_fortress:textures/mob_effect/nethered.png");
+			potionIcon = new ResourceLocation("herobrines_fortress:textures/71sfjf5loll._sy355_.png");
+		}
+
+		@Override
+		public String getName() {
+			return "effect.nethered";
+		}
+
+		@Override
+		public boolean isBeneficial() {
+			return false;
 		}
 
 		@Override
@@ -72,17 +80,17 @@ public class MCreatorNethered extends Elementsherobrines_fortress.ModElement {
 		}
 
 		@Override
-		public boolean shouldRenderInvText(PotionEffect effect) {
+		public boolean shouldRenderInvText(EffectInstance effect) {
 			return true;
 		}
 
 		@Override
-		public boolean shouldRenderHUD(PotionEffect effect) {
+		public boolean shouldRenderHUD(EffectInstance effect) {
 			return true;
 		}
 
 		@Override
-		public void affectEntity(Entity source, Entity indirectSource, EntityLivingBase entity, int amplifier, double health) {
+		public void affectEntity(Entity source, Entity indirectSource, LivingEntity entity, int amplifier, double health) {
 			World world = entity.world;
 			int x = (int) entity.posX;
 			int y = (int) entity.posY;
@@ -95,22 +103,6 @@ public class MCreatorNethered extends Elementsherobrines_fortress.ModElement {
 				$_dependencies.put("world", world);
 				MCreatorNetheredPotionStartedapplied.executeProcedure($_dependencies);
 			}
-		}
-
-		@SideOnly(Side.CLIENT)
-		@Override
-		public void renderInventoryEffect(int x, int y, PotionEffect effect, Minecraft mc) {
-			if (mc.currentScreen != null) {
-				mc.getTextureManager().bindTexture(potionIcon);
-				Gui.drawModalRectWithCustomSizedTexture(x + 6, y + 7, 0, 0, 18, 18, 18, 18);
-			}
-		}
-
-		@SideOnly(Side.CLIENT)
-		@Override
-		public void renderHUDEffect(int x, int y, PotionEffect effect, Minecraft mc, float alpha) {
-			mc.getTextureManager().bindTexture(potionIcon);
-			Gui.drawModalRectWithCustomSizedTexture(x + 3, y + 3, 0, 0, 18, 18, 18, 18);
 		}
 
 		@Override

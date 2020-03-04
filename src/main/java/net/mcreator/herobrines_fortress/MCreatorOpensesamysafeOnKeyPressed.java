@@ -14,6 +14,6 @@ public class MCreatorOpensesamysafeOnKeyPressed extends Elementsherobrines_fortr
 			return;
 		}
 		World world = (World) dependencies.get("world");
-		world.setWorldTime((int) 13000);
+		world.setDayTime((int) 13000);
 	}
 }

@@ -1,24 +1,41 @@
 package net.mcreator.herobrines_fortress;
 
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.registries.ObjectHolder;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.common.BiomeManager;
 
-import net.minecraft.world.gen.feature.WorldGenAbstractTree;
+import net.minecraft.world.gen.surfacebuilders.SurfaceBuilderConfig;
+import net.minecraft.world.gen.surfacebuilders.SurfaceBuilder;
+import net.minecraft.world.gen.placement.Placement;
+import net.minecraft.world.gen.placement.FrequencyConfig;
+import net.minecraft.world.gen.placement.AtSurfaceWithExtraConfig;
+import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.world.gen.feature.IFeatureConfig;
+import net.minecraft.world.gen.feature.GrassFeatureConfig;
+import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.AbstractTreeFeature;
+import net.minecraft.world.gen.IWorldGenerationReader;
+import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.biome.DefaultBiomeFeatures;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.World;
+import net.minecraft.world.IWorldWriter;
+import net.minecraft.world.IWorld;
+import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.Direction;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Block;
 
+import java.util.Set;
 import java.util.Random;
 
 @Elementsherobrines_fortress.ModElement.Tag
 public class MCreatorSickness extends Elementsherobrines_fortress.ModElement {
-	@GameRegistry.ObjectHolder("herobrines_fortress:sickness")
-	public static final BiomeGenCustom biome = null;
+	@ObjectHolder("herobrines_fortress:sickness")
+	public static final CustomBiome biome = null;
 
 	public MCreatorSickness(Elementsherobrines_fortress instance) {
 		super(instance, 44);
@@ -26,51 +43,54 @@ public class MCreatorSickness extends Elementsherobrines_fortress.ModElement {
 
 	@Override
 	public void initElements() {
-		elements.biomes.add(() -> new BiomeGenCustom());
+		elements.biomes.add(() -> new CustomBiome());
 	}
 
 	@Override
-	public void init(FMLInitializationEvent event) {
+	public void init(FMLCommonSetupEvent event) {
 		BiomeManager.addSpawnBiome(biome);
 		BiomeManager.addBiome(BiomeManager.BiomeType.DESERT, new BiomeManager.BiomeEntry(biome, 50));
 	}
 
-	static class BiomeGenCustom extends Biome {
-		public BiomeGenCustom() {
-			super(new Biome.BiomeProperties("Sickness").setRainfall(0.5F).setBaseHeight(0.1F).setHeightVariation(0.2F).setTemperature(0.5F));
+	static class CustomBiome extends Biome {
+		public CustomBiome() {
+			super(new Biome.Builder()
+					.downfall(0.5f)
+					.depth(0.1f)
+					.scale(0.2f)
+					.temperature(0.5f)
+					.precipitation(Biome.RainType.RAIN)
+					.category(Biome.Category.NONE)
+					.waterColor(4159204)
+					.waterFogColor(329011)
+					.surfaceBuilder(
+							SurfaceBuilder.DEFAULT,
+							new SurfaceBuilderConfig(MCreatorSicktnt.block.getDefaultState(), MCreatorSicktnt.block.getDefaultState(),
+									MCreatorSicktnt.block.getDefaultState())));
 			setRegistryName("sickness");
-			topBlock = MCreatorSicktnt.block.getDefaultState();
-			fillerBlock = MCreatorSicktnt.block.getDefaultState();
-			decorator.generateFalls = false;
-			decorator.treesPerChunk = 5;
-			decorator.flowersPerChunk = 10;
-			decorator.grassPerChunk = 10;
-			decorator.deadBushPerChunk = 0;
-			decorator.mushroomsPerChunk = 0;
-			decorator.bigMushroomsPerChunk = 0;
-			decorator.reedsPerChunk = 0;
-			decorator.cactiPerChunk = 0;
-			decorator.sandPatchesPerChunk = 0;
-			decorator.gravelPatchesPerChunk = 0;
-			this.spawnableMonsterList.clear();
-			this.spawnableCreatureList.clear();
-			this.spawnableWaterCreatureList.clear();
-			this.spawnableCaveCreatureList.clear();
-		}
-
-		@Override
-		public WorldGenAbstractTree getRandomTreeFeature(Random rand) {
-			return new CustomTree();
+			DefaultBiomeFeatures.addCarvers(this);
+			DefaultBiomeFeatures.addStructures(this);
+			DefaultBiomeFeatures.addMonsterRooms(this);
+			DefaultBiomeFeatures.addOres(this);
+			addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(Feature.DEFAULT_FLOWER,
+					IFeatureConfig.NO_FEATURE_CONFIG, Placement.COUNT_HEIGHTMAP_32, new FrequencyConfig(10)));
+			addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(Feature.GRASS,
+					new GrassFeatureConfig(Blocks.GRASS.getDefaultState()), Placement.COUNT_HEIGHTMAP_DOUBLE, new FrequencyConfig(10)));
+			addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(new CustomTreeFeature(),
+					IFeatureConfig.NO_FEATURE_CONFIG, Placement.COUNT_EXTRA_HEIGHTMAP, new AtSurfaceWithExtraConfig(5, 0.1F, 1)));
 		}
 	}
 
-	static class CustomTree extends WorldGenAbstractTree {
-		CustomTree() {
-			super(false);
+	static class CustomTreeFeature extends AbstractTreeFeature<NoFeatureConfig> {
+		CustomTreeFeature() {
+			super(NoFeatureConfig::deserialize, false);
 		}
 
 		@Override
-		public boolean generate(World world, Random rand, BlockPos position) {
+		public boolean place(Set<BlockPos> changedBlocks, IWorldGenerationReader worldgen, Random rand, BlockPos position, MutableBoundingBox bbox) {
+			if (!(worldgen instanceof IWorld))
+				return false;
+			IWorld world = (IWorld) worldgen;
 			int height = rand.nextInt(5) + 10;
 			boolean spawnTree = true;
 			if (position.getY() >= 1 && position.getY() + height + 1 <= world.getHeight()) {
@@ -101,9 +121,9 @@ public class MCreatorSickness extends Elementsherobrines_fortress.ModElement {
 							.getBlock()) && (ground2 == MCreatorSicktnt.block.getDefaultState().getBlock() || ground2 == MCreatorSicktnt.block
 							.getDefaultState().getBlock())))
 						return false;
-					IBlockState state = world.getBlockState(position.down());
+					BlockState state = world.getBlockState(position.down());
 					if (position.getY() < world.getHeight() - height - 1) {
-						world.setBlockState(position.down(), MCreatorSicktnt.block.getDefaultState(), 2);
+						setTreeBlockState(changedBlocks, world, position.down(), MCreatorSicktnt.block.getDefaultState(), bbox);
 						for (int genh = position.getY() - 3 + height; genh <= position.getY() + height; genh++) {
 							int i4 = genh - (position.getY() + height);
 							int j1 = (int) (1 - i4 * 0.5);
@@ -113,10 +133,11 @@ public class MCreatorSickness extends Elementsherobrines_fortress.ModElement {
 									if (Math.abs(position.getX()) != j1 || Math.abs(j2) != j1 || rand.nextInt(2) != 0 && i4 != 0) {
 										BlockPos blockpos = new BlockPos(k1, genh, i2);
 										state = world.getBlockState(blockpos);
-										if (state.getBlock().isAir(state, world, blockpos) || state.getBlock().isLeaves(state, world, blockpos)
+										if (state.getBlock().isAir(state, world, blockpos) || state.getMaterial().blocksMovement()
+												|| state.isIn(BlockTags.LEAVES)
 												|| state.getBlock() == MCreatorSicktnt.block.getDefaultState().getBlock()
 												|| state.getBlock() == MCreatorSickleaves.block.getDefaultState().getBlock()) {
-											this.setBlockAndNotifyAdequately(world, blockpos, MCreatorSickleaves.block.getDefaultState());
+											setTreeBlockState(changedBlocks, world, blockpos, MCreatorSickleaves.block.getDefaultState(), bbox);
 										}
 									}
 								}
@@ -125,20 +146,20 @@ public class MCreatorSickness extends Elementsherobrines_fortress.ModElement {
 						for (int genh = 0; genh < height; genh++) {
 							BlockPos genhPos = position.up(genh);
 							state = world.getBlockState(genhPos);
-							if (state.getBlock().isAir(state, world, genhPos)
+							setTreeBlockState(changedBlocks, world, genhPos, MCreatorSickWood.block.getDefaultState(), bbox);
+							if (state.getBlock().isAir(state, world, genhPos) || state.getMaterial().blocksMovement() || state.isIn(BlockTags.LEAVES)
 									|| state.getBlock() == MCreatorSicktnt.block.getDefaultState().getBlock()
 									|| state.getBlock() == MCreatorSickleaves.block.getDefaultState().getBlock()) {
-								this.setBlockAndNotifyAdequately(world, position.up(genh), MCreatorSickWood.block.getDefaultState());
 							}
 						}
 						if (rand.nextInt(4) == 0 && height > 5) {
 							for (int hlevel = 0; hlevel < 2; hlevel++) {
-								for (EnumFacing enumfacing : EnumFacing.Plane.HORIZONTAL) {
+								for (Direction Direction : Direction.Plane.HORIZONTAL) {
 									if (rand.nextInt(4 - hlevel) == 0) {
-										EnumFacing enumfacing1 = enumfacing.getOpposite();
-										this.setBlockAndNotifyAdequately(world,
-												position.add(enumfacing1.getFrontOffsetX(), height - 5 + hlevel, enumfacing1.getFrontOffsetZ()),
-												MCreatorSicktnt.block.getDefaultState());
+										Direction dir = Direction.getOpposite();
+										setTreeBlockState(changedBlocks, world,
+												position.add(dir.getXOffset(), height - 5 + hlevel, dir.getZOffset()),
+												MCreatorSicktnt.block.getDefaultState(), bbox);
 									}
 								}
 							}
@@ -153,33 +174,30 @@ public class MCreatorSickness extends Elementsherobrines_fortress.ModElement {
 			}
 		}
 
-		private void addVines(World world, BlockPos pos) {
-			this.setBlockAndNotifyAdequately(world, pos, MCreatorSicktnt.block.getDefaultState());
+		private void addVines(IWorld world, BlockPos pos, Set<BlockPos> changedBlocks, MutableBoundingBox bbox) {
+			setTreeBlockState(changedBlocks, world, pos, MCreatorSicktnt.block.getDefaultState(), bbox);
 			int i = 5;
 			for (BlockPos blockpos = pos.down(); world.isAirBlock(blockpos) && i > 0; --i) {
-				this.setBlockAndNotifyAdequately(world, blockpos, MCreatorSicktnt.block.getDefaultState());
+				setTreeBlockState(changedBlocks, world, blockpos, MCreatorSicktnt.block.getDefaultState(), bbox);
 				blockpos = blockpos.down();
 			}
 		}
 
-		@Override
-		protected boolean canGrowInto(Block blockType) {
+		private boolean canGrowInto(Block blockType) {
 			return blockType.getDefaultState().getMaterial() == Material.AIR || blockType == MCreatorSickWood.block.getDefaultState().getBlock()
 					|| blockType == MCreatorSickleaves.block.getDefaultState().getBlock()
 					|| blockType == MCreatorSicktnt.block.getDefaultState().getBlock()
 					|| blockType == MCreatorSicktnt.block.getDefaultState().getBlock();
 		}
 
-		@Override
-		protected void setDirtAt(World world, BlockPos pos) {
-			if (world.getBlockState(pos).getBlock() != MCreatorSicktnt.block.getDefaultState().getBlock())
-				this.setBlockAndNotifyAdequately(world, pos, MCreatorSicktnt.block.getDefaultState());
+		private boolean isReplaceable(IWorld world, BlockPos pos) {
+			BlockState state = world.getBlockState(pos);
+			return state.getBlock().isAir(state, world, pos) || canGrowInto(state.getBlock()) || !state.getMaterial().blocksMovement();
 		}
 
-		@Override
-		public boolean isReplaceable(World world, BlockPos pos) {
-			net.minecraft.block.state.IBlockState state = world.getBlockState(pos);
-			return state.getBlock().isAir(state, world, pos) || canGrowInto(state.getBlock()) || state.getBlock().isReplaceable(world, pos);
+		private void setTreeBlockState(Set<BlockPos> changedBlocks, IWorldWriter world, BlockPos pos, BlockState state, MutableBoundingBox mbb) {
+			super.setLogState(changedBlocks, world, pos, state, mbb);
+			changedBlocks.add(pos.toImmutable());
 		}
 	}
 }

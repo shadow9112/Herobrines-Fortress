@@ -6,36 +6,31 @@
  */
 package net.mcreator.herobrines_fortress;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.common.registry.EntityEntry;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.IGuiHandler;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.discovery.ASMDataTable;
-import net.minecraftforge.fml.common.IWorldGenerator;
-import net.minecraftforge.fml.common.IFuelHandler;
+import net.minecraftforge.forgespi.language.ModFileScanData;
+import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.common.MinecraftForge;
 
 import net.minecraft.world.storage.WorldSavedData;
-import net.minecraft.world.gen.IChunkGenerator;
-import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.World;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.potion.Potion;
-import net.minecraft.item.ItemStack;
+import net.minecraft.tags.Tag;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.item.Item;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.block.Block;
 
 import java.util.function.Supplier;
-import java.util.Random;
+import java.util.function.Function;
+import java.util.function.BiConsumer;
+import java.util.Set;
 import java.util.List;
 import java.util.Collections;
 import java.util.ArrayList;
@@ -43,118 +38,75 @@ import java.util.ArrayList;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Retention;
 
-public class Elementsherobrines_fortress implements IFuelHandler, IWorldGenerator {
+public class Elementsherobrines_fortress {
 	protected final List<ModElement> elements = new ArrayList<>();
 	protected final List<Supplier<Block>> blocks = new ArrayList<>();
 	protected final List<Supplier<Item>> items = new ArrayList<>();
 	protected final List<Supplier<Biome>> biomes = new ArrayList<>();
-	protected final List<Supplier<EntityEntry>> entities = new ArrayList<>();
-	protected final List<Supplier<Potion>> potions = new ArrayList<>();
+	protected final List<Supplier<EntityType<?>>> entities = new ArrayList<>();
 
-	public void preInit(FMLPreInitializationEvent event) {
+	public Elementsherobrines_fortress() {
 		try {
-			for (ASMDataTable.ASMData asmData : event.getAsmData().getAll(ModElement.Tag.class.getName())) {
-				Class<?> clazz = Class.forName(asmData.getClassName());
-				if (clazz.getSuperclass() == Elementsherobrines_fortress.ModElement.class)
-					elements.add((Elementsherobrines_fortress.ModElement) clazz.getConstructor(this.getClass()).newInstance(this));
+			ModFileScanData modFileInfo = ModList.get().getModFileById("herobrines_fortress").getFile().getScanResult();
+			Set<ModFileScanData.AnnotationData> annotations = modFileInfo.getAnnotations();
+			for (ModFileScanData.AnnotationData annotationData : annotations) {
+				if (annotationData.getAnnotationType().getClassName().equals(ModElement.Tag.class.getName())) {
+					Class<?> clazz = Class.forName(annotationData.getClassType().getClassName());
+					if (clazz.getSuperclass() == Elementsherobrines_fortress.ModElement.class)
+						elements.add((Elementsherobrines_fortress.ModElement) clazz.getConstructor(this.getClass()).newInstance(this));
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		Collections.sort(elements);
 		elements.forEach(Elementsherobrines_fortress.ModElement::initElements);
-		this.addNetworkMessage(herobrines_fortressVariables.WorldSavedDataSyncMessageHandler.class,
-				herobrines_fortressVariables.WorldSavedDataSyncMessage.class, Side.SERVER, Side.CLIENT);
+		this.addNetworkMessage(herobrines_fortressVariables.WorldSavedDataSyncMessage.class,
+				herobrines_fortressVariables.WorldSavedDataSyncMessage::buffer, herobrines_fortressVariables.WorldSavedDataSyncMessage::new,
+				herobrines_fortressVariables.WorldSavedDataSyncMessage::handler);
+		MinecraftForge.EVENT_BUS.register(this);
 	}
 
 	public void registerSounds(RegistryEvent.Register<net.minecraft.util.SoundEvent> event) {
-		ResourceLocation sound0 = new ResourceLocation("herobrines_fortress", "Battlefield");
+		ResourceLocation sound0 = new ResourceLocation("herobrines_fortress", "battlefield");
 		event.getRegistry().register(new net.minecraft.util.SoundEvent(sound0).setRegistryName(sound0));
-		ResourceLocation sound1 = new ResourceLocation("herobrines_fortress", "Firey");
+		ResourceLocation sound1 = new ResourceLocation("herobrines_fortress", "firey");
 		event.getRegistry().register(new net.minecraft.util.SoundEvent(sound1).setRegistryName(sound1));
-		ResourceLocation sound2 = new ResourceLocation("herobrines_fortress", "Firey_ambient_sound");
+		ResourceLocation sound2 = new ResourceLocation("herobrines_fortress", "firey_ambient_sound");
 		event.getRegistry().register(new net.minecraft.util.SoundEvent(sound2).setRegistryName(sound2));
-		ResourceLocation sound3 = new ResourceLocation("herobrines_fortress", "Dragon_Hearted");
+		ResourceLocation sound3 = new ResourceLocation("herobrines_fortress", "dragon_hearted");
 		event.getRegistry().register(new net.minecraft.util.SoundEvent(sound3).setRegistryName(sound3));
 	}
 
-	@Override
-	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator cg, IChunkProvider cp) {
-		elements.forEach(element -> element.generateWorld(random, chunkX * 16, chunkZ * 16, world, world.provider.getDimension(), cg, cp));
-	}
-
-	@Override
-	public int getBurnTime(ItemStack fuel) {
-		for (ModElement element : elements) {
-			int ret = element.addFuel(fuel);
-			if (ret != 0)
-				return ret;
-		}
-		return 0;
-	}
-
 	@SubscribeEvent
-	public void onPlayerLoggedIn(net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent event) {
-		if (!event.player.world.isRemote) {
-			WorldSavedData mapdata = herobrines_fortressVariables.MapVariables.get(event.player.world);
-			WorldSavedData worlddata = herobrines_fortressVariables.WorldVariables.get(event.player.world);
+	public void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
+		if (!event.getPlayer().world.isRemote) {
+			WorldSavedData mapdata = herobrines_fortressVariables.MapVariables.get(event.getPlayer().world);
+			WorldSavedData worlddata = herobrines_fortressVariables.WorldVariables.get(event.getPlayer().world);
 			if (mapdata != null)
-				herobrines_fortress.PACKET_HANDLER.sendTo(new herobrines_fortressVariables.WorldSavedDataSyncMessage(0, mapdata),
-						(EntityPlayerMP) event.player);
+				herobrines_fortress.PACKET_HANDLER.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) event.getPlayer()),
+						new herobrines_fortressVariables.WorldSavedDataSyncMessage(0, mapdata));
 			if (worlddata != null)
-				herobrines_fortress.PACKET_HANDLER.sendTo(new herobrines_fortressVariables.WorldSavedDataSyncMessage(1, worlddata),
-						(EntityPlayerMP) event.player);
+				herobrines_fortress.PACKET_HANDLER.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) event.getPlayer()),
+						new herobrines_fortressVariables.WorldSavedDataSyncMessage(1, worlddata));
 		}
 	}
 
 	@SubscribeEvent
-	public void onPlayerChangedDimension(net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent event) {
-		if (!event.player.world.isRemote) {
-			WorldSavedData worlddata = herobrines_fortressVariables.WorldVariables.get(event.player.world);
+	public void onPlayerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
+		if (!event.getPlayer().world.isRemote) {
+			WorldSavedData worlddata = herobrines_fortressVariables.WorldVariables.get(event.getPlayer().world);
 			if (worlddata != null)
-				herobrines_fortress.PACKET_HANDLER.sendTo(new herobrines_fortressVariables.WorldSavedDataSyncMessage(1, worlddata),
-						(EntityPlayerMP) event.player);
+				herobrines_fortress.PACKET_HANDLER.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) event.getPlayer()),
+						new herobrines_fortressVariables.WorldSavedDataSyncMessage(1, worlddata));
 		}
 	}
 	private int messageID = 0;
 
-	public <T extends IMessage, V extends IMessage> void addNetworkMessage(Class<? extends IMessageHandler<T, V>> handler, Class<T> messageClass,
-			Side... sides) {
-		for (Side side : sides)
-			herobrines_fortress.PACKET_HANDLER.registerMessage(handler, messageClass, messageID, side);
+	public <T> void addNetworkMessage(Class<T> messageType, BiConsumer<T, PacketBuffer> encoder, Function<PacketBuffer, T> decoder,
+			BiConsumer<T, Supplier<NetworkEvent.Context>> messageConsumer) {
+		herobrines_fortress.PACKET_HANDLER.registerMessage(messageID, messageType, encoder, decoder, messageConsumer);
 		messageID++;
-	}
-
-	public static class GuiHandler implements IGuiHandler {
-		@Override
-		public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
-			if (id == MCreatorStrucutreGui.GUIID)
-				return new MCreatorStrucutreGui.GuiContainerMod(world, x, y, z, player);
-			if (id == MCreatorVaultpassword.GUIID)
-				return new MCreatorVaultpassword.GuiContainerMod(world, x, y, z, player);
-			if (id == MCreatorSafeinventory.GUIID)
-				return new MCreatorSafeinventory.GuiContainerMod(world, x, y, z, player);
-			if (id == MCreatorBackup_vault_password.GUIID)
-				return new MCreatorBackup_vault_password.GuiContainerMod(world, x, y, z, player);
-			if (id == MCreatorPasswordTest.GUIID)
-				return new MCreatorPasswordTest.GuiContainerMod(world, x, y, z, player);
-			return null;
-		}
-
-		@Override
-		public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
-			if (id == MCreatorStrucutreGui.GUIID)
-				return new MCreatorStrucutreGui.GuiWindow(world, x, y, z, player);
-			if (id == MCreatorVaultpassword.GUIID)
-				return new MCreatorVaultpassword.GuiWindow(world, x, y, z, player);
-			if (id == MCreatorSafeinventory.GUIID)
-				return new MCreatorSafeinventory.GuiWindow(world, x, y, z, player);
-			if (id == MCreatorBackup_vault_password.GUIID)
-				return new MCreatorBackup_vault_password.GuiWindow(world, x, y, z, player);
-			if (id == MCreatorPasswordTest.GUIID)
-				return new MCreatorPasswordTest.GuiWindow(world, x, y, z, player);
-			return null;
-		}
 	}
 
 	public List<ModElement> getElements() {
@@ -173,12 +125,8 @@ public class Elementsherobrines_fortress implements IFuelHandler, IWorldGenerato
 		return biomes;
 	}
 
-	public List<Supplier<EntityEntry>> getEntities() {
+	public List<Supplier<EntityType<?>>> getEntities() {
 		return entities;
-	}
-
-	public List<Supplier<Potion>> getPotions() {
-		return potions;
 	}
 
 	public static class ModElement implements Comparable<ModElement> {
@@ -196,23 +144,10 @@ public class Elementsherobrines_fortress implements IFuelHandler, IWorldGenerato
 		public void initElements() {
 		}
 
-		public void init(FMLInitializationEvent event) {
-		}
-
-		public void preInit(FMLPreInitializationEvent event) {
-		}
-
-		public void generateWorld(Random random, int posX, int posZ, World world, int dimID, IChunkGenerator cg, IChunkProvider cp) {
+		public void init(FMLCommonSetupEvent event) {
 		}
 
 		public void serverLoad(FMLServerStartingEvent event) {
-		}
-
-		public void registerModels(ModelRegistryEvent event) {
-		}
-
-		public int addFuel(ItemStack fuel) {
-			return 0;
 		}
 
 		@Override

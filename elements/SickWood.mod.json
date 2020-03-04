@@ -70,9 +70,6 @@
     "inventoryDropWhenDestroyed": true,
     "inventoryComparatorPower": true,
     "inventoryOutSlotIDs": [],
-    "onRightClicked": {
-      "name": "SicktntOnBlockRightClicked2"
-    },
     "onDestroyedByPlayer": {
       "name": "SickWoodBlockDestroyedByPlayer"
     },
